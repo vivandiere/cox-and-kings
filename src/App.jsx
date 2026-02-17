@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import gsap from 'gsap';
 
 /* ────────────────────────────────────────────────────
    Inline SVG Logo Components
@@ -65,7 +66,12 @@ export default function ColorPalette() {
   const [heroSlide, setHeroSlide] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuSearch, setMenuSearch] = useState('');
+  const [menuSearchFocused, setMenuSearchFocused] = useState(false);
+  const [destSlide, setDestSlide] = useState(0);
+  const [destHover, setDestHover] = useState(-1);
   const scrollContainerRef = useRef(null);
+  const isFullScreen = window.location.pathname === '/homepage';
+  const menuRef = useRef(null);
 
   const heroSlides = [
     { src: '/images/hero-01.png', city: 'Jaipur', country: 'India' },
@@ -83,13 +89,41 @@ export default function ColorPalette() {
     return () => clearInterval(id);
   }, [heroSlides.length]);
 
+  const destRegions = [
+    { name: 'Europe', viewBox: '0 0 205 266.01', d: 'M102.5,0C45.89,0,0,45.89,0,102.5v163.51h205V102.5C205,45.89,159.11,0,102.5,0', image: '/images/dest-europe.png' },
+    { name: 'Middle East\n& Africa', viewBox: '0 0 205 267.23', isPolygon: true, points: '33.76 0 33.76 22.5 11.25 22.5 11.25 11.25 22.5 11.25 22.5 33.76 0 33.76 0 233.48 22.5 233.48 22.5 255.98 11.25 255.98 11.25 244.73 33.76 244.73 33.76 267.23 171.24 267.23 171.24 244.73 193.75 244.73 193.75 255.98 182.5 255.98 182.5 233.48 205 233.48 205 33.76 182.5 33.76 182.5 11.25 193.75 11.25 193.75 22.5 171.24 22.5 171.24 0 33.76 0', image: '/images/dest-middle-east.png' },
+    { name: 'Asia &\nOceania', viewBox: '0 0 205 269.06', isPolygon: true, points: '42 0 0 42 0 227.07 42 269.06 163 269.06 205 227.07 205 42 163 0 42 0', image: '/images/dest-asia.png' },
+    { name: 'South\nAmerica', viewBox: '0 0 205 266.01', isPolygon: true, points: '28.47 0 28.47 28.47 0 28.47 0 237.54 28.47 237.54 28.47 266.01 176.53 266.01 176.53 237.54 205 237.54 205 28.47 176.53 28.47 176.53 0 28.47 0', image: '/images/dest-south-america.png' },
+    { name: 'North\nAmerica', viewBox: '0 0 280 364', d: 'M190.243 21.0134C189.641 21.0134 189.052 21.0134 188.45 20.9677C171.586 20.3115 155.877 11.1095 140.829 0C125.721 10.9722 109.964 20.0368 93.0875 20.5556C92.4861 20.5709 91.8967 20.5862 91.2953 20.5862C76.2595 20.5251 60.5381 13.8716 44.8528 5.28007L1.41757 62.903L1.20105 63.1929L0.202677 64.5206L1.41757 62.903C52.8776 137.515 -53.6025 266.04 35.0736 318.666C71.8716 340.508 98.8391 337.5 139.855 362.158C139.181 362.86 138.508 363.562 137.846 364.279C138.52 363.562 139.181 362.86 139.855 362.158C179.339 339.361 207.932 341.103 244.864 319.551C332.133 268.637 229.09 136.735 279.868 64.1085L236.769 6.10412C221.048 14.5583 205.29 21.0745 190.243 21.0134Z', image: '/images/dest-north-america.png' },
+  ];
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setDestSlide((prev) => (prev + 1) % destRegions.length);
+    }, 4000);
+    return () => clearInterval(id);
+  }, [destRegions.length]);
+
+  useEffect(() => {
+    if (menuOpen && menuRef.current) {
+      const items = menuRef.current.querySelectorAll('[data-menu-animate]');
+      gsap.fromTo(items,
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.4, stagger: 0.06, ease: 'power2.out' }
+      );
+    }
+  }, [menuOpen]);
+
   const handleViewportScroll = useCallback(() => {
     const el = scrollContainerRef.current;
     if (!el) return;
     const scrolled = el.scrollTop > 40;
     if (scrolled && !logoCompact) setLogoCompact(true);
-    else if (!scrolled && logoCompact) setLogoCompact(false);
-  }, [logoCompact]);
+    else if (!scrolled && logoCompact) {
+      setLogoCompact(false);
+      if (menuOpen) setMenuOpen(false);
+    }
+  }, [logoCompact, menuOpen]);
   
   const brandAccents = {
     primary: { name: 'Primary Only', hex: '#102037', desc: 'No additional accent — uses primary throughout' },
@@ -161,6 +195,28 @@ export default function ColorPalette() {
   const accent = accents[activeAccent];
   const isPrimaryAccent = activeAccent === 'primary';
   const lightAccents = ['warmSand', 'cream', 'mist'];
+
+  // Generate tint scale from accent hex — mix toward stone bg
+  const hexToRgb = (hex) => {
+    const h = hex.replace('#', '');
+    return [parseInt(h.substring(0,2),16), parseInt(h.substring(2,4),16), parseInt(h.substring(4,6),16)];
+  };
+  const mixWith = (rgb, target, amount) =>
+    rgb.map((c, i) => Math.round(c + (target[i] - c) * amount));
+  const stone = [242, 242, 235];
+  const dark = [16, 32, 55]; // palette.primary.default
+  const rgbToHex = (rgb) => '#' + rgb.map(c => Math.min(255, Math.max(0, c)).toString(16).padStart(2, '0')).join('');
+  const baseRgb = hexToRgb(accent.hex);
+  const accentScale = {
+    120: rgbToHex(mixWith(baseRgb, dark, 0.35)),        // darkened — high contrast text
+    100: accent.hex,                                    // full accent — labels, icons
+    80:  rgbToHex(mixWith(baseRgb, stone, 0.15)),       // 85% accent
+    60:  rgbToHex(mixWith(baseRgb, stone, 0.3)),        // 70% accent
+    50:  rgbToHex(mixWith(baseRgb, stone, 0.45)),       // 55% — medium
+    40:  rgbToHex(mixWith(baseRgb, stone, 0.55)),       // 45%
+    20:  rgbToHex(mixWith(baseRgb, stone, 0.72)),       // 28% — tag bg
+    10:  rgbToHex(mixWith(baseRgb, stone, 0.82)),       // 18% — dividers
+  };
   const isLightAccent = lightAccents.includes(activeAccent);
   const onPrimaryText = isPrimaryAccent ? palette.surface.stone : accent.hex;
   const onPrimaryButtonBg = isPrimaryAccent ? palette.surface.stone : accent.hex;
@@ -232,21 +288,24 @@ export default function ColorPalette() {
     : [];
 
   const menuNavItems = [
-    { label: 'Destinations', type: 'heading' },
-    { label: 'Inspiration', type: 'heading' },
-    { label: 'Small Group Tours', type: 'link' },
-    { label: 'Tailormade Journeys', type: 'link' },
+    'Small Group Tours',
+    'Tailormade Journeys',
+    'Travel Brochures',
   ];
+
+  const locationTags = ['India', 'Peru', 'Uzbekistan', 'Japan', 'Morocco', 'Greece'];
+  const inspirationTags = ['Specialist Tours', 'Solo Travel', 'Wildlife', 'Cultural'];
 
   return (
     <div style={{ 
       minHeight: '100vh', 
-      backgroundColor: palette.surface.stone,
+      backgroundColor: isFullScreen ? palette.primary.default : palette.surface.stone,
       fontFamily: FONT_BODY,
-      padding: '40px 32px',
+      padding: isFullScreen ? 0 : '40px 32px',
     }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ maxWidth: isFullScreen ? 'none' : '1200px', margin: '0 auto' }}>
 
+        {!isFullScreen && (<>
         {/* ════════════════ HEADER ════════════════ */}
         <div style={{ marginBottom: '8px' }}>
           <h1 style={{ 
@@ -1028,6 +1087,8 @@ export default function ColorPalette() {
           </div>
         </div>
 
+        </>)}
+
         {/* ════════════════ NAV + HERO COMBINED PREVIEW (scrollable viewport) ════════════════ */}
         {(() => {
           const heroModes = {
@@ -1052,12 +1113,13 @@ export default function ColorPalette() {
           const navBorderColor = heroMode === 'dark' ? palette.primary.light : palette.neutral[200];
           return (
             <div style={{ 
-              ...card,
+              ...(isFullScreen ? {} : card),
               padding: '0',
               overflow: 'hidden',
-              marginBottom: '24px',
+              marginBottom: isFullScreen ? 0 : '24px',
             }}>
               {/* Controls bar */}
+              {!isFullScreen && (
               <div style={{ 
                 padding: '24px 24px 0 24px',
                 display: 'flex',
@@ -1065,13 +1127,29 @@ export default function ColorPalette() {
                 justifyContent: 'space-between',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <p style={{ ...sectionLabel, marginBottom: 0 }}>Nav + Hero Preview</p>
+                  <p style={{ ...sectionLabel, marginBottom: 0 }}>HOMEPAGE TEST</p>
                   <span style={{
                     fontFamily: FONT_BODY, fontSize: '10px', color: palette.neutral[400],
                     backgroundColor: palette.surface.subtleStone, borderRadius: '4px', padding: '3px 8px',
                     letterSpacing: '0.04em',
                   }}>
                     {logoCompact ? 'SCROLLED — FLOATING NAV' : 'TOP — FULL NAV'}
+                  </span>
+                  <span
+                    onClick={() => window.open('/homepage', '_blank')}
+                    style={{
+                      fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '500',
+                      color: palette.primary.muted, cursor: 'pointer',
+                      letterSpacing: '0.04em', textTransform: 'uppercase',
+                      display: 'flex', alignItems: 'center', gap: '4px',
+                    }}
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                      <polyline points="15 3 21 3 21 9" />
+                      <line x1="10" y1="14" x2="21" y2="3" />
+                    </svg>
+                    Full Screen
                   </span>
                 </div>
                 <div style={{
@@ -1107,9 +1185,11 @@ export default function ColorPalette() {
                   ))}
                 </div>
               </div>
+              )}
               {/* Browser-like viewport */}
-              <div style={{ padding: '16px 24px 24px' }}>
+              <div style={{ padding: isFullScreen ? 0 : '16px 24px 24px' }}>
                 {/* Fake browser chrome */}
+                {!isFullScreen && (
                 <div style={{
                   backgroundColor: palette.neutral[100],
                   borderRadius: '12px 12px 0 0',
@@ -1131,15 +1211,16 @@ export default function ColorPalette() {
                     coxandkings.com
                   </div>
                 </div>
+                )}
                 {/* Scrollable viewport */}
                 <div
                   ref={scrollContainerRef}
                   onScroll={handleViewportScroll}
                   style={{
-                    height: '620px',
+                    height: isFullScreen ? '100vh' : '780px',
                     overflowY: 'auto',
-                    borderRadius: '0 0 12px 12px',
-                    border: `1px solid ${palette.neutral[200]}`,
+                    borderRadius: isFullScreen ? 0 : '0 0 12px 12px',
+                    border: isFullScreen ? 'none' : `1px solid ${palette.neutral[200]}`,
                     borderTop: 'none',
                     position: 'relative',
                     backgroundColor: palette.primary.default,
@@ -1156,34 +1237,59 @@ export default function ColorPalette() {
                     <div style={{
                       position: 'absolute',
                       top: 0, left: 0, right: 0,
-                      display: 'grid',
-                      gridTemplateColumns: '1fr auto 1fr',
-                      alignItems: 'center',
-                      padding: '20px 24px',
                       opacity: logoCompact ? 0 : 1,
                       pointerEvents: logoCompact ? 'none' : 'auto',
                       transition: 'opacity 0.35s ease',
+                      display: 'flex',
+                      flexDirection: 'column',
                     }}>
-                      <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-                        <span style={{ fontFamily: FONT_BODY, fontSize: '14px', color: palette.surface.stone, fontWeight: '500', cursor: 'pointer' }}>Destinations</span>
-                        <span style={{ fontFamily: FONT_BODY, fontSize: '14px', color: 'rgba(242,242,235,0.7)', cursor: 'pointer' }}>Inspiration</span>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <LogoStacked color={palette.surface.stone} height={64} />
-                      </div>
-                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <button style={{
-                          fontFamily: FONT_BODY,
-                          backgroundColor: palette.surface.stone,
-                          color: palette.primary.default,
-                          padding: '14px 32px',
-                          borderRadius: '0',
-                          border: 'none',
-                          fontWeight: '500',
-                          fontSize: '13px',
-                        }}>
-                          Enquire
-                        </button>
+                      <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr auto 1fr',
+                        alignItems: 'center',
+                        padding: '20px 24px',
+                      }}>
+                        <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+                          {/* Menu hamburger / X */}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => setMenuOpen(!menuOpen)}>
+                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '18px', height: '12px', position: 'relative' }}>
+                              <div style={{
+                                position: 'absolute', width: '18px', height: '1.5px', backgroundColor: palette.surface.stone,
+                                top: menuOpen ? '5px' : '1px', transform: menuOpen ? 'rotate(45deg)' : 'none',
+                                transition: 'all 0.3s ease',
+                              }} />
+                              <div style={{
+                                position: 'absolute', width: '18px', height: '1.5px', backgroundColor: palette.surface.stone,
+                                bottom: menuOpen ? '5px' : '1px', transform: menuOpen ? 'rotate(-45deg)' : 'none',
+                                transition: 'all 0.3s ease',
+                              }} />
+                            </div>
+                            <span style={{
+                              fontFamily: FONT_BODY, fontSize: '14px', fontWeight: '500',
+                              color: palette.surface.stone, letterSpacing: '0.06em', textTransform: 'uppercase',
+                            }}>{menuOpen ? 'Close' : 'Menu'}</span>
+                          </div>
+                          <span style={{ width: '1px', height: '16px', backgroundColor: 'rgba(242,242,235,0.2)' }} />
+                          <span style={{ fontFamily: FONT_BODY, fontSize: '14px', color: palette.surface.stone, fontWeight: '500', cursor: 'pointer' }}>Destinations</span>
+                          <span style={{ fontFamily: FONT_BODY, fontSize: '14px', color: 'rgba(242,242,235,0.7)', cursor: 'pointer' }}>Inspiration</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <LogoStacked color={palette.surface.stone} height={64} />
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                          <button style={{
+                            fontFamily: FONT_BODY,
+                            backgroundColor: palette.surface.stone,
+                            color: palette.primary.default,
+                            padding: '14px 32px',
+                            borderRadius: '0',
+                            border: 'none',
+                            fontWeight: '500',
+                            fontSize: '13px',
+                          }}>
+                            Enquire
+                          </button>
+                        </div>
                       </div>
                     </div>
 
@@ -1209,16 +1315,24 @@ export default function ColorPalette() {
                         backdropFilter: 'blur(16px)',
                         border: `1px solid ${navBorderColor}`,
                       }}>
-                      {/* Left — Hamburger + Menu */}
+                      {/* Left — Hamburger / X + Menu/Close */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => setMenuOpen(!menuOpen)}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                          <div style={{ width: '18px', height: '1.5px', backgroundColor: hm.navLinkActive }} />
-                          <div style={{ width: '18px', height: '1.5px', backgroundColor: hm.navLinkActive }} />
+                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '18px', height: '12px', position: 'relative' }}>
+                          <div style={{
+                            position: 'absolute', width: '18px', height: '1.5px', backgroundColor: hm.navLinkActive,
+                            top: menuOpen ? '5px' : '1px', transform: menuOpen ? 'rotate(45deg)' : 'none',
+                            transition: 'all 0.3s ease',
+                          }} />
+                          <div style={{
+                            position: 'absolute', width: '18px', height: '1.5px', backgroundColor: hm.navLinkActive,
+                            bottom: menuOpen ? '5px' : '1px', transform: menuOpen ? 'rotate(-45deg)' : 'none',
+                            transition: 'all 0.3s ease',
+                          }} />
                         </div>
                         <span style={{
                           fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
                           color: hm.navLinkActive, letterSpacing: '0.08em', textTransform: 'uppercase',
-                        }}>Menu</span>
+                        }}>{menuOpen ? 'Close' : 'Menu'}</span>
                       </div>
                       {/* Center — Inline logo */}
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -1246,160 +1360,210 @@ export default function ColorPalette() {
                         </svg>
                       </div>
                       </div>
-                      {/* ═══ MENU DROPDOWN ═══ */}
-                      {menuOpen && (
-                        <div style={{
+                    </div>
+
+                    {/* ═══ MENU DROPDOWN — independent, positioned below active nav ═══ */}
+                    {menuOpen && (
+                      <div style={{
+                        position: 'absolute',
+                        top: logoCompact ? '64px' : '104px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        width: '100%',
+                        maxWidth: '540px',
+                        zIndex: 10,
+                        transition: 'top 0.35s ease',
+                      }}>
+                        <div ref={menuRef} style={{
                           backgroundColor: palette.surface.stone,
                           border: `1px solid ${palette.neutral[200]}`,
                           borderTop: 'none',
                           display: 'flex',
                           flexDirection: 'column',
-                          maxHeight: '420px',
+                          maxHeight: '680px',
                           overflow: 'auto',
                         }}>
-                      {/* Search bar */}
-                      <div style={{ padding: '20px 24px 0' }}>
-                        <div style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '12px',
-                          borderBottom: `1px solid ${palette.primary.default}`,
-                          paddingBottom: '12px',
-                        }}>
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="11" cy="11" r="8" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                          </svg>
-                          <input
-                            type="text"
-                            value={menuSearch}
-                            onChange={(e) => setMenuSearch(e.target.value)}
-                            placeholder="Search destinations..."
-                            style={{
-                              flex: 1,
-                              border: 'none',
-                              outline: 'none',
-                              backgroundColor: 'transparent',
-                              fontFamily: FONT_BODY,
-                              fontSize: '16px',
-                              fontWeight: '300',
-                              color: palette.primary.default,
-                              letterSpacing: '0.02em',
-                            }}
-                          />
-                          {menuSearch && (
-                            <span
-                              onClick={() => setMenuSearch('')}
-                              style={{ cursor: 'pointer', color: palette.neutral[400], fontSize: '12px' }}
-                            >✕</span>
-                          )}
-                        </div>
-                      </div>
+                          {/* Search prompt — editable with blinking cursor */}
+                          <div data-menu-animate style={{ padding: '36px 28px 60px' }}>
+                            <style>{`
+                              @keyframes menuCursorBlink {
+                                0%, 100% { opacity: 1; }
+                                50% { opacity: 0; }
+                              }
+                              .menu-search-input::placeholder {
+                                color: ${accentScale[80]};
+                                opacity: 1;
+                              }
+                            `}</style>
+                            <div style={{ position: 'relative', display: 'inline-block', width: '100%' }}>
+                              <input
+                                className="menu-search-input"
+                                type="text"
+                                value={menuSearch}
+                                onChange={(e) => setMenuSearch(e.target.value)}
+                                onFocus={() => setMenuSearchFocused(true)}
+                                onBlur={() => setMenuSearchFocused(false)}
+                                placeholder="Where would you like go?"
+                                style={{
+                                  fontFamily: FONT_HEADING,
+                                  fontSize: '26px',
+                                  fontWeight: '400',
+                                  color: palette.primary.default,
+                                  letterSpacing: '0.02em',
+                                  border: 'none',
+                                  outline: 'none',
+                                  background: 'transparent',
+                                  width: '100%',
+                                  padding: 0,
+                                  caretColor: menuSearchFocused ? palette.primary.default : 'transparent',
+                                }}
+                              />
+                              {!menuSearch && !menuSearchFocused && (
+                                <span style={{
+                                  position: 'absolute',
+                                  right: 0,
+                                  top: '50%',
+                                  transform: 'translateY(-50%)',
+                                  width: '2px',
+                                  height: '26px',
+                                  backgroundColor: accentScale[80],
+                                  animation: 'menuCursorBlink 1s ease-in-out infinite',
+                                  pointerEvents: 'none',
+                                }} />
+                              )}
+                            </div>
+                          </div>
 
-                      {/* Search results — destination images */}
-                      {filteredDestinations.length > 0 && (
-                        <div style={{
-                          padding: '16px 24px',
-                          display: 'grid',
-                          gridTemplateColumns: 'repeat(3, 1fr)',
-                          gap: '8px',
-                        }}>
-                          {filteredDestinations.map((d) => (
-                            <div key={d.name} style={{
-                              position: 'relative',
-                              aspectRatio: '4 / 3',
-                              overflow: 'hidden',
-                              cursor: 'pointer',
-                            }}>
-                              <img src={d.image} alt={d.name} style={{
-                                width: '100%', height: '100%', objectFit: 'cover', display: 'block',
-                              }} />
-                              <div style={{
-                                position: 'absolute', inset: 0,
-                                backgroundColor: '#10203740',
-                                display: 'flex', flexDirection: 'column',
-                                justifyContent: 'flex-end', padding: '12px',
+                          {/* Location tags */}
+                          <div data-menu-animate style={{ padding: '0 28px 16px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                <circle cx="12" cy="10" r="3" />
+                              </svg>
+                              <span style={{
+                                fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300',
+                                color: palette.primary.default, letterSpacing: '0.1em', textTransform: 'uppercase',
+                              }}>Destinations</span>
+                            </div>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                              {locationTags.map(tag => (
+                                <span key={tag} style={{
+                                  fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400',
+                                  color: accentScale[120], backgroundColor: accentScale[20],
+                                  padding: '7px 14px', borderRadius: '20px',
+                                  letterSpacing: '0.06em', textTransform: 'uppercase',
+                                  cursor: 'pointer',
+                                }}>{tag}</span>
+                              ))}
+                              <span style={{
+                                fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400',
+                                color: accentScale[120], backgroundColor: 'transparent',
+                                padding: '7px 14px', borderRadius: '20px',
+                                border: `1px solid ${accentScale[50]}`,
+                                letterSpacing: '0.06em', textTransform: 'uppercase',
+                                cursor: 'pointer',
+                              }}>View all →</span>
+                            </div>
+                          </div>
+
+                          {/* Inspiration tags */}
+                          <div data-menu-animate style={{ padding: '8px 28px 28px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                              </svg>
+                              <span style={{
+                                fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300',
+                                color: palette.primary.default, letterSpacing: '0.1em', textTransform: 'uppercase',
+                              }}>Inspiration</span>
+                            </div>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                              {inspirationTags.map(tag => (
+                                <span key={tag} style={{
+                                  fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400',
+                                  color: accentScale[120], backgroundColor: accentScale[20],
+                                  padding: '7px 14px', borderRadius: '20px',
+                                  letterSpacing: '0.06em', textTransform: 'uppercase',
+                                  cursor: 'pointer',
+                                }}>{tag}</span>
+                              ))}
+                              <span style={{
+                                fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400',
+                                color: accentScale[120], backgroundColor: 'transparent',
+                                padding: '7px 14px', borderRadius: '20px',
+                                border: `1px solid ${accentScale[50]}`,
+                                letterSpacing: '0.06em', textTransform: 'uppercase',
+                                cursor: 'pointer',
+                              }}>View all →</span>
+                            </div>
+                          </div>
+
+                          {/* Nav items */}
+                          <div style={{ padding: '0 28px' }}>
+                            {menuNavItems.map((label) => (
+                              <div key={label} data-menu-animate style={{
+                                borderTop: `1px solid ${accentScale[10]}`,
+                                padding: '18px 0',
+                                cursor: 'pointer',
                               }}>
                                 <span style={{
-                                  fontFamily: FONT_HEADING, color: '#FFFFFF',
-                                  fontSize: '18px', fontWeight: '400',
-                                  textTransform: 'uppercase', letterSpacing: '0.04em',
-                                }}>{d.name}</span>
-                                <span style={{
-                                  fontFamily: FONT_MONO, color: 'rgba(255,255,255,0.7)',
-                                  fontSize: '9px', letterSpacing: '0.06em', textTransform: 'uppercase',
-                                  marginTop: '2px',
-                                }}>{d.region}</span>
+                                  fontFamily: FONT_HEADING,
+                                  fontSize: '16px',
+                                  fontWeight: '400',
+                                  color: palette.primary.default,
+                                  letterSpacing: '0.06em',
+                                }}>{label}</span>
                               </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* No results message */}
-                      {menuSearch.trim() && filteredDestinations.length === 0 && (
-                        <div style={{ padding: '32px', textAlign: 'center' }}>
-                          <p style={{
-                            fontFamily: FONT_BODY, fontSize: '14px', fontWeight: '300',
-                            color: palette.neutral[400],
-                          }}>No destinations found for "{menuSearch}"</p>
-                        </div>
-                      )}
-
-                      {/* Nav items */}
-                      <div style={{ padding: '4px 24px' }}>
-                        {menuNavItems.map((item, i) => (
-                          <div key={item.label} style={{
-                            borderBottom: `1px solid ${palette.neutral[200]}`,
-                            padding: '14px 0',
-                            cursor: 'pointer',
-                          }}>
-                            <span style={{
-                              fontFamily: FONT_BODY,
-                              fontSize: '15px',
-                              fontWeight: item.type === 'heading' ? '500' : '300',
-                              color: palette.primary.default,
-                              letterSpacing: '0.02em',
-                            }}>{item.label}</span>
+                            ))}
                           </div>
-                        ))}
-                      </div>
 
-                      {/* CTA bar at bottom */}
-                      <div style={{
-                        backgroundColor: palette.primary.default,
-                        padding: '14px 24px',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={palette.surface.stone} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.6 }}>
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                          </svg>
-                          <span style={{
-                            fontFamily: FONT_BODY, fontSize: '13px', color: palette.surface.stone,
-                            fontWeight: '300',
-                          }}>020 3993 4424</span>
+                          {/* CTA bar — Speak to our experts */}
+                          <div data-menu-animate style={{
+                            backgroundColor: palette.primary.default,
+                            margin: '12px 0 0',
+                            padding: '20px 28px 24px',
+                          }}>
+                            <p style={{
+                              fontFamily: FONT_HEADING, fontSize: '16px', fontWeight: '400',
+                              color: palette.surface.stone, letterSpacing: '0.06em',
+                              textTransform: 'uppercase', marginBottom: '8px',
+                            }}>Speak to our experts</p>
+                            <p style={{
+                              fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '300',
+                              color: palette.surface.stone, opacity: 0.7, lineHeight: 1.6,
+                              letterSpacing: '0.04em',
+                            }}>
+                              MON-FRI  9:00am - 6:00pm<br />
+                              SAT  10:00am - 4:30pm
+                            </p>
+                            <div style={{
+                              display: 'flex', justifyContent: 'space-between',
+                              alignItems: 'center', marginTop: '12px',
+                            }}>
+                              <span style={{
+                                fontFamily: FONT_BODY, fontSize: '15px', fontWeight: '500',
+                                color: palette.surface.stone, letterSpacing: '0.06em',
+                              }}>020 3993 4424</span>
+                              <button style={{
+                                fontFamily: FONT_BODY,
+                                backgroundColor: palette.surface.stone,
+                                color: palette.primary.default,
+                                padding: '8px 20px',
+                                borderRadius: '0',
+                                border: 'none',
+                                fontWeight: '400',
+                                fontSize: '11px',
+                                letterSpacing: '0.06em',
+                                textTransform: 'uppercase',
+                              }}>
+                                Enquire
+                              </button>
+                            </div>
+                          </div>
                         </div>
-                        <button style={{
-                          fontFamily: FONT_BODY,
-                          backgroundColor: palette.surface.stone,
-                          color: palette.primary.default,
-                          padding: '8px 20px',
-                          borderRadius: '0',
-                          border: 'none',
-                          fontWeight: '500',
-                          fontSize: '11px',
-                          letterSpacing: '0.04em',
-                          textTransform: 'uppercase',
-                        }}>
-                          Enquire
-                        </button>
                       </div>
-                        </div>
-                      )}
-                    </div>
+                    )}
                   </div>
 
                   {/* Hero section — pulled up behind transparent nav */}
@@ -1432,7 +1596,7 @@ export default function ColorPalette() {
                     <div style={{
                       position: 'relative',
                       zIndex: 2,
-                      padding: '48px',
+                      padding: '24px',
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'flex-end',
@@ -1616,8 +1780,10 @@ export default function ColorPalette() {
                           position: 'absolute',
                           inset: 0,
                           display: 'flex',
+                          flexDirection: 'column',
                           alignItems: 'center',
                           justifyContent: 'center',
+                          padding: '24px',
                         }}>
                           <p style={{
                             fontFamily: FONT_HEADING,
@@ -1632,10 +1798,237 @@ export default function ColorPalette() {
                           }}>
                             {item.label}
                           </p>
+                          <button style={{
+                            fontFamily: FONT_BODY,
+                            backgroundColor: palette.surface.stone,
+                            color: palette.primary.default,
+                            padding: '14px 32px',
+                            borderRadius: '0',
+                            border: 'none',
+                            fontWeight: '500',
+                            fontSize: '13px',
+                            letterSpacing: '0.04em',
+                            textTransform: 'uppercase',
+                            marginTop: '24px',
+                            cursor: 'pointer',
+                          }}>
+                            Explore
+                          </button>
                         </div>
                       </div>
                     ))}
                   </div>
+                  {/* ──── Destinations Module ──── */}
+                  <div style={{
+                    background: palette.surface.stone,
+                    padding: '80px 0 0',
+                    transition: 'all 0.3s ease',
+                    overflow: 'hidden',
+                  }}>
+                    {/* Top row — heading + CTA */}
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      marginBottom: '48px',
+                      padding: '0 48px',
+                    }}>
+                      <h2 style={{
+                        fontFamily: FONT_HEADING,
+                        fontSize: '32px',
+                        fontWeight: '400',
+                        color: palette.primary.default,
+                        letterSpacing: '0.02em',
+                        margin: 0,
+                      }}>
+                        Destinations
+                      </h2>
+                      <button style={{
+                        fontFamily: FONT_BODY,
+                        backgroundColor: palette.primary.default,
+                        color: palette.surface.stone,
+                        padding: '14px 32px',
+                        borderRadius: '0',
+                        border: 'none',
+                        fontWeight: '500',
+                        fontSize: '13px',
+                        letterSpacing: '0.06em',
+                        textTransform: 'uppercase',
+                        cursor: 'pointer',
+                        flexShrink: 0,
+                      }}>
+                        View All Destinations
+                      </button>
+                    </div>
+
+                    {/* Content row — description left, shapes slider right (bleeds edge) */}
+                    <div style={{
+                      display: 'flex',
+                      gap: '48px',
+                      alignItems: 'flex-end',
+                    }}>
+                      {/* Description text */}
+                      <div style={{ padding: '0 64px 80px 48px', flexShrink: 0, width: '30%' }}>
+                        <p style={{
+                          fontFamily: FONT_BODY,
+                          fontSize: '18px',
+                          fontWeight: '300',
+                          color: palette.primary.default,
+                          lineHeight: 1.7,
+                          margin: 0,
+                        }}>
+                          If you are looking for the best holiday destinations, Cox &amp; Kings offers worldwide holidays to some of the most fascinating parts of the globe.
+                        </p>
+                      </div>
+
+                      {/* Shapes slider — auto-scrolling, overflows right edge */}
+                      <div style={{
+                        flex: 1,
+                        overflow: 'hidden',
+                        alignSelf: 'stretch',
+                        display: 'flex',
+                        alignItems: 'flex-end',
+                      }}>
+                        <div style={{
+                          display: 'flex',
+                          gap: '28px',
+                          alignItems: 'flex-end',
+                          transform: `translateX(-${destSlide * (400 + 28)}px)`,
+                          transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                        }}>
+                          {destRegions.map((region, idx) => {
+                            const isActive = idx === destSlide;
+                            const hasImage = !!region.image;
+                            const clipId = `dest-clip-${idx}`;
+                            const vb = region.viewBox.split(' ').map(Number);
+                            return (
+                            <div key={region.name} style={{
+                              position: 'relative',
+                              flexShrink: 0,
+                              width: '400px',
+                              cursor: 'pointer',
+                            }}
+                              onClick={() => setDestSlide(idx)}
+                              onMouseEnter={() => setDestHover(idx)}
+                              onMouseLeave={() => setDestHover(-1)}
+                            >
+                              <svg viewBox={region.viewBox} xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: 'auto', display: 'block', overflow: 'hidden' }}>
+                                <defs>
+                                  <clipPath id={clipId}>
+                                    {region.isPolygon && region.points
+                                      ? <polygon points={region.points} />
+                                      : <path d={region.d} />
+                                    }
+                                  </clipPath>
+                                </defs>
+                                {region.isPolygon && region.points
+                                  ? <polygon points={region.points} fill={palette.primary.default} />
+                                  : <path d={region.d} fill={palette.primary.default} />
+                                }
+                                {hasImage && (
+                                  <>
+                                    <image
+                                      href={region.image}
+                                      x="0" y="0"
+                                      width={vb[2]} height={vb[3]}
+                                      preserveAspectRatio="xMidYMid slice"
+                                      clipPath={`url(#${clipId})`}
+                                      style={{
+                                        opacity: isActive ? 1 : 0,
+                                        transition: 'opacity 0.6s ease',
+                                      }}
+                                    />
+                                    <rect
+                                      x="0" y="0"
+                                      width={vb[2]} height={vb[3]}
+                                      fill="#102037"
+                                      fillOpacity="0.10"
+                                      clipPath={`url(#${clipId})`}
+                                      style={{
+                                        opacity: isActive ? 1 : 0,
+                                        transition: 'opacity 0.6s ease',
+                                      }}
+                                    />
+                                  </>
+                                )}
+                                <rect
+                                  x="0" y="0"
+                                  width={vb[2]} height={vb[3]}
+                                  fill={palette.primary.default}
+                                  clipPath={`url(#${clipId})`}
+                                  style={{
+                                    opacity: destHover === idx ? 0.25 : 0,
+                                    transition: 'opacity 0.3s ease',
+                                    pointerEvents: 'none',
+                                  }}
+                                />
+                              </svg>
+                              <div style={{
+                                position: 'absolute',
+                                inset: 0,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                padding: '16px',
+                              }}>
+                                <p style={{
+                                  fontFamily: FONT_HEADING,
+                                  color: palette.surface.stone,
+                                  fontSize: '40px',
+                                  fontWeight: '400',
+                                  textAlign: 'center',
+                                  lineHeight: 1.15,
+                                  margin: 0,
+                                  whiteSpace: 'pre-line',
+                                }}>
+                                  {region.name}
+                                </p>
+                              </div>
+                            </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                    {/* Pagination line + arrows */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '0 48px', marginTop: '80px', paddingBottom: '48px' }}>
+                      <div style={{ display: 'flex', flex: 1, height: '1px' }}>
+                        {destRegions.map((_, i) => (
+                          <div
+                            key={i}
+                            onClick={() => setDestSlide(i)}
+                            style={{
+                              flex: 1,
+                              height: '1px',
+                              backgroundColor: palette.primary.default,
+                              opacity: i === destSlide ? 1 : 0.15,
+                              transition: 'opacity 0.6s ease',
+                              cursor: 'pointer',
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
+                        <div
+                          onClick={() => setDestSlide((prev) => (prev - 1 + destRegions.length) % destRegions.length)}
+                          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="15 18 9 12 15 6" />
+                          </svg>
+                        </div>
+                        <div
+                          onClick={() => setDestSlide((prev) => (prev + 1) % destRegions.length)}
+                          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="9 18 15 12 9 6" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Spacer for scrollability */}
                   <div style={{
                     background: heroMode === 'dark'
@@ -1653,6 +2046,7 @@ export default function ColorPalette() {
         })()}
 
         {/* ════════════════ COLOR VALUES EXPORT ════════════════ */}
+        {!isFullScreen && (<>
         <div style={{ 
           backgroundColor: palette.primary.default, 
           borderRadius: '12px', 
@@ -1723,6 +2117,7 @@ export default function ColorPalette() {
         }}>
           Cox &amp; Kings — Color Palette Tester — {new Date().getFullYear()}
         </div>
+        </>)}
       </div>
     </div>
   );
