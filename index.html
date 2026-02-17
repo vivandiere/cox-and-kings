@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://use.typekit.net/mvx1cir.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cox &amp; Kings — Color Palette Tester</title>
+    <style>
+      /* ——— Ceno TRIAL (body & labels) ——— */
+      @font-face {
+        font-family: 'CenoTRIAL';
+        src: url('./Fonts/Ceno TRIAL/CenoTRIAL-Thin.otf') format('opentype');
+        font-weight: 100;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'CenoTRIAL';
+        src: url('./Fonts/Ceno TRIAL/CenoTRIAL-ThinItalic.otf') format('opentype');
+        font-weight: 100;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'CenoTRIAL';
+        src: url('./Fonts/Ceno TRIAL/CenoTRIAL-Extralight.otf') format('opentype');
+        font-weight: 200;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'CenoTRIAL';
+        src: url('./Fonts/Ceno TRIAL/CenoTRIAL-ExtralightItalic.otf') format('opentype');
+        font-weight: 200;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'CenoTRIAL';
+        src: url('./Fonts/Ceno TRIAL/CenoTRIAL-Light.otf') format('opentype');
+        font-weight: 300;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'CenoTRIAL';
+        src: url('./Fonts/Ceno TRIAL/CenoTRIAL-LightItalic.otf') format('opentype');
+        font-weight: 300;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'CenoTRIAL';
+        src: url('./Fonts/Ceno TRIAL/CenoTRIAL-Regular.otf') format('opentype');
+        font-weight: 400;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'CenoTRIAL';
+        src: url('./Fonts/Ceno TRIAL/CenoTRIAL-RegularItalic.otf') format('opentype');
+        font-weight: 400;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'CenoTRIAL';
+        src: url('./Fonts/Ceno TRIAL/CenoTRIAL-Book.otf') format('opentype');
+        font-weight: 450;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'CenoTRIAL';
+        src: url('./Fonts/Ceno TRIAL/CenoTRIAL-BookItalic.otf') format('opentype');
+        font-weight: 450;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'CenoTRIAL';
+        src: url('./Fonts/Ceno TRIAL/CenoTRIAL-Medium.otf') format('opentype');
+        font-weight: 500;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'CenoTRIAL';
+        src: url('./Fonts/Ceno TRIAL/CenoTRIAL-MediumItalic.otf') format('opentype');
+        font-weight: 500;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'CenoTRIAL';
+        src: url('./Fonts/Ceno TRIAL/CenoTRIAL-Bold.otf') format('opentype');
+        font-weight: 700;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'CenoTRIAL';
+        src: url('./Fonts/Ceno TRIAL/CenoTRIAL-BoldItalic.otf') format('opentype');
+        font-weight: 700;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'CenoTRIAL';
+        src: url('./Fonts/Ceno TRIAL/CenoTRIAL-Black.otf') format('opentype');
+        font-weight: 900;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'CenoTRIAL';
+        src: url('./Fonts/Ceno TRIAL/CenoTRIAL-BlackItalic.otf') format('opentype');
+        font-weight: 900;
+        font-style: italic;
+      }
+
+      /* ——— Meso TRIAL (headers) ——— */
+      @font-face {
+        font-family: 'MesoTRIAL';
+        src: url('./Fonts/Meso TRIAL/MesoTRIAL-Thin.otf') format('opentype');
+        font-weight: 100;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'MesoTRIAL';
+        src: url('./Fonts/Meso TRIAL/MesoTRIAL-ThinItalic.otf') format('opentype');
+        font-weight: 100;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'MesoTRIAL';
+        src: url('./Fonts/Meso TRIAL/MesoTRIAL-Extralight.otf') format('opentype');
+        font-weight: 200;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'MesoTRIAL';
+        src: url('./Fonts/Meso TRIAL/MesoTRIAL-ExtralightItalic.otf') format('opentype');
+        font-weight: 200;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'MesoTRIAL';
+        src: url('./Fonts/Meso TRIAL/MesoTRIAL-Light.otf') format('opentype');
+        font-weight: 300;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'MesoTRIAL';
+        src: url('./Fonts/Meso TRIAL/MesoTRIAL-LightItalic.otf') format('opentype');
+        font-weight: 300;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'MesoTRIAL';
+        src: url('./Fonts/Meso TRIAL/MesoTRIAL-Regular.otf') format('opentype');
+        font-weight: 400;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'MesoTRIAL';
+        src: url('./Fonts/Meso TRIAL/MesoTRIAL-RegularItalic.otf') format('opentype');
+        font-weight: 400;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'MesoTRIAL';
+        src: url('./Fonts/Meso TRIAL/MesoTRIAL-Book.otf') format('opentype');
+        font-weight: 450;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'MesoTRIAL';
+        src: url('./Fonts/Meso TRIAL/MesoTRIAL-BookItalic.otf') format('opentype');
+        font-weight: 450;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'MesoTRIAL';
+        src: url('./Fonts/Meso TRIAL/MesoTRIAL-Medium.otf') format('opentype');
+        font-weight: 500;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'MesoTRIAL';
+        src: url('./Fonts/Meso TRIAL/MesoTRIAL-MediumItalic.otf') format('opentype');
+        font-weight: 500;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'MesoTRIAL';
+        src: url('./Fonts/Meso TRIAL/MesoTRIAL-Bold.otf') format('opentype');
+        font-weight: 700;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'MesoTRIAL';
+        src: url('./Fonts/Meso TRIAL/MesoTRIAL-BoldItalic.otf') format('opentype');
+        font-weight: 700;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'MesoTRIAL';
+        src: url('./Fonts/Meso TRIAL/MesoTRIAL-Black.otf') format('opentype');
+        font-weight: 900;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'MesoTRIAL';
+        src: url('./Fonts/Meso TRIAL/MesoTRIAL-BlackItalic.otf') format('opentype');
+        font-weight: 900;
+        font-style: italic;
+      }
+
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
