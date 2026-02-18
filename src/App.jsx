@@ -136,9 +136,9 @@ export default function ColorPalette() {
   };
   
   const brandDecorative = {
-    warmSand: { name: 'Warm Sand', hex: '#E5BDB1', desc: 'Brand decorative — soft blush sand' },
-    cream: { name: 'Soft Cream', hex: '#F8F1CD', desc: 'Brand decorative — warm cream' },
-    mist: { name: 'Cool Mist', hex: '#DAE0EF', desc: 'Brand decorative — soft blue-grey' },
+    warmSand: { name: 'Warm Sand', hex: '#E5BDB1', desc: 'Brand decorative — soft blush sand. Sparingly as backgrounds, interactive maps' },
+    cream: { name: 'Soft Cream', hex: '#F8F1CD', desc: 'Brand decorative — warm cream. Sparingly as backgrounds, interactive maps' },
+    mist: { name: 'Cool Mist', hex: '#DAE0EF', desc: 'Brand decorative — soft blue-grey. Sparingly as backgrounds, interactive maps' },
   };
   
   const brandDecorativeDeep = {
@@ -314,6 +314,17 @@ export default function ColorPalette() {
         {!isFullScreen && (<>
         {/* ════════════════ HEADER ════════════════ */}
         <div style={{ marginBottom: '8px' }}>
+          <p style={{
+            fontFamily: FONT_BODY,
+            fontSize: TS.sm,
+            fontWeight: '300',
+            color: palette.neutral[400],
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
+            marginBottom: '6px',
+          }}>
+            Cox &amp; Kings Rebrand
+          </p>
           <h1 style={{ 
             fontFamily: FONT_HEADING,
             color: palette.primary.default, 
@@ -323,15 +334,16 @@ export default function ColorPalette() {
             lineHeight: 1.1,
             textTransform: 'uppercase',
           }}>
-            UI Color Palette
+            Design Foundations
           </h1>
           <p style={{ 
             fontFamily: FONT_BODY,
             color: palette.neutral[500], 
             fontSize: TS.sm,
             marginTop: '4px',
+            lineHeight: 1.6,
           }}>
-            Based on primary #102037 and stone #F2F2EB
+            Interactive tester for colour palette, accent selection, typography, and component preview. Select an accent below to see it applied across the homepage prototype in real time.
           </p>
         </div>
         <p style={{ 
@@ -340,7 +352,7 @@ export default function ColorPalette() {
           fontSize: TS.sm,
           marginBottom: '32px',
         }}>
-          Headers in <strong style={{ fontFamily: FONT_HEADING, fontWeight: '500' }}>MesoTRIAL Medium</strong> &middot; Body in <strong>CenoTRIAL</strong> &middot; Labels in <span style={{ fontWeight: '300' }}>CenoTRIAL Light</span>
+          Primary <code style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.neutral[500] }}>#102037</code> &middot; Stone <code style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.neutral[500] }}>#F2F2EB</code> &middot; Headers in <strong style={{ fontFamily: FONT_HEADING, fontWeight: '500' }}>MesoTRIAL Medium</strong> &middot; Body in <strong>CenoTRIAL</strong> &middot; Labels in <span style={{ fontWeight: '300' }}>CenoTRIAL Light</span>
         </p>
 
         {/* ════════════════ ACCENT SELECTOR ════════════════ */}
@@ -652,7 +664,7 @@ export default function ColorPalette() {
                 </div>
               );
             })}
-            <p style={{ ...sectionLabel, marginTop: '16px', marginBottom: '12px' }}>Brand Decorative (sparingly as backgrounds)</p>
+            <p style={{ ...sectionLabel, marginTop: '16px', marginBottom: '12px' }}>Brand Decorative (sparingly as backgrounds, interactive maps)</p>
             {[
               { name: 'Warm Sand', hex: '#E5BDB1' },
               { name: 'Soft Cream', hex: '#F8F1CD' },
@@ -688,44 +700,58 @@ export default function ColorPalette() {
             ))}
           </div>
 
-          {/* Accent */}
+          {/* Accent Scale */}
           <div style={card}>
             <h3 style={sectionHeading}>
-              Accent {isPrimaryAccent && <span style={{ fontWeight: '400', color: palette.neutral[400] }}>(using primary)</span>}
+              Accent {isPrimaryAccent ? <span style={{ fontWeight: '400', color: palette.neutral[400] }}>(using primary)</span> : <span style={{ fontWeight: '400', color: palette.neutral[400] }}>Scale</span>}
             </h3>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
-              <div style={{
-                width: '48px', height: '48px', borderRadius: '8px',
-                backgroundColor: accent.hex, marginRight: '12px',
-                border: isLightAccent ? '1px solid #E0E0D8' : 'none'
-              }}/>
-              <div>
-                <div style={{ fontSize: '14px', fontWeight: '500', color: palette.primary.default }}>default</div>
-                <div style={{ fontSize: '13px', color: palette.neutral[500], fontFamily: 'monospace' }}>{accent.hex}</div>
-              </div>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
-              <div style={{
-                width: '48px', height: '48px', borderRadius: '8px',
-                backgroundColor: isPrimaryAccent ? palette.primary.tint : `${accent.hex}20`,
-                marginRight: '12px', border: '1px solid #E0E0D8'
-              }}/>
-              <div>
-                <div style={{ fontSize: '14px', fontWeight: '500', color: palette.primary.default }}>tint</div>
-                <div style={{ fontSize: '13px', color: palette.neutral[500], fontFamily: 'monospace' }}>{isPrimaryAccent ? palette.primary.tint : `${accent.hex}20`}</div>
-              </div>
-            </div>
-            {isPrimaryAccent && (
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
-                <div style={{
-                  width: '48px', height: '48px', borderRadius: '8px',
-                  backgroundColor: palette.surface.stone, marginRight: '12px', border: '1px solid #E0E0D8'
-                }}/>
-                <div>
-                  <div style={{ fontSize: '14px', fontWeight: '500', color: palette.primary.default }}>onPrimary</div>
-                  <div style={{ fontSize: '13px', color: palette.neutral[500], fontFamily: 'monospace' }}>{palette.surface.stone}</div>
-                </div>
-              </div>
+            {isPrimaryAccent ? (
+              <>
+                {[
+                  { token: 'default', hex: palette.primary.default },
+                  { token: 'tint', hex: palette.primary.tint },
+                  { token: 'onPrimary', hex: palette.surface.stone },
+                ].map((item) => (
+                  <div key={item.token} style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+                    <div style={{
+                      width: '48px', height: '48px', borderRadius: '8px',
+                      backgroundColor: item.hex, marginRight: '12px',
+                      border: item.hex === palette.primary.default ? 'none' : '1px solid #E0E0D8',
+                    }}/>
+                    <div>
+                      <div style={{ fontSize: '14px', fontWeight: '500', color: palette.primary.default }}>{item.token}</div>
+                      <div style={{ fontSize: '13px', color: palette.neutral[500], fontFamily: 'monospace' }}>{item.hex}</div>
+                    </div>
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
+                {[
+                  { token: 'accent/120', value: accentScale[120], usage: 'High-contrast text' },
+                  { token: 'accent/100', value: accentScale[100], usage: 'Base — icons, labels' },
+                  { token: 'accent/80',  value: accentScale[80],  usage: 'Headings on light bg' },
+                  { token: 'accent/60',  value: accentScale[60],  usage: 'Secondary elements' },
+                  { token: 'accent/50',  value: accentScale[50],  usage: 'Decorative borders' },
+                  { token: 'accent/40',  value: accentScale[40],  usage: 'Subtle highlights' },
+                  { token: 'accent/20',  value: accentScale[20],  usage: 'Tag backgrounds' },
+                  { token: 'accent/10',  value: accentScale[10],  usage: 'Dividers, faint bg' },
+                ].map((item) => (
+                  <div key={item.token} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                    <div style={{
+                      width: '48px', height: '48px', borderRadius: '8px',
+                      backgroundColor: item.value, marginRight: '12px',
+                      border: `1px solid ${palette.neutral[200]}`,
+                      flexShrink: 0,
+                    }}/>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: '13px', fontWeight: '500', color: palette.primary.default }}>{item.token}</div>
+                      <div style={{ fontSize: '12px', color: palette.neutral[500], fontFamily: 'monospace' }}>{item.value}</div>
+                      <div style={{ fontSize: '11px', color: palette.neutral[400], marginTop: '1px' }}>{item.usage}</div>
+                    </div>
+                  </div>
+                ))}
+              </>
             )}
           </div>
 
@@ -2174,7 +2200,7 @@ export default function ColorPalette() {
         {/* Figma Tokens Doc Link */}
         <div style={{ textAlign: 'center', padding: '32px 0 0' }}>
           <a
-            href="https://github.com/vivandiere/cox-and-kings/blob/main/FIGMA-TOKENS.md"
+            href="https://github.com/vivandiere/cox-and-kings/blob/main/DESIGN-FOUNDATIONS.md"
             target="_blank"
             rel="noopener noreferrer"
             style={{
@@ -2203,7 +2229,7 @@ export default function ColorPalette() {
               <line x1="16" y1="17" x2="8" y2="17" />
               <polyline points="10 9 9 9 8 9" />
             </svg>
-            Figma Design Tokens
+            Design Foundations
           </a>
         </div>
 
@@ -2215,7 +2241,7 @@ export default function ColorPalette() {
           fontSize: '12px',
           fontFamily: FONT_BODY,
         }}>
-          Cox &amp; Kings — Color Palette Tester — {new Date().getFullYear()}
+          Cox &amp; Kings — Design Foundations — {new Date().getFullYear()}
         </div>
         </>)}
       </div>
