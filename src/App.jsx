@@ -114,6 +114,12 @@ export default function ColorPalette() {
     }
   }, [menuOpen]);
 
+  useEffect(() => {
+    const handleEsc = (e) => { if (e.key === 'Escape' && menuOpen) setMenuOpen(false); };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [menuOpen]);
+
   const handleViewportScroll = useCallback(() => {
     const el = scrollContainerRef.current;
     if (!el) return;
@@ -1879,6 +1885,62 @@ export default function ColorPalette() {
                         }}>
                           If you are looking for the best holiday destinations, Cox &amp; Kings offers worldwide holidays to some of the most fascinating parts of the globe.
                         </p>
+
+                        {/* "You are here" anchor */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '36px', cursor: 'pointer' }}>
+                          <style>{`
+                            @keyframes youAreHerePing {
+                              0% { transform: scale(1); opacity: 0.45; }
+                              70% { transform: scale(2.4); opacity: 0; }
+                              100% { transform: scale(2.4); opacity: 0; }
+                            }
+                            @keyframes youAreHerePing2 {
+                              0% { transform: scale(1); opacity: 0.25; }
+                              70% { transform: scale(3.2); opacity: 0; }
+                              100% { transform: scale(3.2); opacity: 0; }
+                            }
+                          `}</style>
+                          <div style={{ position: 'relative', width: '18px', height: '18px', flexShrink: 0 }}>
+                            {/* Ping rings */}
+                            <span style={{
+                              position: 'absolute',
+                              top: '50%', left: '50%',
+                              width: '10px', height: '10px',
+                              marginTop: '-5px', marginLeft: '-5px',
+                              borderRadius: '50%',
+                              backgroundColor: accentScale[80],
+                              animation: 'youAreHerePing 2.4s cubic-bezier(0, 0, 0.2, 1) infinite',
+                            }} />
+                            <span style={{
+                              position: 'absolute',
+                              top: '50%', left: '50%',
+                              width: '10px', height: '10px',
+                              marginTop: '-5px', marginLeft: '-5px',
+                              borderRadius: '50%',
+                              backgroundColor: accentScale[80],
+                              animation: 'youAreHerePing2 2.4s cubic-bezier(0, 0, 0.2, 1) infinite',
+                              animationDelay: '0.6s',
+                            }} />
+                            {/* Solid dot */}
+                            <span style={{
+                              position: 'absolute',
+                              top: '50%', left: '50%',
+                              width: '10px', height: '10px',
+                              marginTop: '-5px', marginLeft: '-5px',
+                              borderRadius: '50%',
+                              backgroundColor: palette.primary.default,
+                              zIndex: 1,
+                            }} />
+                          </div>
+                          <span style={{
+                            fontFamily: FONT_BODY,
+                            fontSize: '11px',
+                            fontWeight: '600',
+                            letterSpacing: '0.12em',
+                            textTransform: 'uppercase',
+                            color: palette.primary.default,
+                          }}>You are here — Start exploring</span>
+                        </div>
                       </div>
 
                       {/* Shapes slider — auto-scrolling, overflows right edge */}
@@ -1935,7 +1997,9 @@ export default function ColorPalette() {
                                       clipPath={`url(#${clipId})`}
                                       style={{
                                         opacity: isActive ? 1 : 0,
-                                        transition: 'opacity 0.6s ease',
+                                        transition: 'opacity 0.6s ease, transform 0.5s ease',
+                                        transformOrigin: `${vb[2] / 2}px ${vb[3] / 2}px`,
+                                        transform: destHover === idx ? 'scale(1.05)' : 'scale(1)',
                                       }}
                                     />
                                     <rect
@@ -2105,6 +2169,42 @@ export default function ColorPalette() {
               </>
             )}
           </div>
+        </div>
+
+        {/* Figma Tokens Doc Link */}
+        <div style={{ textAlign: 'center', padding: '32px 0 0' }}>
+          <a
+            href="https://github.com/vivandiere/cox-and-kings/blob/main/FIGMA-TOKENS.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              fontFamily: FONT_BODY,
+              fontSize: '13px',
+              fontWeight: '500',
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              color: palette.primary.default,
+              backgroundColor: palette.surface.white,
+              padding: '14px 32px',
+              borderRadius: '8px',
+              border: `1px solid ${palette.neutral[200]}`,
+              textDecoration: 'none',
+              boxShadow: '0 1px 3px rgba(16,32,55,0.08)',
+              cursor: 'pointer',
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+            Figma Design Tokens
+          </a>
         </div>
 
         {/* Footer */}
