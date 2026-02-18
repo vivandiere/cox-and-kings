@@ -157,13 +157,10 @@ export default function ColorPalette() {
     khaki: { name: 'Soft Khaki', hex: '#8A8562', desc: 'Earthy neutral — safari-friendly, legible' },
     khakiGold: { name: 'Golden Khaki', hex: '#A08C4A', desc: 'Warmer gold-toned khaki — luxe feel' },
     terracotta: { name: 'Soft Terracotta', hex: '#D4836A', desc: 'Warm, earthy, very travel-appropriate' },
-    sage: { name: 'Muted Sage', hex: '#6B9B7A', desc: 'Natural, calming, safari-friendly' },
     periwinkle: { name: 'Dusty Periwinkle', hex: '#7B8CDE', desc: 'Soft but distinctive, modern feel' },
     rose: { name: 'Dusty Rose', hex: '#C4727E', desc: 'Sophisticated warmth, luxury feel' },
-    teal: { name: 'Soft Teal', hex: '#5B9A8B', desc: 'Fresh, oceanic, cruise-appropriate' },
     amber: { name: 'Muted Amber', hex: '#C9944A', desc: 'Golden hour warmth, premium' },
     slate: { name: 'Warm Slate', hex: '#7889A4', desc: 'Subtle, professional, very versatile' },
-    mauve: { name: 'Soft Mauve', hex: '#A87CA0', desc: 'Unique, memorable, slightly unexpected' },
   };
   
   const accents = { ...brandAccents, ...brandDecorative, ...brandDecorativeDeep, ...uiAccents };
