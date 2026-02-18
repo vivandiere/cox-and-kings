@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import gsap from 'gsap';
+import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 
 /* ────────────────────────────────────────────────────
    Inline SVG Logo Components
@@ -69,6 +70,10 @@ export default function ColorPalette() {
   const [menuSearchFocused, setMenuSearchFocused] = useState(false);
   const [destSlide, setDestSlide] = useState(0);
   const [destHover, setDestHover] = useState(-1);
+  const [mapActiveRegion, setMapActiveRegion] = useState(null);
+  const [mapHoverRegion, setMapHoverRegion] = useState(null);
+  const [mapZoom, setMapZoom] = useState(1);
+  const [mapCenter, setMapCenter] = useState([20, 30]);
   const scrollContainerRef = useRef(null);
   const isFullScreen = window.location.pathname === '/homepage';
   const menuRef = useRef(null);
@@ -2130,6 +2135,270 @@ export default function ColorPalette() {
                     transition: 'all 0.3s ease',
                   }} />
                 </div>
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* ════════════════ INTERACTIVE WORLD MAP ════════════════ */}
+        {!isFullScreen && (() => {
+          const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
+
+          const REGIONS = {
+            'Africa': [24,72,108,120,132,140,148,174,178,180,204,226,231,232,262,266,270,288,324,328,332,384,404,426,430,434,450,454,466,478,480,504,508,516,562,566,646,678,686,694,706,710,716,728,729,732,748,768,788,800,834,854,894],
+            'Central America': [44,52,84,188,192,212,214,222,308,320,332,340,388,484,558,591,630,659,662,670,780],
+            'Central Asia': [398,417,762,795,860],
+            'Europe': [8,20,40,56,70,100,112,191,196,203,208,233,246,250,268,276,292,300,348,352,372,380,428,438,440,442,470,492,498,499,528,578,616,620,642,643,674,688,703,705,724,752,756,804,807,826],
+            'Far East': [104,116,144,156,344,360,392,410,418,458,496,608,626,702,704,764,158],
+            'Indian Ocean': [174,462,480,690,144],
+            'Indian Subcontinent': [50,64,356,462,524,586],
+            'North Africa & Middle East': [12,48,51,31,196,818,368,376,400,414,422,434,504,512,275,634,682,760,788,792,887],
+            'North America': [124,840],
+            'Polar': [10,304,578,752,246,352,643],
+            'South America': [32,68,76,152,170,218,238,254,328,600,604,740,858,862],
+          };
+
+          const regionHighlight = accent.hex;
+
+          const countryToRegion = {};
+          Object.entries(REGIONS).forEach(([region, codes]) => {
+            codes.forEach((code) => { countryToRegion[code] = region; });
+          });
+
+          return (
+            <div style={{
+              ...card,
+              marginTop: '24px',
+              marginBottom: '24px',
+              padding: 0,
+              overflow: 'hidden',
+              position: 'relative',
+            }}>
+              {/* Header bar */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '20px 24px 0',
+              }}>
+                <div>
+                  <p style={sectionLabel}>Destinations Page</p>
+                  <h2 style={{ ...sectionHeading, marginBottom: '4px' }}>Interactive SVG Navigation Map</h2>
+                  <p style={{ fontFamily: FONT_BODY, fontSize: '13px', color: palette.neutral[500], margin: 0 }}>
+                    Click a region to highlight — colours from the design system
+                  </p>
+                </div>
+                {mapActiveRegion && (
+                  <button
+                    onClick={() => setMapActiveRegion(null)}
+                    style={{
+                      fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '500',
+                      letterSpacing: '0.04em', textTransform: 'uppercase',
+                      color: palette.neutral[500], backgroundColor: 'transparent',
+                      border: `1px solid ${palette.neutral[300]}`, borderRadius: '6px',
+                      padding: '8px 16px', cursor: 'pointer',
+                    }}
+                  >
+                    Reset
+                  </button>
+                )}
+              </div>
+
+              {/* Region pills */}
+              <div style={{
+                display: 'flex', flexWrap: 'wrap', gap: '6px',
+                padding: '16px 24px',
+              }}>
+                {Object.keys(REGIONS).map((region) => {
+                  const isActive = mapActiveRegion === region;
+                  return (
+                    <button
+                      key={region}
+                      onClick={() => setMapActiveRegion(isActive ? null : region)}
+                      style={{
+                        fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
+                        letterSpacing: '0.03em', textTransform: 'uppercase',
+                        color: isActive ? '#FFFFFF' : palette.primary.default,
+                        backgroundColor: isActive ? regionHighlight : palette.surface.stone,
+                        border: 'none', borderRadius: '4px',
+                        padding: '7px 12px', cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      {region}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Map */}
+              <div style={{
+                backgroundColor: palette.primary.default,
+                borderRadius: '0 0 12px 12px',
+                position: 'relative',
+              }}>
+                <ComposableMap
+                  projection="geoMercator"
+                  projectionConfig={{ scale: 120, center: [20, 30] }}
+                  style={{ width: '100%', height: 'auto' }}
+                >
+                  <ZoomableGroup
+                    zoom={mapZoom}
+                    center={mapCenter}
+                    onMoveEnd={({ coordinates, zoom }) => { setMapCenter(coordinates); setMapZoom(zoom); }}
+                    minZoom={1}
+                    maxZoom={8}
+                  >
+                    <Geographies geography={GEO_URL}>
+                      {({ geographies }) =>
+                        geographies.map((geo) => {
+                          const numId = parseInt(geo.id, 10);
+                          const region = countryToRegion[numId];
+                          const isActiveRegion = mapActiveRegion && region === mapActiveRegion;
+                          const isHoveredRegion = mapHoverRegion && region === mapHoverRegion;
+
+                          let fill = palette.primary.light;
+                          if (isActiveRegion) fill = regionHighlight;
+                          else if (isHoveredRegion) fill = palette.primary.lighter;
+
+                          return (
+                            <Geography
+                              key={geo.rsmKey}
+                              geography={geo}
+                              onMouseEnter={() => { if (region) setMapHoverRegion(region); }}
+                              onMouseLeave={() => setMapHoverRegion(null)}
+                              onClick={() => { if (region) setMapActiveRegion(mapActiveRegion === region ? null : region); }}
+                              style={{
+                                default: {
+                                  fill,
+                                  stroke: palette.primary.default,
+                                  strokeWidth: 0.5,
+                                  transition: 'fill 0.3s ease',
+                                  outline: 'none',
+                                  cursor: region ? 'pointer' : 'default',
+                                },
+                                hover: {
+                                  fill: isActiveRegion ? regionHighlight : (region ? palette.primary.lighter : palette.primary.light),
+                                  stroke: palette.primary.default,
+                                  strokeWidth: 0.5,
+                                  outline: 'none',
+                                  cursor: region ? 'pointer' : 'default',
+                                },
+                                pressed: {
+                                  fill: region ? regionHighlight : palette.primary.light,
+                                  stroke: palette.primary.default,
+                                  strokeWidth: 0.5,
+                                  outline: 'none',
+                                },
+                              }}
+                            />
+                          );
+                        })
+                      }
+                    </Geographies>
+                  </ZoomableGroup>
+                </ComposableMap>
+
+                {/* Zoom controls */}
+                <div style={{
+                  position: 'absolute',
+                  top: '16px', right: '16px',
+                  display: 'flex', flexDirection: 'column', gap: '2px',
+                }}>
+                  <button
+                    onClick={() => setMapZoom((z) => Math.min(z * 1.5, 8))}
+                    style={{
+                      width: '32px', height: '32px',
+                      backgroundColor: 'rgba(242,242,235,0.12)',
+                      backdropFilter: 'blur(8px)',
+                      border: `1px solid rgba(242,242,235,0.15)`,
+                      borderRadius: '6px 6px 0 0',
+                      color: palette.surface.stone,
+                      fontSize: '16px', fontWeight: '300', fontFamily: FONT_BODY,
+                      cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      transition: 'background-color 0.2s ease',
+                    }}
+                  >+</button>
+                  <button
+                    onClick={() => setMapZoom((z) => Math.max(z / 1.5, 1))}
+                    style={{
+                      width: '32px', height: '32px',
+                      backgroundColor: 'rgba(242,242,235,0.12)',
+                      backdropFilter: 'blur(8px)',
+                      border: `1px solid rgba(242,242,235,0.15)`,
+                      borderRadius: '0 0 6px 6px',
+                      color: palette.surface.stone,
+                      fontSize: '16px', fontWeight: '300', fontFamily: FONT_BODY,
+                      cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      transition: 'background-color 0.2s ease',
+                    }}
+                  >−</button>
+                  {mapZoom > 1 && (
+                    <button
+                      onClick={() => { setMapZoom(1); setMapCenter([20, 30]); }}
+                      style={{
+                        width: '32px', height: '32px',
+                        marginTop: '6px',
+                        backgroundColor: 'rgba(242,242,235,0.12)',
+                        backdropFilter: 'blur(8px)',
+                        border: `1px solid rgba(242,242,235,0.15)`,
+                        borderRadius: '6px',
+                        color: palette.surface.stone,
+                        cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        transition: 'background-color 0.2s ease',
+                      }}
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 12h18M12 3v18M4.5 4.5l15 15M19.5 4.5l-15 15" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+
+                {/* Active region label overlay */}
+                {mapActiveRegion && (
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '24px', left: '24px',
+                    display: 'flex', alignItems: 'center', gap: '12px',
+                  }}>
+                    <div style={{
+                      width: '12px', height: '12px', borderRadius: '2px',
+                      backgroundColor: regionHighlight,
+                    }} />
+                    <span style={{
+                      fontFamily: FONT_BODY, fontSize: '13px', fontWeight: '500',
+                      letterSpacing: '0.06em', textTransform: 'uppercase',
+                      color: palette.surface.stone,
+                    }}>
+                      {mapActiveRegion}
+                    </span>
+                  </div>
+                )}
+
+                {/* Hover region label */}
+                {!mapActiveRegion && mapHoverRegion && (
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '24px', left: '24px',
+                    display: 'flex', alignItems: 'center', gap: '12px',
+                  }}>
+                    <div style={{
+                      width: '12px', height: '12px', borderRadius: '2px',
+                      backgroundColor: palette.primary.lighter,
+                    }} />
+                    <span style={{
+                      fontFamily: FONT_BODY, fontSize: '13px', fontWeight: '500',
+                      letterSpacing: '0.06em', textTransform: 'uppercase',
+                      color: palette.surface.stone, opacity: 0.7,
+                    }}>
+                      {mapHoverRegion}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           );
