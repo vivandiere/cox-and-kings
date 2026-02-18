@@ -160,7 +160,6 @@ export default function ColorPalette() {
     periwinkle: { name: 'Dusty Periwinkle', hex: '#7B8CDE', desc: 'Soft but distinctive, modern feel' },
     rose: { name: 'Dusty Rose', hex: '#C4727E', desc: 'Sophisticated warmth, luxury feel' },
     amber: { name: 'Muted Amber', hex: '#C9944A', desc: 'Golden hour warmth, premium' },
-    slate: { name: 'Warm Slate', hex: '#7889A4', desc: 'Subtle, professional, very versatile' },
   };
   
   const accents = { ...brandAccents, ...brandDecorative, ...brandDecorativeDeep, ...uiAccents };
