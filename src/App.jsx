@@ -141,13 +141,13 @@ export default function ColorPalette() {
   };
   
   const brandDecorative = {
-    warmSand: { name: 'Warm Sand', hex: '#E5BDB1', desc: 'Brand decorative — soft blush sand. Sparingly as backgrounds, interactive maps' },
+    dustyBlush: { name: 'Dusty Blush', hex: '#E5BDB1', desc: 'Brand decorative — soft pinkish beige. Sparingly as backgrounds, interactive maps' },
     cream: { name: 'Soft Cream', hex: '#F8F1CD', desc: 'Brand decorative — warm cream. Sparingly as backgrounds, interactive maps' },
     mist: { name: 'Cool Mist', hex: '#DAE0EF', desc: 'Brand decorative — soft blue-grey. Sparingly as backgrounds, interactive maps' },
   };
   
   const brandDecorativeDeep = {
-    warmSandDeep: { name: 'Warm Sand Deep', hex: '#B58474', desc: 'Brand compound — legible warm sand' },
+    dustyBlushDeep: { name: 'Dusty Blush Deep', hex: '#B58474', desc: 'Brand compound — legible dusty blush' },
     creamDeep: { name: 'Soft Cream Deep', hex: '#9A8A5A', desc: 'Brand compound — legible ochre cream' },
     mistDeep: { name: 'Cool Mist Deep', hex: '#566A9B', desc: 'Brand compound — deeper blue-grey' },
   };
@@ -201,7 +201,7 @@ export default function ColorPalette() {
 
   const accent = accents[activeAccent];
   const isPrimaryAccent = activeAccent === 'primary';
-  const lightAccents = ['warmSand', 'cream', 'mist'];
+  const lightAccents = ['dustyBlush', 'cream', 'mist'];
 
   // Generate tint scale from accent hex — mix toward stone bg
   const hexToRgb = (hex) => {
@@ -667,7 +667,7 @@ export default function ColorPalette() {
             })}
             <p style={{ ...sectionLabel, marginTop: '16px', marginBottom: '12px' }}>Brand Decorative (sparingly as backgrounds, interactive maps)</p>
             {[
-              { name: 'Warm Sand', hex: '#E5BDB1' },
+              { name: 'Dusty Blush', hex: '#E5BDB1' },
               { name: 'Soft Cream', hex: '#F8F1CD' },
               { name: 'Cool Mist', hex: '#DAE0EF' },
             ].map(({ name, hex }) => (

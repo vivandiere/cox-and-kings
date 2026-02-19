@@ -9,13 +9,13 @@ export default function ColorPalette() {
   };
   
   const brandDecorative = {
-    warmSand: { name: 'Warm Sand', hex: '#E5BDB1', desc: 'Brand decorative — soft blush sand' },
+    dustyBlush: { name: 'Dusty Blush', hex: '#E5BDB1', desc: 'Brand decorative — soft pinkish beige' },
     cream: { name: 'Soft Cream', hex: '#F8F1CD', desc: 'Brand decorative — warm cream' },
     mist: { name: 'Cool Mist', hex: '#DAE0EF', desc: 'Brand decorative — soft blue-grey' },
   };
   
   const brandDecorativeDeep = {
-    warmSandDeep: { name: 'Warm Sand Deep', hex: '#B58474', desc: 'Brand compound — legible warm sand' },
+    dustyBlushDeep: { name: 'Dusty Blush Deep', hex: '#B58474', desc: 'Brand compound — legible dusty blush' },
     creamDeep: { name: 'Soft Cream Deep', hex: '#9A8A5A', desc: 'Brand compound — legible ochre cream' },
     mistDeep: { name: 'Cool Mist Deep', hex: '#566A9B', desc: 'Brand compound — deeper blue-grey' },
   };
@@ -76,7 +76,7 @@ export default function ColorPalette() {
   const isPrimaryAccent = activeAccent === 'primary';
   
   // Check if this is a light accent that needs special handling
-  const lightAccents = ['warmSand', 'cream', 'mist'];
+  const lightAccents = ['dustyBlush', 'cream', 'mist'];
   const isLightAccent = lightAccents.includes(activeAccent);
   
   // Colors for "on primary" contexts
