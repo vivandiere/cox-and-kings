@@ -77,6 +77,7 @@ export default function ColorPalette() {
   const scrollContainerRef = useRef(null);
   const isFullScreen = window.location.pathname === '/homepage';
   const menuRef = useRef(null);
+  const destDrag = useRef({ active: false, startX: 0, startSlide: 0 });
 
   const heroSlides = [
     { src: '/images/hero-01.png', city: 'Jaipur', country: 'India' },
@@ -95,11 +96,16 @@ export default function ColorPalette() {
   }, [heroSlides.length]);
 
   const destRegions = [
-    { name: 'Europe', viewBox: '0 0 205 266.01', d: 'M102.5,0C45.89,0,0,45.89,0,102.5v163.51h205V102.5C205,45.89,159.11,0,102.5,0', image: '/images/dest-europe.png' },
-    { name: 'Middle East\n& Africa', viewBox: '0 0 205 267.23', isPolygon: true, points: '33.76 0 33.76 22.5 11.25 22.5 11.25 11.25 22.5 11.25 22.5 33.76 0 33.76 0 233.48 22.5 233.48 22.5 255.98 11.25 255.98 11.25 244.73 33.76 244.73 33.76 267.23 171.24 267.23 171.24 244.73 193.75 244.73 193.75 255.98 182.5 255.98 182.5 233.48 205 233.48 205 33.76 182.5 33.76 182.5 11.25 193.75 11.25 193.75 22.5 171.24 22.5 171.24 0 33.76 0', image: '/images/dest-middle-east.png' },
-    { name: 'Asia &\nOceania', viewBox: '0 0 205 269.06', isPolygon: true, points: '42 0 0 42 0 227.07 42 269.06 163 269.06 205 227.07 205 42 163 0 42 0', image: '/images/dest-asia.png' },
-    { name: 'South\nAmerica', viewBox: '0 0 205 266.01', isPolygon: true, points: '28.47 0 28.47 28.47 0 28.47 0 237.54 28.47 237.54 28.47 266.01 176.53 266.01 176.53 237.54 205 237.54 205 28.47 176.53 28.47 176.53 0 28.47 0', image: '/images/dest-south-america.png' },
+    { name: 'Europe', viewBox: '0 0 415 554', d: 'M391.798 184.374C391.798 82.5485 309.25 0 207.424 0C105.598 0 23.0498 82.5485 23.0498 184.374H0V553.123H414.848V184.374H391.798Z', image: '/images/dest-europe.png' },
+    { name: 'Indian\nSubcontinent', viewBox: '0 0 205 293.56', d: 'M189.52,99.51v-9.44c0-12.66-11.22-23.15-25.47-24.34-.52-.76-1.05-1.5-1.6-2.24v-2.29c.32-40.49-44.52-38.19-59.95-61.2-15.43,23-60.26,20.7-59.95,61.2v2.28c-.55.74-1.09,1.49-1.61,2.25-14.24,1.2-25.47,11.69-25.47,24.34v9.44c-8.8,1.57-15.47,8.36-15.47,16.45v61.64c0,8.08,6.67,14.88,15.48,16.45v9.44c0,12.66,11.22,23.15,25.47,24.35.52.76,1.05,1.5,1.6,2.24v2.29c-.32,40.5,44.52,38.2,59.95,61.2,15.43-23,60.26-20.7,59.95-61.2v-2.28c.56-.74,1.1-1.49,1.62-2.25,14.24-1.2,25.46-11.69,25.46-24.35v-9.44c8.8-1.57,15.47-8.36,15.47-16.45v-61.64c0-8.08-6.67-14.88-15.48-16.45', image: '/images/dest-india-subcontinent.png' },
+    { name: 'Far East', viewBox: '0 0 205 269.06', isPolygon: true, points: '42 0 0 42 0 227.07 42 269.06 163 269.06 205 227.07 205 42 163 0 42 0', image: '/images/dest-far-east.png' },
+    { name: 'Central\nAsia', viewBox: '0 0 205 267.23', isPolygon: true, points: '33.76 0 33.76 22.5 11.25 22.5 11.25 11.25 22.5 11.25 22.5 33.76 0 33.76 0 233.48 22.5 233.48 22.5 255.98 11.25 255.98 11.25 244.73 33.76 244.73 33.76 267.23 171.24 267.23 171.24 244.73 193.75 244.73 193.75 255.98 182.5 255.98 182.5 233.48 205 233.48 205 33.76 182.5 33.76 182.5 11.25 193.75 11.25 193.75 22.5 171.24 22.5 171.24 0 33.76 0', image: '/images/dest-central-asia.png' },
+    { name: 'North Africa\n& Middle East', viewBox: '0 0 205 266.01', isPolygon: true, points: '28.47 0 28.47 28.47 0 28.47 0 237.54 28.47 237.54 28.47 266.01 176.53 266.01 176.53 237.54 205 237.54 205 28.47 176.53 28.47 176.53 0 28.47 0', image: '/images/dest-north-africa-middle-east.png' },
+    { name: 'Africa', viewBox: '0 0 205 293.56', d: 'M189.52,99.51v-9.44c0-12.66-11.22-23.15-25.47-24.34-.52-.76-1.05-1.5-1.6-2.24v-2.29c.32-40.49-44.52-38.19-59.95-61.2-15.43,23-60.26,20.7-59.95,61.2v2.28c-.55.74-1.09,1.49-1.61,2.25-14.24,1.2-25.47,11.69-25.47,24.34v9.44c-8.8,1.57-15.47,8.36-15.47,16.45v61.64c0,8.08,6.67,14.88,15.48,16.45v9.44c0,12.66,11.22,23.15,25.47,24.35.52.76,1.05,1.5,1.6,2.24v2.29c-.32,40.5,44.52,38.2,59.95,61.2,15.43-23,60.26-20.7,59.95-61.2v-2.28c.56-.74,1.1-1.49,1.62-2.25,14.24-1.2,25.46-11.69,25.46-24.35v-9.44c8.8-1.57,15.47-8.36,15.47-16.45v-61.64c0-8.08-6.67-14.88-15.48-16.45', image: '/images/dest-africa.png' },
+    { name: 'South\nAmerica', viewBox: '0 0 205 269.06', isPolygon: true, points: '42 0 0 42 0 227.07 42 269.06 163 269.06 205 227.07 205 42 163 0 42 0', image: '/images/dest-south-america.png' },
+    { name: 'Central\nAmerica', viewBox: '0 0 205 266.01', d: 'M102.5,0C45.89,0,0,45.89,0,102.5v163.51h205V102.5C205,45.89,159.11,0,102.5,0', image: '/images/dest-central-america.png' },
     { name: 'North\nAmerica', viewBox: '0 0 280 364', d: 'M190.243 21.0134C189.641 21.0134 189.052 21.0134 188.45 20.9677C171.586 20.3115 155.877 11.1095 140.829 0C125.721 10.9722 109.964 20.0368 93.0875 20.5556C92.4861 20.5709 91.8967 20.5862 91.2953 20.5862C76.2595 20.5251 60.5381 13.8716 44.8528 5.28007L1.41757 62.903L1.20105 63.1929L0.202677 64.5206L1.41757 62.903C52.8776 137.515 -53.6025 266.04 35.0736 318.666C71.8716 340.508 98.8391 337.5 139.855 362.158C139.181 362.86 138.508 363.562 137.846 364.279C138.52 363.562 139.181 362.86 139.855 362.158C179.339 339.361 207.932 341.103 244.864 319.551C332.133 268.637 229.09 136.735 279.868 64.1085L236.769 6.10412C221.048 14.5583 205.29 21.0745 190.243 21.0134Z', image: '/images/dest-north-america.png' },
+    { name: 'Polar', viewBox: '0 0 205 267.23', isPolygon: true, points: '33.76 0 33.76 22.5 11.25 22.5 11.25 11.25 22.5 11.25 22.5 33.76 0 33.76 0 233.48 22.5 233.48 22.5 255.98 11.25 255.98 11.25 244.73 33.76 244.73 33.76 267.23 171.24 267.23 171.24 244.73 193.75 244.73 193.75 255.98 182.5 255.98 182.5 233.48 205 233.48 205 33.76 182.5 33.76 182.5 11.25 193.75 11.25 193.75 22.5 171.24 22.5 171.24 0 33.76 0', image: '/images/dest-polar.png' },
   ];
 
   useEffect(() => {
@@ -973,104 +979,6 @@ export default function ColorPalette() {
             </div>
           </div>
 
-          {/* Cards with Logo */}
-          <div style={{ marginBottom: '32px' }}>
-            <p style={{ ...sectionLabel, marginBottom: '12px' }}>Cards</p>
-            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-              <div style={{
-                backgroundColor: palette.surface.stone,
-                borderRadius: '12px',
-                padding: '20px',
-                width: '220px',
-              }}>
-                <div style={{ 
-                  width: '100%', height: '100px', 
-                  backgroundColor: palette.primary.tint,
-                  borderRadius: '8px', marginBottom: '12px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <LogoMark color={palette.primary.muted} height={48} />
-                </div>
-                <h4 style={{ fontFamily: FONT_HEADING, fontSize: '15px', fontWeight: '500', color: palette.primary.default, marginBottom: '4px' }}>Rajasthan Tour</h4>
-                <p style={{ fontFamily: FONT_BODY, fontSize: '13px', color: palette.neutral[500], marginBottom: '12px' }}>Discover the land of kings and forts</p>
-                <span style={{ 
-                  fontFamily: FONT_BODY,
-                  fontSize: '13px', 
-                  color: isPrimaryAccent || isLightAccent ? palette.primary.default : accent.hex, 
-                  fontWeight: '500',
-                  textDecoration: isPrimaryAccent || isLightAccent ? 'underline' : 'none'
-                }}>Learn more →</span>
-              </div>
-              
-              <div style={{
-                backgroundColor: palette.primary.default,
-                borderRadius: '12px',
-                padding: '20px',
-                width: '220px',
-              }}>
-                <div style={{ marginBottom: '12px' }}>
-                  <LogoMark color={isPrimaryAccent ? palette.surface.stone : accent.hex} height={32} />
-                </div>
-                <div style={{ 
-                  fontFamily: FONT_BODY,
-                  fontSize: '12px', color: onPrimaryText, fontWeight: '300',
-                  marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em'
-                }}>
-                  Featured
-                </div>
-                <h4 style={{ fontFamily: FONT_HEADING, fontSize: '15px', fontWeight: '500', color: '#FFFFFF', marginBottom: '4px' }}>Kerala Backwaters</h4>
-                <p style={{ fontFamily: FONT_BODY, fontSize: '13px', color: palette.primary.faded, marginBottom: '12px' }}>Serene houseboats &amp; spice gardens</p>
-                <button style={{
-                  fontFamily: FONT_BODY,
-                  backgroundColor: onPrimaryButtonBg,
-                  color: onPrimaryButtonText,
-                  padding: '8px 16px',
-                  borderRadius: '6px',
-                  border: 'none',
-                  fontWeight: '500',
-                  fontSize: '13px',
-                }}>
-                  Explore
-                </button>
-              </div>
-
-              {isLightAccent && (
-                <div style={{
-                  backgroundColor: accent.hex,
-                  borderRadius: '12px',
-                  padding: '20px',
-                  width: '220px',
-                }}>
-                  <div style={{ marginBottom: '12px' }}>
-                    <LogoMark color={palette.primary.default} height={32} />
-                  </div>
-                  <div style={{ 
-                    fontFamily: FONT_BODY,
-                    fontSize: '12px', color: palette.primary.default, fontWeight: '300',
-                    marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em'
-                  }}>
-                    On Accent
-                  </div>
-                  <h4 style={{ fontFamily: FONT_HEADING, fontSize: '15px', fontWeight: '500', color: palette.primary.default, marginBottom: '4px' }}>Accent Card</h4>
-                  <p style={{ fontFamily: FONT_BODY, fontSize: '13px', color: palette.primary.muted, marginBottom: '12px' }}>Light accents work great as fills</p>
-                  <button style={{
-                    fontFamily: FONT_BODY,
-                    backgroundColor: palette.primary.default,
-                    color: '#FFFFFF',
-                    padding: '8px 16px',
-                    borderRadius: '6px',
-                    border: 'none',
-                    fontWeight: '500',
-                    fontSize: '13px',
-                  }}>
-                    Action
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-
-
           {/* Alerts */}
           <div style={{ marginBottom: '32px' }}>
             <p style={{ ...sectionLabel, marginBottom: '12px' }}>Alerts (compound semantic)</p>
@@ -1116,6 +1024,654 @@ export default function ColorPalette() {
                   {label}
                 </span>
               ))}
+            </div>
+          </div>
+
+          {/* Product Cards */}
+          <div style={{ marginTop: '40px' }}>
+            <p style={{ ...sectionLabel, marginBottom: '16px' }}>Product Cards</p>
+            <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', alignItems: 'stretch' }}>
+
+              {/* Card 1 — Serif-led: Meso title, Ceno price + overlapping image */}
+              {(() => {
+                const stops = ['Delhi', 'Agra', 'Jaipur', 'Udaipur', 'Varanasi'];
+                return (
+                  <div style={{ width: '340px', display: 'flex', flexDirection: 'column' }}>
+                    <p style={{
+                      fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300',
+                      color: palette.neutral[400], textTransform: 'uppercase',
+                      letterSpacing: '0.08em', marginBottom: '8px', textAlign: 'center',
+                    }}>V1 &mdash; Serif-led, Meso title, Ceno price</p>
+                    <div style={{
+                      flex: 1, display: 'flex', flexDirection: 'column',
+                      backgroundColor: palette.surface.stone,
+                      borderRadius: '16px',
+                      boxShadow: '0 2px 12px rgba(16,32,55,0.08)',
+                      padding: '6px 6px 0',
+                    }}>
+                      <div style={{ position: 'relative', zIndex: 1, marginBottom: '-16px' }}>
+                        <img
+                          src="/images/hero-01.png"
+                          alt="The Grand Tour of India"
+                          style={{ width: '100%', height: '230px', objectFit: 'cover', display: 'block', borderRadius: '24px' }}
+                        />
+                        <span style={{
+                          position: 'absolute', top: '14px', left: '14px',
+                          fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
+                          letterSpacing: '0.08em', textTransform: 'uppercase',
+                          backgroundColor: isPrimaryAccent ? palette.surface.stone : accent.hex,
+                          color: isPrimaryAccent ? palette.primary.default : (isLightAccent ? palette.primary.default : '#FFFFFF'),
+                          padding: '6px 12px', borderRadius: '6px',
+                        }}>
+                          Small Group Tour
+                        </span>
+                        <span style={{
+                          position: 'absolute', bottom: '14px', right: '14px',
+                          fontFamily: 'chainprinter, "Courier New", monospace',
+                          color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
+                          letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
+                        }}>
+                          Agra, India
+                        </span>
+                      </div>
+                      <div style={{ padding: '28px 18px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                        <h4 style={{
+                          fontFamily: FONT_HEADING, fontSize: TS.lg, fontWeight: '500',
+                          color: palette.primary.default, marginBottom: '6px', lineHeight: 1.2,
+                        }}>
+                          The Grand Tour of India
+                        </h4>
+                        <p style={{
+                          fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '500',
+                          color: palette.primary.default, letterSpacing: '0.04em',
+                          textTransform: 'uppercase', marginBottom: '14px',
+                        }}>
+                          17 Days &bull; Limited to 18 Guests
+                        </p>
+                        <p style={{
+                          fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300',
+                          color: palette.neutral[400], textTransform: 'uppercase',
+                          letterSpacing: '0.06em', marginBottom: '6px',
+                        }}>
+                          Itinerary
+                        </p>
+                        <p style={{
+                          fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '500',
+                          color: palette.primary.default, lineHeight: 1.6, marginBottom: '18px',
+                        }}>
+                          {stops.map((s, i) => (
+                            <React.Fragment key={s}>{s}{i < stops.length - 1 && <span style={{ margin: '0 6px', color: palette.neutral[300] }}>&bull;</span>}</React.Fragment>
+                          ))}
+                        </p>
+                        <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                          <p style={{
+                            fontFamily: FONT_BODY, fontSize: TS.bodyLg, fontWeight: '400',
+                            color: isPrimaryAccent ? palette.primary.default : accent.hex,
+                          }}>
+                            From £4,095
+                          </p>
+                          <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px' }}>
+                            <span style={{
+                              fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '500',
+                              color: palette.neutral[400], textTransform: 'uppercase',
+                              letterSpacing: '0.06em',
+                            }}>
+                              Activity Level:
+                            </span>
+                            <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end' }}>
+                              {[8, 12, 16].map((h, i) => (
+                                <div key={i} style={{
+                                  width: '4px', height: `${h}px`, borderRadius: '1px',
+                                  backgroundColor: i < 2 ? palette.primary.default : palette.neutral[200],
+                                }}/>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Card 2 — Sans-led: All Ceno, title above image */}
+              {(() => {
+                const stops = ['Marrakech', 'Atlas Mountains', 'Sahara', 'Fes'];
+                return (
+                  <div style={{ width: '340px', display: 'flex', flexDirection: 'column' }}>
+                    <p style={{
+                      fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300',
+                      color: palette.neutral[400], textTransform: 'uppercase',
+                      letterSpacing: '0.08em', marginBottom: '8px', textAlign: 'center',
+                    }}>V2 &mdash; Sans-led, All Ceno</p>
+                    <div style={{
+                      flex: 1, display: 'flex', flexDirection: 'column',
+                      backgroundColor: palette.primary.default,
+                      borderRadius: '16px',
+                      overflow: 'hidden',
+                      boxShadow: '0 2px 12px rgba(16,32,55,0.15)',
+                    }}>
+                      <div style={{ padding: '20px 24px 14px' }}>
+                        <span style={{
+                          fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
+                          letterSpacing: '0.08em', textTransform: 'uppercase',
+                          color: isPrimaryAccent ? palette.primary.faded : accent.hex,
+                        }}>
+                          Tailormade
+                        </span>
+                        <h4 style={{
+                          fontFamily: FONT_BODY, fontSize: TS.xl, fontWeight: '500',
+                          color: '#FFFFFF', marginTop: '6px', marginBottom: '4px', lineHeight: 1.15,
+                        }}>
+                          Morocco Uncovered
+                        </h4>
+                        <p style={{
+                          fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '400',
+                          color: palette.primary.faded, letterSpacing: '0.04em',
+                          textTransform: 'uppercase',
+                        }}>
+                          12 Days &bull; Private Journey
+                        </p>
+                      </div>
+                      <div style={{ position: 'relative' }}>
+                        <img
+                          src="/images/hero-02.png"
+                          alt="Morocco Uncovered"
+                          style={{ width: '100%', height: '200px', objectFit: 'cover', display: 'block' }}
+                        />
+                        <span style={{
+                          position: 'absolute', bottom: '12px', right: '14px',
+                          fontFamily: 'chainprinter, "Courier New", monospace',
+                          color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
+                          letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
+                        }}>
+                          Marrakech, Morocco
+                        </span>
+                      </div>
+                      <div style={{ padding: '16px 24px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                        <p style={{
+                          fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300',
+                          color: palette.primary.faded, textTransform: 'uppercase',
+                          letterSpacing: '0.06em', marginBottom: '6px', opacity: 0.7,
+                        }}>
+                          Itinerary
+                        </p>
+                        <p style={{
+                          fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '400',
+                          color: palette.surface.stone, lineHeight: 1.6, marginBottom: '18px',
+                        }}>
+                          {stops.map((s, i) => (
+                            <React.Fragment key={s}>{s}{i < stops.length - 1 && <span style={{ margin: '0 6px', color: palette.primary.muted }}>&bull;</span>}</React.Fragment>
+                          ))}
+                        </p>
+                        <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                          <p style={{
+                            fontFamily: FONT_BODY, fontSize: TS.bodyLg, fontWeight: '700',
+                            color: isPrimaryAccent ? palette.surface.stone : accent.hex,
+                          }}>
+                            From £3,250
+                          </p>
+                          <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px' }}>
+                            <span style={{
+                              fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '500',
+                              color: palette.primary.faded, textTransform: 'uppercase',
+                              letterSpacing: '0.06em', opacity: 0.7,
+                            }}>
+                              Activity Level:
+                            </span>
+                            <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end' }}>
+                              {[8, 12, 16].map((h, i) => (
+                                <div key={i} style={{
+                                  width: '4px', height: `${h}px`, borderRadius: '1px',
+                                  backgroundColor: i < 3 ? palette.surface.stone : palette.primary.muted,
+                                }}/>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Card 3 — Editorial: Meso Light title, Meso stops, mixed price */}
+              <div style={{ width: '340px', display: 'flex', flexDirection: 'column' }}>
+                <p style={{
+                  fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300',
+                  color: palette.neutral[400], textTransform: 'uppercase',
+                  letterSpacing: '0.08em', marginBottom: '8px', textAlign: 'center',
+                }}>V3 &mdash; Editorial, Meso Light + Meso stops</p>
+                <div style={{
+                  flex: 1, display: 'flex', flexDirection: 'column',
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  boxShadow: '0 2px 12px rgba(16,32,55,0.08)',
+                  border: `1px solid ${palette.neutral[100]}`,
+                }}>
+                  <div style={{ position: 'relative' }}>
+                    <img
+                      src="/images/hero-03.png"
+                      alt="Japan in Cherry Blossom"
+                      style={{ width: '100%', height: '220px', objectFit: 'cover', display: 'block' }}
+                    />
+                    <span style={{
+                      position: 'absolute', top: '14px', left: '14px',
+                      fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
+                      letterSpacing: '0.08em', textTransform: 'uppercase',
+                      backgroundColor: palette.primary.default,
+                      color: '#FFFFFF',
+                      padding: '6px 12px', borderRadius: '6px',
+                    }}>
+                      Small Group Tour
+                    </span>
+                    <span style={{
+                      position: 'absolute', bottom: '12px', right: '14px',
+                      fontFamily: 'chainprinter, "Courier New", monospace',
+                      color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
+                      letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
+                    }}>
+                      Kyoto, Japan
+                    </span>
+                  </div>
+                  <div style={{ padding: '20px 24px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <h4 style={{
+                      fontFamily: FONT_HEADING, fontSize: TS.xl, fontWeight: '500',
+                      color: palette.primary.default, marginBottom: '6px', lineHeight: 1.15,
+                    }}>
+                      Japan in Cherry Blossom
+                    </h4>
+                    <p style={{
+                      fontFamily: FONT_HEADING, fontSize: TS.sm, fontWeight: '400',
+                      color: palette.primary.default, letterSpacing: '0.04em',
+                      textTransform: 'uppercase', marginBottom: '14px',
+                    }}>
+                      14 Days &bull; Limited to 16 Guests
+                    </p>
+                    <p style={{
+                      fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300',
+                      color: palette.neutral[400], textTransform: 'uppercase',
+                      letterSpacing: '0.06em', marginBottom: '6px',
+                    }}>
+                      Itinerary
+                    </p>
+                    <p style={{
+                      fontFamily: FONT_HEADING, fontSize: TS.sm, fontWeight: '400',
+                      color: palette.primary.default, lineHeight: 1.6, marginBottom: '18px',
+                    }}>
+                      {['Tokyo', 'Hakone', 'Kyoto', 'Osaka', 'Hiroshima'].map((s, i, arr) => (
+                        <React.Fragment key={s}>{s}{i < arr.length - 1 && <span style={{ margin: '0 6px', color: palette.neutral[300] }}>&bull;</span>}</React.Fragment>
+                      ))}
+                    </p>
+                    <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                      <p>
+                        <span style={{
+                          fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '300',
+                          color: palette.neutral[500],
+                        }}>From </span>
+                        <span style={{
+                          fontFamily: FONT_HEADING, fontSize: TS.bodyLg, fontWeight: '500',
+                          color: isPrimaryAccent ? palette.primary.default : accent.hex,
+                        }}>£5,495</span>
+                      </p>
+                      <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px' }}>
+                        <span style={{
+                          fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '500',
+                          color: palette.neutral[400], textTransform: 'uppercase',
+                          letterSpacing: '0.06em',
+                        }}>
+                          Activity Level:
+                        </span>
+                        <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end' }}>
+                          {[8, 12, 16].map((h, i) => (
+                            <div key={i} style={{
+                              width: '4px', height: `${h}px`, borderRadius: '1px',
+                              backgroundColor: i < 1 ? palette.primary.default : palette.neutral[200],
+                            }}/>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Product Cards — Detailed View */}
+          <div style={{ marginTop: '40px' }}>
+            <p style={{ ...sectionLabel, marginBottom: '16px' }}>Product Cards — Detailed</p>
+
+            {/* Detailed V1 — Classic horizontal */}
+            <p style={{
+              fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300',
+              color: palette.neutral[400], textTransform: 'uppercase',
+              letterSpacing: '0.08em', marginBottom: '10px',
+            }}>V1 &mdash; Classic horizontal</p>
+            <div style={{
+              display: 'flex', borderRadius: '16px', overflow: 'hidden',
+              backgroundColor: palette.surface.stone,
+              boxShadow: '0 2px 12px rgba(16,32,55,0.08)',
+              marginBottom: '28px',
+            }}>
+              <div style={{ position: 'relative', width: '420px', minHeight: '320px', flexShrink: 0 }}>
+                <img
+                  src="/images/hero-01.png"
+                  alt="The Grand Tour of India"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+                <span style={{
+                  position: 'absolute', top: '16px', left: '16px',
+                  fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
+                  letterSpacing: '0.08em', textTransform: 'uppercase',
+                  backgroundColor: isPrimaryAccent ? palette.surface.stone : accent.hex,
+                  color: isPrimaryAccent ? palette.primary.default : (isLightAccent ? palette.primary.default : '#FFFFFF'),
+                  padding: '6px 14px', borderRadius: '6px',
+                }}>
+                  Small Group Tour
+                </span>
+                <span style={{
+                  position: 'absolute', bottom: '14px', right: '14px',
+                  fontFamily: 'chainprinter, "Courier New", monospace',
+                  color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
+                  letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
+                }}>
+                  Agra, India
+                </span>
+              </div>
+              <div style={{ padding: '28px 32px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <h4 style={{
+                  fontFamily: FONT_HEADING, fontSize: TS.xl, fontWeight: '500',
+                  color: palette.primary.default, marginBottom: '6px', lineHeight: 1.2,
+                }}>
+                  The Grand Tour of India
+                </h4>
+                <p style={{
+                  fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '500',
+                  color: palette.primary.default, letterSpacing: '0.04em',
+                  textTransform: 'uppercase', marginBottom: '16px',
+                }}>
+                  17 Days &bull; 8 Destinations
+                </p>
+                <p style={{
+                  fontFamily: FONT_BODY, fontSize: TS.base, fontWeight: '400',
+                  color: palette.neutral[700], lineHeight: 1.65, marginBottom: '20px',
+                }}>
+                  Explore the diverse cultural influences that have created the fascinating heritage of India. This tour encompasses holy cities, the resplendent Taj Mahal, Jodhpur's bluewashed houses, and the beautiful lakes and palaces of Udaipur.
+                </p>
+                <p style={{
+                  fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300',
+                  color: palette.neutral[400], textTransform: 'uppercase',
+                  letterSpacing: '0.06em', marginBottom: '6px',
+                }}>
+                  Itinerary
+                </p>
+                <p style={{
+                  fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '500',
+                  color: palette.primary.default, lineHeight: 1.6, marginBottom: '20px',
+                }}>
+                  {['Amritsar', 'Varanasi', 'New Delhi', 'Agra', 'Rajasthan', 'Jaipur', 'Jodhpur', 'Udaipur'].map((s, i, arr) => (
+                    <React.Fragment key={s}>{s}{i < arr.length - 1 && <span style={{ margin: '0 6px', color: palette.neutral[300] }}>&bull;</span>}</React.Fragment>
+                  ))}
+                </p>
+                <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <p style={{
+                    fontFamily: FONT_HEADING, fontSize: TS.bodyLg, fontWeight: '400',
+                    color: isPrimaryAccent ? palette.primary.default : accent.hex,
+                  }}>
+                    From £4,095
+                  </p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px' }}>
+                      <span style={{
+                        fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '500',
+                        color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.06em',
+                      }}>Activity Level:</span>
+                      <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end' }}>
+                        {[8, 12, 16].map((h, i) => (
+                          <div key={i} style={{
+                            width: '4px', height: `${h}px`, borderRadius: '1px',
+                            backgroundColor: i < 2 ? palette.primary.default : palette.neutral[200],
+                          }}/>
+                        ))}
+                      </div>
+                    </div>
+                    <button style={{
+                      fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '500',
+                      backgroundColor: palette.primary.default, color: '#FFFFFF',
+                      padding: '10px 24px', borderRadius: '8px', border: 'none',
+                      cursor: 'pointer', letterSpacing: '0.02em',
+                    }}>
+                      Explore
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Detailed V2 — Content left, image right 50%, stone bg */}
+            <p style={{
+              fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300',
+              color: palette.neutral[400], textTransform: 'uppercase',
+              letterSpacing: '0.08em', marginBottom: '10px',
+            }}>V2 &mdash; Content left, image right</p>
+            <div style={{
+              display: 'flex', borderRadius: '16px', overflow: 'hidden',
+              backgroundColor: palette.surface.stone,
+              boxShadow: '0 2px 12px rgba(16,32,55,0.08)',
+              marginBottom: '28px',
+            }}>
+              <div style={{ width: '50%', padding: '32px 36px', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ marginBottom: '16px' }}>
+                  <span style={{
+                    fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
+                    letterSpacing: '0.08em', textTransform: 'uppercase',
+                    color: isPrimaryAccent ? palette.neutral[400] : accent.hex,
+                  }}>
+                    Small Group Tour
+                  </span>
+                </div>
+                <h4 style={{
+                  fontFamily: FONT_HEADING, fontSize: TS['2xl'], fontWeight: '500',
+                  color: palette.primary.default, marginBottom: '6px', lineHeight: 1.15,
+                }}>
+                  The Grand Tour of India
+                </h4>
+                <p style={{
+                  fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '400',
+                  color: palette.neutral[500], letterSpacing: '0.04em',
+                  textTransform: 'uppercase', marginBottom: '18px',
+                }}>
+                  17 Days &bull; 8 Destinations &bull; Limited to 18 Guests
+                </p>
+                <p style={{
+                  fontFamily: FONT_BODY, fontSize: TS.base, fontWeight: '400',
+                  color: palette.neutral[700], lineHeight: 1.65, marginBottom: '20px',
+                }}>
+                  Explore the diverse cultural influences that have created the fascinating heritage of India. This tour encompasses holy cities, the resplendent Taj Mahal, Jodhpur's bluewashed houses, and the beautiful lakes and palaces of Udaipur.
+                </p>
+                <p style={{
+                  fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300',
+                  color: palette.neutral[400], textTransform: 'uppercase',
+                  letterSpacing: '0.06em', marginBottom: '6px',
+                }}>
+                  Itinerary
+                </p>
+                <p style={{
+                  fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '500',
+                  color: palette.primary.default, lineHeight: 1.8, marginBottom: '24px',
+                }}>
+                  {['Amritsar', 'Varanasi', 'New Delhi', 'Agra', 'Rajasthan', 'Jaipur', 'Jodhpur', 'Udaipur'].map((s, i, arr) => (
+                    <React.Fragment key={s}>{s}{i < arr.length - 1 && <span style={{ margin: '0 6px', color: palette.neutral[300] }}>&bull;</span>}</React.Fragment>
+                  ))}
+                </p>
+                <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <p style={{
+                    fontFamily: FONT_HEADING, fontSize: TS.lg, fontWeight: '400',
+                    color: isPrimaryAccent ? palette.primary.default : accent.hex,
+                  }}>
+                    From £4,095
+                  </p>
+                  <button style={{
+                    fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '500',
+                    backgroundColor: palette.primary.default,
+                    color: '#FFFFFF',
+                    padding: '10px 24px', borderRadius: '8px', border: 'none',
+                    cursor: 'pointer', letterSpacing: '0.02em',
+                  }}>
+                    Explore
+                  </button>
+                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px', marginLeft: 'auto' }}>
+                    <span style={{
+                      fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '500',
+                      color: palette.neutral[400], textTransform: 'uppercase',
+                      letterSpacing: '0.06em',
+                    }}>Activity Level:</span>
+                    <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end' }}>
+                      {[8, 12, 16].map((h, i) => (
+                        <div key={i} style={{
+                          width: '4px', height: `${h}px`, borderRadius: '1px',
+                          backgroundColor: i < 2 ? palette.primary.default : palette.neutral[200],
+                        }}/>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style={{ width: '50%', flexShrink: 0, position: 'relative' }}>
+                <img
+                  src="/images/hero-01.png"
+                  alt="The Grand Tour of India"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+                <span style={{
+                  position: 'absolute', bottom: '14px', right: '14px',
+                  fontFamily: 'chainprinter, "Courier New", monospace',
+                  color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
+                  letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
+                }}>
+                  Agra, India
+                </span>
+              </div>
+            </div>
+
+            {/* Detailed V3 — Editorial overlay */}
+            <p style={{
+              fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300',
+              color: palette.neutral[400], textTransform: 'uppercase',
+              letterSpacing: '0.08em', marginBottom: '10px',
+            }}>V3 &mdash; Editorial overlay</p>
+            <div style={{
+              borderRadius: '16px', overflow: 'hidden',
+              boxShadow: '0 2px 16px rgba(16,32,55,0.12)',
+              marginBottom: '28px',
+            }}>
+              <div style={{ position: 'relative', height: '400px' }}>
+                <img
+                  src="/images/hero-01.png"
+                  alt="The Grand Tour of India"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+                <div style={{
+                  position: 'absolute', inset: 0,
+                  background: 'linear-gradient(to right, rgba(16,32,55,0.92) 0%, rgba(16,32,55,0.75) 50%, rgba(16,32,55,0) 100%)',
+                }}/>
+                <span style={{
+                  position: 'absolute', bottom: '14px', right: '14px', zIndex: 1,
+                  fontFamily: 'chainprinter, "Courier New", monospace',
+                  color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
+                  letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
+                }}>
+                  Agra, India
+                </span>
+                <div style={{
+                  position: 'absolute', top: 0, left: 0, bottom: 0,
+                  width: '60%', padding: '32px 36px',
+                  display: 'flex', flexDirection: 'column',
+                }}>
+                  <div style={{ marginBottom: '16px' }}>
+                    <span style={{
+                      fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
+                      letterSpacing: '0.08em', textTransform: 'uppercase',
+                      backgroundColor: isPrimaryAccent ? palette.surface.stone : accent.hex,
+                      color: isPrimaryAccent ? palette.primary.default : (isLightAccent ? palette.primary.default : '#FFFFFF'),
+                      padding: '5px 12px', borderRadius: '5px',
+                    }}>
+                      Small Group Tour
+                    </span>
+                  </div>
+                  <h4 style={{
+                    fontFamily: FONT_HEADING, fontSize: TS['2xl'], fontWeight: '500',
+                    color: '#FFFFFF', marginBottom: '4px', lineHeight: 1.15,
+                  }}>
+                    The Grand Tour of India
+                  </h4>
+                  <p style={{
+                    fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '400',
+                    color: palette.primary.faded, letterSpacing: '0.04em',
+                    textTransform: 'uppercase', marginBottom: '18px',
+                  }}>
+                    17 Days &bull; 8 Destinations &bull; Limited to 18 Guests
+                  </p>
+                  <p style={{
+                    fontFamily: FONT_BODY, fontSize: '15px', fontWeight: '400',
+                    color: 'rgba(242,242,235,0.85)', lineHeight: 1.65, marginBottom: '20px',
+                  }}>
+                    Explore the diverse cultural influences that have created the fascinating heritage of India. This tour encompasses holy cities, the resplendent Taj Mahal, and the beautiful lakes of Udaipur.
+                  </p>
+                  <div style={{ marginTop: 'auto' }}>
+                    <p style={{
+                      fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300',
+                      color: palette.primary.faded, textTransform: 'uppercase',
+                      letterSpacing: '0.06em', marginBottom: '6px', opacity: 0.7,
+                    }}>
+                      Itinerary
+                    </p>
+                    <p style={{
+                      fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '400',
+                      color: palette.surface.stone, lineHeight: 1.8, marginBottom: '20px',
+                    }}>
+                      {['Amritsar', 'Varanasi', 'New Delhi', 'Agra', 'Rajasthan', 'Jaipur', 'Jodhpur', 'Udaipur'].map((s, i, arr) => (
+                        <React.Fragment key={s}>{s}{i < arr.length - 1 && <span style={{ margin: '0 6px', color: palette.primary.muted }}>&bull;</span>}</React.Fragment>
+                      ))}
+                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                      <p style={{
+                        fontFamily: FONT_HEADING, fontSize: TS.lg, fontWeight: '400',
+                        color: isPrimaryAccent ? palette.surface.stone : accent.hex,
+                      }}>
+                        From £4,095
+                      </p>
+                      <button style={{
+                        fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '500',
+                        backgroundColor: isPrimaryAccent ? palette.surface.stone : accent.hex,
+                        color: isPrimaryAccent ? palette.primary.default : (isLightAccent ? palette.primary.default : '#FFFFFF'),
+                        padding: '10px 24px', borderRadius: '8px', border: 'none',
+                        cursor: 'pointer', letterSpacing: '0.02em',
+                      }}>
+                        Explore
+                      </button>
+                      <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px' }}>
+                        <span style={{
+                          fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '500',
+                          color: palette.primary.faded, textTransform: 'uppercase',
+                          letterSpacing: '0.06em', opacity: 0.7,
+                        }}>Activity Level:</span>
+                        <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end' }}>
+                          {[8, 12, 16].map((h, i) => (
+                            <div key={i} style={{
+                              width: '4px', height: `${h}px`, borderRadius: '1px',
+                              backgroundColor: i < 2 ? palette.surface.stone : palette.primary.muted,
+                            }}/>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1971,13 +2527,34 @@ export default function ColorPalette() {
                       </div>
 
                       {/* Shapes slider — auto-scrolling, overflows right edge */}
-                      <div style={{
-                        flex: 1,
-                        overflow: 'hidden',
-                        alignSelf: 'stretch',
-                        display: 'flex',
-                        alignItems: 'flex-end',
-                      }}>
+                      <div
+                        style={{
+                          flex: 1,
+                          overflow: 'hidden',
+                          alignSelf: 'stretch',
+                          display: 'flex',
+                          alignItems: 'flex-end',
+                          cursor: destDrag.current.active ? 'grabbing' : 'grab',
+                          userSelect: 'none',
+                        }}
+                        onPointerDown={(e) => {
+                          destDrag.current = { active: true, dragged: false, startX: e.clientX, startSlide: destSlide };
+                          e.currentTarget.setPointerCapture(e.pointerId);
+                        }}
+                        onPointerMove={(e) => {
+                          if (!destDrag.current.active) return;
+                          const dx = e.clientX - destDrag.current.startX;
+                          if (Math.abs(dx) > 5) destDrag.current.dragged = true;
+                          const slideWidth = 400 + 28;
+                          const slidesOffset = Math.round(-dx / slideWidth);
+                          if (Math.abs(dx) > slideWidth * 0.2) {
+                            const next = Math.max(0, Math.min(destRegions.length - 1, destDrag.current.startSlide + slidesOffset));
+                            if (next !== destSlide) setDestSlide(next);
+                          }
+                        }}
+                        onPointerUp={() => { destDrag.current.active = false; }}
+                        onPointerCancel={() => { destDrag.current.active = false; }}
+                      >
                         <div style={{
                           display: 'flex',
                           gap: '28px',
@@ -1995,9 +2572,8 @@ export default function ColorPalette() {
                               position: 'relative',
                               flexShrink: 0,
                               width: '400px',
-                              cursor: 'pointer',
                             }}
-                              onClick={() => setDestSlide(idx)}
+                              onClick={() => { if (!destDrag.current.dragged) setDestSlide(idx); }}
                               onMouseEnter={() => setDestHover(idx)}
                               onMouseLeave={() => setDestHover(-1)}
                             >
@@ -2010,49 +2586,48 @@ export default function ColorPalette() {
                                     }
                                   </clipPath>
                                 </defs>
-                                {region.isPolygon && region.points
-                                  ? <polygon points={region.points} fill={palette.primary.default} />
-                                  : <path d={region.d} fill={palette.primary.default} />
-                                }
-                                {hasImage && (
-                                  <>
-                                    <image
-                                      href={region.image}
-                                      x="0" y="0"
-                                      width={vb[2]} height={vb[3]}
-                                      preserveAspectRatio="xMidYMid slice"
-                                      clipPath={`url(#${clipId})`}
-                                      style={{
-                                        opacity: isActive ? 1 : 0,
-                                        transition: 'opacity 0.6s ease, transform 0.5s ease',
-                                        transformOrigin: `${vb[2] / 2}px ${vb[3] / 2}px`,
-                                        transform: destHover === idx ? 'scale(1.05)' : 'scale(1)',
-                                      }}
-                                    />
-                                    <rect
-                                      x="0" y="0"
-                                      width={vb[2]} height={vb[3]}
-                                      fill="#102037"
-                                      fillOpacity="0.10"
-                                      clipPath={`url(#${clipId})`}
-                                      style={{
-                                        opacity: isActive ? 1 : 0,
-                                        transition: 'opacity 0.6s ease',
-                                      }}
-                                    />
-                                  </>
-                                )}
-                                <rect
-                                  x="0" y="0"
-                                  width={vb[2]} height={vb[3]}
-                                  fill={palette.primary.default}
-                                  clipPath={`url(#${clipId})`}
-                                  style={{
-                                    opacity: destHover === idx ? 0.25 : 0,
-                                    transition: 'opacity 0.3s ease',
-                                    pointerEvents: 'none',
-                                  }}
-                                />
+                                <g clipPath={`url(#${clipId})`}>
+                                  {region.isPolygon && region.points
+                                    ? <polygon points={region.points} fill={palette.primary.default} />
+                                    : <path d={region.d} fill={palette.primary.default} />
+                                  }
+                                  {hasImage && (
+                                    <>
+                                      <image
+                                        href={region.image}
+                                        x="0" y="0"
+                                        width={vb[2]} height={vb[3]}
+                                        preserveAspectRatio="xMidYMid slice"
+                                        style={{
+                                          opacity: (isActive || destHover === idx) ? 1 : 0,
+                                          transition: 'opacity 0.6s ease, transform 0.5s ease',
+                                          transformOrigin: `${vb[2] / 2}px ${vb[3] / 2}px`,
+                                          transform: destHover === idx ? 'scale(1.05)' : 'scale(1)',
+                                        }}
+                                      />
+                                      <rect
+                                        x="0" y="0"
+                                        width={vb[2]} height={vb[3]}
+                                        fill="#102037"
+                                        fillOpacity="0.10"
+                                        style={{
+                                          opacity: (isActive || destHover === idx) ? 1 : 0,
+                                          transition: 'opacity 0.6s ease',
+                                        }}
+                                      />
+                                    </>
+                                  )}
+                                  <rect
+                                    x="0" y="0"
+                                    width={vb[2]} height={vb[3]}
+                                    fill={palette.primary.default}
+                                    style={{
+                                      opacity: destHover === idx && !isActive ? 0.25 : 0,
+                                      transition: 'opacity 0.3s ease',
+                                      pointerEvents: 'none',
+                                    }}
+                                  />
+                                </g>
                               </svg>
                               <div style={{
                                 position: 'absolute',
