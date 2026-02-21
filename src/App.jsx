@@ -2656,40 +2656,83 @@ export default function ColorPalette() {
                         </div>
                       </div>
                     </div>
-                    {/* Pagination line + arrows */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '0 48px', marginTop: '80px', paddingBottom: '48px' }}>
-                      <div style={{ display: 'flex', flex: 1, height: '1px' }}>
-                        {destRegions.map((_, i) => (
+                    {/* Region navigation bar — aligned with shapes */}
+                    <div style={{ display: 'flex', gap: '48px', marginTop: '80px', paddingBottom: '48px' }}>
+                      <div style={{ flexShrink: 0, width: '30%', padding: '0 0 0 48px', display: 'flex', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                           <div
-                            key={i}
-                            onClick={() => setDestSlide(i)}
-                            style={{
-                              flex: 1,
-                              height: '1px',
-                              backgroundColor: palette.primary.default,
-                              opacity: i === destSlide ? 1 : 0.15,
-                              transition: 'opacity 0.6s ease',
-                              cursor: 'pointer',
-                            }}
-                          />
-                        ))}
-                      </div>
-                      <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
-                        <div
-                          onClick={() => setDestSlide((prev) => (prev - 1 + destRegions.length) % destRegions.length)}
-                          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-                        >
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="15 18 9 12 15 6" />
-                          </svg>
+                            onClick={() => setDestSlide((prev) => (prev - 1 + destRegions.length) % destRegions.length)}
+                            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="15 18 9 12 15 6" />
+                            </svg>
+                          </div>
+                          <span style={{
+                            fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
+                            color: palette.neutral[400], letterSpacing: '0.06em', textTransform: 'uppercase',
+                          }}>
+                            {destSlide + 1} / {destRegions.length}
+                          </span>
+                          <div
+                            onClick={() => setDestSlide((prev) => (prev + 1) % destRegions.length)}
+                            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                          </div>
                         </div>
-                        <div
-                          onClick={() => setDestSlide((prev) => (prev + 1) % destRegions.length)}
-                          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-                        >
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="9 18 15 12 9 6" />
-                          </svg>
+                      </div>
+                      <div style={{ flex: 1, overflow: 'hidden' }}>
+                        <div style={{
+                          position: 'relative',
+                          width: `${destRegions.length * (400 + 28) - 28}px`,
+                          transform: `translateX(-${destSlide * (400 + 28)}px)`,
+                          transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                        }}>
+                          <div style={{
+                            height: '1px',
+                            backgroundColor: palette.neutral[200],
+                            width: '100%',
+                          }}/>
+                          <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            height: '1px',
+                            backgroundColor: palette.primary.default,
+                            width: `${((destSlide + 1) / destRegions.length) * 100}%`,
+                            transition: 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                          }}/>
+                          <div style={{ display: 'flex' }}>
+                            {destRegions.map((region, i) => (
+                              <div
+                                key={region.name}
+                                onClick={() => setDestSlide(i)}
+                                style={{
+                                  width: '400px',
+                                  marginRight: i < destRegions.length - 1 ? '28px' : 0,
+                                  flexShrink: 0,
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                <span style={{
+                                  display: 'block',
+                                  marginTop: '12px',
+                                  fontFamily: FONT_BODY,
+                                  fontSize: '11px',
+                                  fontWeight: i === destSlide ? '500' : '400',
+                                  color: i === destSlide ? palette.primary.default : palette.neutral[400],
+                                  letterSpacing: '0.03em',
+                                  whiteSpace: 'nowrap',
+                                  transition: 'color 0.3s ease',
+                                }}>
+                                  {region.name.replace('\n', ' ')}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
