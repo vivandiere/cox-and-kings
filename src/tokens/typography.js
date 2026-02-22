@@ -1,0 +1,16 @@
+export const FONT_HEADING = "'MesoTRIAL', Georgia, 'Times New Roman', serif";
+export const FONT_BODY = "'CenoTRIAL', system-ui, -apple-system, sans-serif";
+export const FONT_MONO = "'chainprinter', 'Courier New', monospace";
+
+export const TS = {
+  xs: '9px',
+  sm: '12px',
+  base: '16px',
+  bodyLg: '21px',
+  lg: '26px',
+  xl: '28px',
+  '2xl': '38px',
+  '3xl': '51px',
+  '4xl': '67px',
+  hero: '72px',
+};
