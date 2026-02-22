@@ -2,6 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AccentProvider } from './components/AccentContext.jsx';
+import PasswordGate from './components/PasswordGate.jsx';
 import AppLayout from './layouts/AppLayout.jsx';
 import IndexPage from './pages/IndexPage.jsx';
 import FoundationsPage from './pages/FoundationsPage.jsx';
@@ -21,6 +22,7 @@ import EnquiryPage from './pages/EnquiryPage.jsx';
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AccentProvider>
+      <PasswordGate>
       <BrowserRouter>
         <Routes>
           {/* Fullscreen — no sidebar layout */}
@@ -44,6 +46,7 @@ createRoot(document.getElementById('root')).render(
           </Route>
         </Routes>
       </BrowserRouter>
+      </PasswordGate>
     </AccentProvider>
   </React.StrictMode>
 );

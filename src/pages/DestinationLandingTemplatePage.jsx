@@ -38,20 +38,6 @@ export default function DestinationLandingTemplatePage() {
       }}>
         Top-level destinations hub — an overview of all regions with navigation into individual region, country, and journey pages.
       </p>
-      <span style={{
-        fontFamily: FONT_BODY,
-        fontSize: '11px',
-        fontWeight: '500',
-        letterSpacing: '0.08em',
-        textTransform: 'uppercase',
-        color: palette.neutral[400],
-        backgroundColor: palette.surface.subtleStone,
-        padding: '6px 14px',
-        borderRadius: '4px',
-        marginTop: '24px',
-      }}>
-        Coming Soon
-      </span>
     </div>
   );
 }

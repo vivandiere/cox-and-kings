@@ -78,7 +78,7 @@ export default function MapPage() {
             lineHeight: 1.1,
             textTransform: 'uppercase',
           }}>
-            Interactive World Map
+            Navigational Map
           </h1>
         </div>
 
@@ -90,7 +90,7 @@ export default function MapPage() {
           overflow: 'hidden',
           position: 'relative',
         }}>
-          <p style={{ ...sectionLabel, padding: '24px 24px 0 24px' }}>Interactive World Map</p>
+          <p style={{ ...sectionLabel, padding: '24px 24px 0 24px' }}>Navigational Map</p>
           <h3 style={{ ...sectionHeading, padding: '0 24px 4px 24px', fontSize: TS.bodyLg }}>
             Explore Our Destinations
           </h3>

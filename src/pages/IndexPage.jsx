@@ -154,32 +154,15 @@ export default function IndexPage() {
                       border: `1px solid ${palette.neutral[100]}`,
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <h3 style={{
-                        fontFamily: FONT_HEADING,
-                        fontSize: TS.bodyLg,
-                        fontWeight: '500',
-                        color: palette.primary.default,
-                        margin: 0,
-                      }}>
-                        {page.title}
-                      </h3>
-                      {isUpcoming && (
-                        <span style={{
-                          fontFamily: FONT_BODY,
-                          fontSize: '10px',
-                          fontWeight: '500',
-                          letterSpacing: '0.08em',
-                          textTransform: 'uppercase',
-                          color: palette.neutral[400],
-                          backgroundColor: palette.surface.subtleStone,
-                          padding: '4px 10px',
-                          borderRadius: '4px',
-                        }}>
-                          Coming Soon
-                        </span>
-                      )}
-                    </div>
+                    <h3 style={{
+                      fontFamily: FONT_HEADING,
+                      fontSize: TS.bodyLg,
+                      fontWeight: '500',
+                      color: palette.primary.default,
+                      margin: 0,
+                    }}>
+                      {page.title}
+                    </h3>
                     <p style={{
                       fontFamily: FONT_BODY,
                       fontSize: '14px',
