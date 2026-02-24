@@ -11,6 +11,9 @@ import {
   CreditCard, Shield, Award, Luggage, Plane, Ship, Train, Car,
   Sunrise, Mountain, Waves, TreePine, Camera, Compass,
   Eye, EyeOff, Settings, User, LogOut, ChevronFirst, ChevronLast,
+  Landmark, Drama, Music, Palette, BookOpen, Flame, Tent,
+  Binoculars, Footprints, Leaf, Bird, Fish, Turtle, Flower2,
+  Snowflake, Sun, CloudSun, Grape, Bike, Sailboat,
 } from 'lucide-react';
 
 const uiIconGroups = [
@@ -86,13 +89,38 @@ const uiIconGroups = [
     ],
   },
   {
-    label: 'Experiences & Nature',
+    label: 'Culture & Experiences',
+    icons: [
+      { Icon: Landmark, name: 'Heritage' },
+      { Icon: Drama, name: 'Theatre' },
+      { Icon: Music, name: 'Music' },
+      { Icon: Palette, name: 'Art' },
+      { Icon: BookOpen, name: 'History' },
+      { Icon: Grape, name: 'Food & Wine' },
+      { Icon: Flame, name: 'Cooking' },
+      { Icon: Camera, name: 'Photography' },
+      { Icon: Bike, name: 'Cycling' },
+      { Icon: Footprints, name: 'Walking' },
+      { Icon: Tent, name: 'Camping' },
+      { Icon: Binoculars, name: 'Safari' },
+      { Icon: Sailboat, name: 'Sailing' },
+    ],
+  },
+  {
+    label: 'Nature & Landscape',
     icons: [
       { Icon: Sunrise, name: 'Sunrise' },
+      { Icon: Sun, name: 'Sun' },
+      { Icon: CloudSun, name: 'Climate' },
       { Icon: Mountain, name: 'Mountain' },
       { Icon: Waves, name: 'Coastal' },
-      { Icon: TreePine, name: 'Wildlife' },
-      { Icon: Camera, name: 'Photography' },
+      { Icon: TreePine, name: 'Forest' },
+      { Icon: Leaf, name: 'Botanical' },
+      { Icon: Flower2, name: 'Gardens' },
+      { Icon: Bird, name: 'Birding' },
+      { Icon: Fish, name: 'Marine' },
+      { Icon: Turtle, name: 'Wildlife' },
+      { Icon: Snowflake, name: 'Winter' },
     ],
   },
 ];
