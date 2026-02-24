@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import { palette } from '../tokens/index.js';
-import { FONT_HEADING, FONT_BODY, FONT_MONO, TS } from '../tokens/index.js';
+import { FONT_HEADING, FONT_BODY, TS } from '../tokens/index.js';
 import { useAccent } from '../components/AccentContext.jsx';
+import ItineraryMap from '../components/ItineraryMap.jsx';
 
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 
@@ -78,8 +79,20 @@ export default function MapPage() {
             lineHeight: 1.1,
             textTransform: 'uppercase',
           }}>
-            Navigational Map
+            Maps
           </h1>
+        </div>
+
+        <div style={{ ...card, marginTop: '24px', marginBottom: '24px' }}>
+          <h2 style={sectionHeading}>Itinerary Map</h2>
+          <p style={{
+            fontFamily: FONT_BODY, fontSize: '13px', color: palette.neutral[500],
+            lineHeight: 1.5, maxWidth: '600px', marginTop: '-8px', marginBottom: '24px',
+          }}>
+            Day-by-day journey route built on Leaflet with branded raster tiles and CSS filters.
+            Switch base styles, route colours, and click stops for details.
+          </p>
+          <ItineraryMap />
         </div>
 
         <div style={{

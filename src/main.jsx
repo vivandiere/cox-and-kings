@@ -8,6 +8,7 @@ import IndexPage from './pages/IndexPage.jsx';
 import FoundationsPage from './pages/FoundationsPage.jsx';
 import HomepagePage from './pages/HomepagePage.jsx';
 import MapPage from './pages/MapPage.jsx';
+import IconsPage from './pages/IconsPage.jsx';
 import DestinationLandingPage from './pages/DestinationLandingPage.jsx';
 import DestinationLandingTemplatePage from './pages/DestinationLandingTemplatePage.jsx';
 import DestinationT1Page from './pages/DestinationT1Page.jsx';
@@ -33,6 +34,7 @@ createRoot(document.getElementById('root')).render(
             <Route index element={<IndexPage />} />
             <Route path="foundations" element={<FoundationsPage />} />
             <Route path="maps" element={<MapPage />} />
+            <Route path="icons" element={<IconsPage />} />
             <Route path="destinations" element={<DestinationLandingPage />} />
             <Route path="destination-landing" element={<DestinationLandingTemplatePage />} />
             <Route path="destination-t1" element={<DestinationT1Page />} />

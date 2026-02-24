@@ -15,6 +15,7 @@ const navGroups = [
     items: [
       { to: '/foundations', label: 'Foundations' },
       { to: '/maps', label: 'Maps' },
+      { to: '/icons', label: 'Icons' },
     ],
   },
   {

@@ -20,6 +20,12 @@ const sections = [
         desc: 'Navigational SVG maps, interactive world map, and itinerary maps using a map platform API.',
         status: 'live',
       },
+      {
+        to: '/icons',
+        title: 'Icons',
+        desc: 'UI icons (Lucide) for navigation and interface elements, plus editorial icons for brand USPs.',
+        status: 'live',
+      },
     ],
   },
   {
