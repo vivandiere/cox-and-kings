@@ -768,7 +768,7 @@ export default function FoundationsPage() {
                     <div style={{
                       flex: 1, display: 'flex', flexDirection: 'column',
                       backgroundColor: palette.surface.stone,
-                      borderRadius: '16px',
+                      borderRadius: '0',
                       boxShadow: '0 2px 12px rgba(16,32,55,0.08)',
                       padding: '6px 6px 0',
                     }}>
@@ -1074,7 +1074,7 @@ export default function FoundationsPage() {
               letterSpacing: '0.08em', marginBottom: '10px',
             }}>V1 &mdash; Classic horizontal</p>
             <div style={{
-              display: 'flex', borderRadius: '16px', overflow: 'hidden',
+              display: 'flex', borderRadius: '0', overflow: 'hidden',
               backgroundColor: palette.surface.stone,
               boxShadow: '0 2px 12px rgba(16,32,55,0.08)',
               marginBottom: '28px',
