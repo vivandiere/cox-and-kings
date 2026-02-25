@@ -56,8 +56,8 @@ function LogoStacked({ color = 'currentColor', height = 64 }) {
 /* ────────────────────────────────────────────────────
    Font Constants
    ──────────────────────────────────────────────────── */
-const FONT_HEADING = "'MesoTRIAL', Georgia, 'Times New Roman', serif";
-const FONT_BODY    = "'CenoTRIAL', system-ui, -apple-system, sans-serif";
+const FONT_HEADING = "'Meso', Georgia, 'Times New Roman', serif";
+const FONT_BODY    = "'Ceno', system-ui, -apple-system, sans-serif";
 const FONT_MONO    = "'chainprinter', 'Courier New', monospace";
 
 export default function ColorPalette() {
@@ -343,15 +343,6 @@ export default function ColorPalette() {
           }}>
             Design Foundations
           </h1>
-          <p style={{ 
-            fontFamily: FONT_BODY,
-            color: palette.neutral[500], 
-            fontSize: TS.sm,
-            marginTop: '4px',
-            lineHeight: 1.6,
-          }}>
-            Interactive tester for colour palette, accent selection, typography, and component preview. Select an accent below to see it applied across the homepage prototype in real time.
-          </p>
         </div>
         <p style={{ 
           fontFamily: FONT_BODY,
@@ -359,7 +350,7 @@ export default function ColorPalette() {
           fontSize: TS.sm,
           marginBottom: '32px',
         }}>
-          Primary <code style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.neutral[500] }}>#102037</code> &middot; Stone <code style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.neutral[500] }}>#F2F2EB</code> &middot; Headers in <strong style={{ fontFamily: FONT_HEADING, fontWeight: '500' }}>MesoTRIAL Medium</strong> &middot; Body in <strong>CenoTRIAL</strong> &middot; Labels in <span style={{ fontWeight: '300' }}>CenoTRIAL Light</span>
+          Primary <code style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.neutral[500] }}>#102037</code> &middot; Stone <code style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.neutral[500] }}>#F2F2EB</code> &middot; Headers in <strong style={{ fontFamily: FONT_HEADING, fontWeight: '500' }}>Meso Medium</strong> &middot; Body in <strong>Ceno</strong> &middot; Labels in <span style={{ fontWeight: '300' }}>Ceno Light</span>
         </p>
 
         {/* ════════════════ ACCENT SELECTOR ════════════════ */}
@@ -812,7 +803,7 @@ export default function ColorPalette() {
           <h3 style={sectionHeading}>Typography Preview</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
             <div>
-              <p style={sectionLabel}>MesoTRIAL — Headers</p>
+              <p style={sectionLabel}>Meso — Headers</p>
               <h2 style={{ fontFamily: FONT_HEADING, color: palette.primary.default, fontSize: TS.xl, fontWeight: '700', marginBottom: '8px' }}>
                 Bold 700
               </h2>
@@ -833,7 +824,7 @@ export default function ColorPalette() {
               </h4>
             </div>
             <div>
-              <p style={sectionLabel}>CenoTRIAL — Body &amp; Labels</p>
+              <p style={sectionLabel}>Ceno — Body &amp; Labels</p>
               <p style={{ fontFamily: FONT_BODY, color: palette.primary.default, fontSize: TS.base, lineHeight: 1.65, marginBottom: '12px' }}>
                 Cox &amp; Kings, established in 1758, is the world's longest-established travel company. From the majestic palaces of Rajasthan to the serene backwaters of Kerala, every journey tells a story.
               </p>
@@ -3046,11 +3037,11 @@ export default function ColorPalette() {
                 </div>
                 <div>
                   <p style={{ fontFamily: FONT_BODY, fontSize: '12px', color: palette.primary.faded, marginBottom: '4px' }}>Heading Font</p>
-                  <code style={{ color: '#FFFFFF', fontSize: '14px', fontFamily: 'monospace' }}>MesoTRIAL</code>
+                  <code style={{ color: '#FFFFFF', fontSize: '14px', fontFamily: 'monospace' }}>Meso</code>
                 </div>
                 <div>
                   <p style={{ fontFamily: FONT_BODY, fontSize: '12px', color: palette.primary.faded, marginBottom: '4px' }}>Body Font</p>
-                  <code style={{ color: '#FFFFFF', fontSize: '14px', fontFamily: 'monospace' }}>CenoTRIAL</code>
+                  <code style={{ color: '#FFFFFF', fontSize: '14px', fontFamily: 'monospace' }}>Ceno</code>
                 </div>
               </>
             ) : (
@@ -3069,11 +3060,11 @@ export default function ColorPalette() {
                 </div>
                 <div>
                   <p style={{ fontFamily: FONT_BODY, fontSize: '12px', color: palette.primary.faded, marginBottom: '4px' }}>Heading Font</p>
-                  <code style={{ color: '#FFFFFF', fontSize: '14px', fontFamily: 'monospace' }}>MesoTRIAL</code>
+                  <code style={{ color: '#FFFFFF', fontSize: '14px', fontFamily: 'monospace' }}>Meso</code>
                 </div>
                 <div>
                   <p style={{ fontFamily: FONT_BODY, fontSize: '12px', color: palette.primary.faded, marginBottom: '4px' }}>Body Font</p>
-                  <code style={{ color: '#FFFFFF', fontSize: '14px', fontFamily: 'monospace' }}>CenoTRIAL</code>
+                  <code style={{ color: '#FFFFFF', fontSize: '14px', fontFamily: 'monospace' }}>Ceno</code>
                 </div>
               </>
             )}

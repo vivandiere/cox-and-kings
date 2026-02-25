@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { palette, brandAccents, brandDecorative, brandDecorativeDeep, uiAccents, buildAccentScale, lightAccents } from '../tokens/index.js';
 import { FONT_HEADING, FONT_BODY, FONT_MONO, TS } from '../tokens/index.js';
 import { LogoMark, LogoInline, LogoStacked } from '../components/Logo.jsx';
@@ -66,15 +66,6 @@ export default function FoundationsPage() {
           }}>
             Design Foundations
           </h1>
-          <p style={{
-            fontFamily: FONT_BODY,
-            color: palette.neutral[500],
-            fontSize: TS.sm,
-            marginTop: '4px',
-            lineHeight: 1.6,
-          }}>
-            Interactive tester for colour palette, accent selection, typography, and component preview. Select an accent below to see it applied across the homepage prototype in real time.
-          </p>
         </div>
         <p style={{
           fontFamily: FONT_BODY,
@@ -82,7 +73,7 @@ export default function FoundationsPage() {
           fontSize: TS.sm,
           marginBottom: '32px',
         }}>
-          Primary <code style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.neutral[500] }}>#102037</code> &middot; Stone <code style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.neutral[500] }}>#F2F2EB</code> &middot; Headers in <strong style={{ fontFamily: FONT_HEADING, fontWeight: '500' }}>MesoTRIAL Medium</strong> &middot; Body in <strong>CenoTRIAL</strong> &middot; Labels in <span style={{ fontWeight: '300' }}>CenoTRIAL Light</span>
+          Primary <code style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.neutral[500] }}>#102037</code> &middot; Stone <code style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.neutral[500] }}>#F2F2EB</code> &middot; Headers in <strong style={{ fontFamily: FONT_HEADING, fontWeight: '500' }}>Meso Medium</strong> &middot; Body in <strong>Ceno</strong> &middot; Labels in <span style={{ fontWeight: '300' }}>Ceno Light</span>
         </p>
 
         {/* ════════════════ ACCENT SELECTOR ════════════════ */}
@@ -535,7 +526,7 @@ export default function FoundationsPage() {
           <h3 style={sectionHeading}>Typography Preview</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
             <div>
-              <p style={sectionLabel}>MesoTRIAL — Headers</p>
+              <p style={sectionLabel}>Meso — Headers</p>
               <h2 style={{ fontFamily: FONT_HEADING, color: palette.primary.default, fontSize: TS.xl, fontWeight: '700', marginBottom: '8px' }}>
                 Bold 700
               </h2>
@@ -556,7 +547,7 @@ export default function FoundationsPage() {
               </h4>
             </div>
             <div>
-              <p style={sectionLabel}>CenoTRIAL — Body &amp; Labels</p>
+              <p style={sectionLabel}>Ceno — Body &amp; Labels</p>
               <p style={{ fontFamily: FONT_BODY, color: palette.primary.default, fontSize: TS.base, lineHeight: 1.65, marginBottom: '12px' }}>
                 Cox &amp; Kings, established in 1758, is the world's longest-established travel company. From the majestic palaces of Rajasthan to the serene backwaters of Kerala, every journey tells a story.
               </p>
@@ -655,6 +646,7 @@ export default function FoundationsPage() {
           </div>
 
           {/* Form Elements */}
+          <div style={{ height: '1px', backgroundColor: palette.neutral[300], margin: '40px 0' }} />
           <div style={{ marginBottom: '32px' }}>
             <p style={{ ...sectionLabel, marginBottom: '12px' }}>Form Elements</p>
             <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'flex-start' }}>
@@ -703,6 +695,7 @@ export default function FoundationsPage() {
           </div>
 
           {/* Alerts */}
+          <div style={{ height: '1px', backgroundColor: palette.neutral[300], margin: '40px 0' }} />
           <div style={{ marginBottom: '32px' }}>
             <p style={{ ...sectionLabel, marginBottom: '12px' }}>Alerts (compound semantic)</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '400px' }}>
@@ -726,6 +719,7 @@ export default function FoundationsPage() {
           </div>
 
           {/* Status Badges */}
+          <div style={{ height: '1px', backgroundColor: palette.neutral[300], margin: '40px 0' }} />
           <div>
             <p style={{ ...sectionLabel, marginBottom: '12px' }}>Status Badges</p>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
@@ -750,8 +744,298 @@ export default function FoundationsPage() {
             </div>
           </div>
 
+          <div style={{ height: '1px', backgroundColor: palette.neutral[300], margin: '40px 0' }} />
+          {/* ════════════════ TAB STYLES ════════════════ */}
+          {(() => {
+            const [tabStyleA, setTabStyleA] = useState(0);
+            const [tabStyleB, setTabStyleB] = useState(0);
+            const [tabStyleC, setTabStyleC] = useState(0);
+            const [tabStyleD, setTabStyleD] = useState(0);
+            const [productTab, setProductTab] = useState(0);
+
+            const binaryLabels = ['Small Group Tours', 'Tailormade Journeys'];
+            const multiLabels = ['All Destinations', 'Small Group', 'Tailormade', 'River Cruises', 'Rail Journeys'];
+
+            const sgtProducts = [
+              { title: 'The Grand Tour of India', location: 'Agra, India', days: 17, price: '£3,495', img: '/images/hero-01.png' },
+              { title: 'Highlights of Japan', location: 'Kyoto, Japan', days: 12, price: '£4,295', img: '/images/dest-far-east.png' },
+              { title: 'Morocco Discovery', location: 'Marrakech, Morocco', days: 10, price: '£2,195', img: '/images/dest-north-africa-middle-east.png' },
+            ];
+            const tmProducts = [
+              { title: 'Kerala & the Backwaters', location: 'Kerala, India', days: 14, price: '£3,895', img: '/images/dest-india-subcontinent.png' },
+              { title: 'Patagonia Explorer', location: 'Torres del Paine, Chile', days: 16, price: '£5,495', img: '/images/dest-south-america.png' },
+              { title: 'Silk Road Adventure', location: 'Samarkand, Uzbekistan', days: 15, price: '£4,195', img: '/images/dest-central-asia.png' },
+            ];
+            const activeProducts = productTab === 0 ? sgtProducts : tmProducts;
+
+            const tabBase = {
+              fontFamily: FONT_BODY, cursor: 'pointer', border: 'none',
+              transition: 'all 0.3s ease', whiteSpace: 'nowrap',
+            };
+
+            return (
+              <div style={{ marginTop: '40px' }}>
+                <p style={{ ...sectionLabel, marginBottom: '16px' }}>Tab Styles</p>
+
+                {/* ── Style A: Underline ── */}
+                <div style={{ marginBottom: '40px' }}>
+                  <p style={{
+                    fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300',
+                    color: palette.neutral[400], textTransform: 'uppercase',
+                    letterSpacing: '0.08em', marginBottom: '12px',
+                  }}>A &mdash; Underline</p>
+
+                  {/* Binary */}
+                  <div style={{ display: 'flex', gap: '0', borderBottom: `1px solid ${palette.neutral[200]}`, marginBottom: '16px' }}>
+                    {binaryLabels.map((label, i) => (
+                      <button key={label} onClick={() => setTabStyleA(i)} style={{
+                        ...tabBase,
+                        backgroundColor: 'transparent',
+                        padding: '12px 24px',
+                        fontSize: '14px',
+                        fontWeight: tabStyleA === i ? '500' : '400',
+                        color: tabStyleA === i ? palette.primary.default : palette.neutral[400],
+                        borderBottom: tabStyleA === i ? `2px solid ${palette.primary.default}` : '2px solid transparent',
+                        marginBottom: '-1px',
+                      }}>{label}</button>
+                    ))}
+                  </div>
+                  {/* Multi */}
+                  <div style={{ display: 'flex', gap: '0', borderBottom: `1px solid ${palette.neutral[200]}` }}>
+                    {multiLabels.map((label, i) => (
+                      <button key={label} onClick={() => setTabStyleA(i)} style={{
+                        ...tabBase,
+                        backgroundColor: 'transparent',
+                        padding: '12px 20px',
+                        fontSize: '13px',
+                        fontWeight: tabStyleA === i ? '500' : '400',
+                        color: tabStyleA === i ? palette.primary.default : palette.neutral[400],
+                        borderBottom: tabStyleA === i ? `2px solid ${palette.primary.default}` : '2px solid transparent',
+                        marginBottom: '-1px',
+                      }}>{label}</button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* ── Style B: Pill / Capsule ── */}
+                <div style={{ marginBottom: '40px' }}>
+                  <p style={{
+                    fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300',
+                    color: palette.neutral[400], textTransform: 'uppercase',
+                    letterSpacing: '0.08em', marginBottom: '12px',
+                  }}>B &mdash; Pill</p>
+
+                  {/* Binary */}
+                  <div style={{
+                    display: 'inline-flex', gap: '4px', padding: '4px',
+                    backgroundColor: palette.neutral[100], borderRadius: '32px', marginBottom: '16px',
+                  }}>
+                    {binaryLabels.map((label, i) => (
+                      <button key={label} onClick={() => setTabStyleB(i)} style={{
+                        ...tabBase,
+                        padding: '10px 24px',
+                        fontSize: '13px',
+                        fontWeight: '500',
+                        letterSpacing: '0.02em',
+                        borderRadius: '28px',
+                        backgroundColor: tabStyleB === i ? '#FFFFFF' : 'transparent',
+                        color: tabStyleB === i ? palette.primary.default : palette.neutral[500],
+                        boxShadow: tabStyleB === i ? '0 1px 4px rgba(16,32,55,0.1)' : 'none',
+                      }}>{label}</button>
+                    ))}
+                  </div>
+                  <br />
+                  {/* Multi */}
+                  <div style={{
+                    display: 'inline-flex', gap: '4px', padding: '4px',
+                    backgroundColor: palette.neutral[100], borderRadius: '32px',
+                  }}>
+                    {multiLabels.map((label, i) => (
+                      <button key={label} onClick={() => setTabStyleB(i)} style={{
+                        ...tabBase,
+                        padding: '10px 20px',
+                        fontSize: '12px',
+                        fontWeight: '500',
+                        letterSpacing: '0.02em',
+                        borderRadius: '28px',
+                        backgroundColor: tabStyleB === i ? '#FFFFFF' : 'transparent',
+                        color: tabStyleB === i ? palette.primary.default : palette.neutral[500],
+                        boxShadow: tabStyleB === i ? '0 1px 4px rgba(16,32,55,0.1)' : 'none',
+                      }}>{label}</button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* ── Style C: Boxed / Outlined ── */}
+                <div style={{ marginBottom: '40px' }}>
+                  <p style={{
+                    fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300',
+                    color: palette.neutral[400], textTransform: 'uppercase',
+                    letterSpacing: '0.08em', marginBottom: '12px',
+                  }}>C &mdash; Outlined</p>
+
+                  {/* Binary */}
+                  <div style={{ display: 'flex', gap: '0', marginBottom: '16px', width: 'fit-content' }}>
+                    {binaryLabels.map((label, i) => (
+                      <button key={label} onClick={() => setTabStyleC(i)} style={{
+                        ...tabBase,
+                        padding: '12px 28px',
+                        fontSize: '13px',
+                        fontWeight: '500',
+                        letterSpacing: '0.04em',
+                        textTransform: 'uppercase',
+                        backgroundColor: tabStyleC === i ? palette.primary.default : 'transparent',
+                        color: tabStyleC === i ? '#FFFFFF' : palette.primary.default,
+                        border: `1px solid ${palette.primary.default}`,
+                        marginLeft: i > 0 ? '-1px' : '0',
+                      }}>{label}</button>
+                    ))}
+                  </div>
+                  {/* Multi */}
+                  <div style={{ display: 'flex', gap: '0', width: 'fit-content' }}>
+                    {multiLabels.map((label, i) => (
+                      <button key={label} onClick={() => setTabStyleC(i)} style={{
+                        ...tabBase,
+                        padding: '12px 20px',
+                        fontSize: '12px',
+                        fontWeight: '500',
+                        letterSpacing: '0.04em',
+                        textTransform: 'uppercase',
+                        backgroundColor: tabStyleC === i ? palette.primary.default : 'transparent',
+                        color: tabStyleC === i ? '#FFFFFF' : palette.primary.default,
+                        border: `1px solid ${palette.primary.default}`,
+                        marginLeft: i > 0 ? '-1px' : '0',
+                      }}>{label}</button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* ── Style D: Minimal Text ── */}
+                <div style={{ marginBottom: '40px' }}>
+                  <p style={{
+                    fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300',
+                    color: palette.neutral[400], textTransform: 'uppercase',
+                    letterSpacing: '0.08em', marginBottom: '12px',
+                  }}>D &mdash; Minimal Text</p>
+
+                  {/* Binary */}
+                  <div style={{ display: 'flex', gap: '28px', marginBottom: '16px' }}>
+                    {binaryLabels.map((label, i) => (
+                      <button key={label} onClick={() => setTabStyleD(i)} style={{
+                        ...tabBase,
+                        backgroundColor: 'transparent',
+                        padding: '0 0 6px',
+                        fontSize: '15px',
+                        fontWeight: '400',
+                        fontFamily: FONT_HEADING,
+                        color: tabStyleD === i ? palette.primary.default : palette.neutral[300],
+                        borderBottom: tabStyleD === i ? `1px solid ${palette.primary.default}` : '1px solid transparent',
+                      }}>{label}</button>
+                    ))}
+                  </div>
+                  {/* Multi */}
+                  <div style={{ display: 'flex', gap: '24px' }}>
+                    {multiLabels.map((label, i) => (
+                      <button key={label} onClick={() => setTabStyleD(i)} style={{
+                        ...tabBase,
+                        backgroundColor: 'transparent',
+                        padding: '0 0 6px',
+                        fontSize: '14px',
+                        fontWeight: '400',
+                        fontFamily: FONT_HEADING,
+                        color: tabStyleD === i ? palette.primary.default : palette.neutral[300],
+                        borderBottom: tabStyleD === i ? `1px solid ${palette.primary.default}` : '1px solid transparent',
+                      }}>{label}</button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* ── Live Demo: Product Carousel with binary tabs ── */}
+                <div style={{ marginTop: '48px', paddingTop: '32px', borderTop: `1px solid ${palette.neutral[200]}` }}>
+                  <p style={{ ...sectionLabel, marginBottom: '16px' }}>Tab Demo &mdash; Product Carousel</p>
+
+                  {/* Binary pill tabs */}
+                  <div style={{
+                    display: 'inline-flex', gap: '4px', padding: '4px',
+                    backgroundColor: palette.neutral[100], borderRadius: '32px', marginBottom: '28px',
+                  }}>
+                    {binaryLabels.map((label, i) => (
+                      <button key={label} onClick={() => setProductTab(i)} style={{
+                        ...tabBase,
+                        padding: '10px 24px',
+                        fontSize: '13px',
+                        fontWeight: '500',
+                        letterSpacing: '0.02em',
+                        borderRadius: '28px',
+                        backgroundColor: productTab === i ? '#FFFFFF' : 'transparent',
+                        color: productTab === i ? palette.primary.default : palette.neutral[500],
+                        boxShadow: productTab === i ? '0 1px 4px rgba(16,32,55,0.1)' : 'none',
+                      }}>{label}</button>
+                    ))}
+                  </div>
+
+                  {/* Product cards row */}
+                  <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+                    {activeProducts.map((p) => (
+                      <div key={p.title} style={{
+                        width: '260px', display: 'flex', flexDirection: 'column',
+                        backgroundColor: palette.surface.stone,
+                        boxShadow: '0 2px 12px rgba(16,32,55,0.08)',
+                        padding: '6px 6px 0',
+                      }}>
+                        <div style={{ position: 'relative' }}>
+                          <img src={p.img} alt={p.title}
+                            style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block', borderRadius: '24px' }}
+                          />
+                          <span style={{
+                            position: 'absolute', top: '12px', left: '12px',
+                            fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '500',
+                            letterSpacing: '0.08em', textTransform: 'uppercase',
+                            backgroundColor: isPrimaryAccent ? palette.surface.stone : accent.hex,
+                            color: isPrimaryAccent ? palette.primary.default : (isLightAccent ? palette.primary.default : '#FFFFFF'),
+                            padding: '5px 10px', borderRadius: '6px',
+                          }}>
+                            {productTab === 0 ? 'Small Group Tour' : 'Tailormade'}
+                          </span>
+                          <span style={{
+                            position: 'absolute', bottom: '12px', right: '12px',
+                            fontFamily: 'chainprinter, "Courier New", monospace',
+                            color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
+                            letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
+                          }}>{p.location}</span>
+                        </div>
+                        <div style={{ padding: '16px 14px 20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                          <h4 style={{
+                            fontFamily: FONT_HEADING, fontSize: '18px', fontWeight: '500',
+                            color: palette.primary.default, margin: '0 0 6px',
+                          }}>{p.title}</h4>
+                          <p style={{
+                            fontFamily: FONT_BODY, fontSize: '13px', fontWeight: '300',
+                            color: palette.neutral[500], margin: '0 0 12px',
+                          }}>{p.days} days &middot; From {p.price}pp</p>
+                          <div style={{ marginTop: 'auto' }}>
+                            <button style={{
+                              ...tabBase,
+                              fontWeight: '500', fontSize: '13px',
+                              backgroundColor: 'transparent',
+                              color: palette.primary.default,
+                              padding: 0,
+                              textDecoration: 'underline',
+                              textUnderlineOffset: '3px',
+                            }}>Explore →</button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
+          <div style={{ height: '1px', backgroundColor: palette.neutral[300], margin: '40px 0' }} />
           {/* ════════════════ PRODUCT CARDS ════════════════ */}
-          <div style={{ marginTop: '40px' }}>
+          <div>
             <p style={{ ...sectionLabel, marginBottom: '16px' }}>Product Cards</p>
             <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', alignItems: 'stretch' }}>
 
@@ -1063,8 +1347,9 @@ export default function FoundationsPage() {
             </div>
           </div>
 
+          <div style={{ height: '1px', backgroundColor: palette.neutral[300], margin: '40px 0' }} />
           {/* ════════════════ PRODUCT CARDS — DETAILED ════════════════ */}
-          <div style={{ marginTop: '40px' }}>
+          <div>
             <p style={{ ...sectionLabel, marginBottom: '16px' }}>Product Cards — Detailed</p>
 
             {/* Detailed V1 — Classic horizontal */}
@@ -1453,11 +1738,11 @@ export default function FoundationsPage() {
                 </div>
                 <div>
                   <p style={{ fontFamily: FONT_BODY, fontSize: '12px', color: palette.primary.faded, marginBottom: '4px' }}>Heading Font</p>
-                  <code style={{ color: '#FFFFFF', fontSize: '14px', fontFamily: 'monospace' }}>MesoTRIAL</code>
+                  <code style={{ color: '#FFFFFF', fontSize: '14px', fontFamily: 'monospace' }}>Meso</code>
                 </div>
                 <div>
                   <p style={{ fontFamily: FONT_BODY, fontSize: '12px', color: palette.primary.faded, marginBottom: '4px' }}>Body Font</p>
-                  <code style={{ color: '#FFFFFF', fontSize: '14px', fontFamily: 'monospace' }}>CenoTRIAL</code>
+                  <code style={{ color: '#FFFFFF', fontSize: '14px', fontFamily: 'monospace' }}>Ceno</code>
                 </div>
               </>
             ) : (
@@ -1476,11 +1761,11 @@ export default function FoundationsPage() {
                 </div>
                 <div>
                   <p style={{ fontFamily: FONT_BODY, fontSize: '12px', color: palette.primary.faded, marginBottom: '4px' }}>Heading Font</p>
-                  <code style={{ color: '#FFFFFF', fontSize: '14px', fontFamily: 'monospace' }}>MesoTRIAL</code>
+                  <code style={{ color: '#FFFFFF', fontSize: '14px', fontFamily: 'monospace' }}>Meso</code>
                 </div>
                 <div>
                   <p style={{ fontFamily: FONT_BODY, fontSize: '12px', color: palette.primary.faded, marginBottom: '4px' }}>Body Font</p>
-                  <code style={{ color: '#FFFFFF', fontSize: '14px', fontFamily: 'monospace' }}>CenoTRIAL</code>
+                  <code style={{ color: '#FFFFFF', fontSize: '14px', fontFamily: 'monospace' }}>Ceno</code>
                 </div>
               </>
             )}

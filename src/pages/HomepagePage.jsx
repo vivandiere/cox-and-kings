@@ -5,8 +5,23 @@ import { FONT_HEADING, FONT_BODY, FONT_MONO, TS } from '../tokens/index.js';
 import { LogoInline, LogoStacked } from '../components/Logo.jsx';
 import { useAccent } from '../components/AccentContext.jsx';
 
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < breakpoint : false
+  );
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    setIsMobile(mq.matches);
+    return () => mq.removeEventListener('change', handler);
+  }, [breakpoint]);
+  return isMobile;
+}
+
 export default function HomepagePage() {
   const { accent, accentScale, isPrimaryAccent, isLightAccent } = useAccent();
+  const mob = useIsMobile();
 
   const [heroMode, setHeroMode] = useState('offWhite');
   const [logoCompact, setLogoCompact] = useState(false);
@@ -19,6 +34,7 @@ export default function HomepagePage() {
 
   const scrollContainerRef = useRef(null);
   const menuRef = useRef(null);
+  const destScrollRef = useRef(null);
   const destDrag = useRef({ active: false, startX: 0, startSlide: 0 });
 
   const heroSlides = [
@@ -156,125 +172,127 @@ export default function HomepagePage() {
           position: 'sticky',
           top: 0,
           zIndex: 10,
-          height: '104px',
+          height: mob ? '80px' : '104px',
         }}>
-          {/* Full-width nav (top / not scrolled) */}
-          <div style={{
-            position: 'absolute',
-            top: 0, left: 0, right: 0,
-            opacity: logoCompact ? 0 : 1,
-            pointerEvents: logoCompact ? 'none' : 'auto',
-            transition: 'opacity 0.35s ease',
-            display: 'flex',
-            flexDirection: 'column',
-          }}>
+          {/* Full-width nav (top / not scrolled) — desktop only */}
+          {!mob && (
             <div style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr auto 1fr',
-              alignItems: 'center',
-              padding: '20px 24px',
+              position: 'absolute',
+              top: 0, left: 0, right: 0,
+              opacity: logoCompact ? 0 : 1,
+              pointerEvents: logoCompact ? 'none' : 'auto',
+              transition: 'opacity 0.35s ease',
+              display: 'flex',
+              flexDirection: 'column',
             }}>
-              <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => setMenuOpen(!menuOpen)}>
-                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '18px', height: '12px', position: 'relative' }}>
-                    <div style={{
-                      position: 'absolute', width: '18px', height: '1.5px', backgroundColor: palette.surface.stone,
-                      top: menuOpen ? '5px' : '1px', transform: menuOpen ? 'rotate(45deg)' : 'none',
-                      transition: 'all 0.3s ease',
-                    }} />
-                    <div style={{
-                      position: 'absolute', width: '18px', height: '1.5px', backgroundColor: palette.surface.stone,
-                      bottom: menuOpen ? '5px' : '1px', transform: menuOpen ? 'rotate(-45deg)' : 'none',
-                      transition: 'all 0.3s ease',
-                    }} />
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr auto 1fr',
+                alignItems: 'center',
+                padding: '20px 24px',
+              }}>
+                <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => setMenuOpen(!menuOpen)}>
+                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '18px', height: '12px', position: 'relative' }}>
+                      <div style={{
+                        position: 'absolute', width: '18px', height: '1.5px', backgroundColor: palette.surface.stone,
+                        top: menuOpen ? '5px' : '1px', transform: menuOpen ? 'rotate(45deg)' : 'none',
+                        transition: 'all 0.3s ease',
+                      }} />
+                      <div style={{
+                        position: 'absolute', width: '18px', height: '1.5px', backgroundColor: palette.surface.stone,
+                        bottom: menuOpen ? '5px' : '1px', transform: menuOpen ? 'rotate(-45deg)' : 'none',
+                        transition: 'all 0.3s ease',
+                      }} />
+                    </div>
+                    <span style={{
+                      fontFamily: FONT_BODY, fontSize: '14px', fontWeight: '500',
+                      color: palette.surface.stone, letterSpacing: '0.06em', textTransform: 'uppercase',
+                    }}>{menuOpen ? 'Close' : 'Menu'}</span>
                   </div>
-                  <span style={{
-                    fontFamily: FONT_BODY, fontSize: '14px', fontWeight: '500',
-                    color: palette.surface.stone, letterSpacing: '0.06em', textTransform: 'uppercase',
-                  }}>{menuOpen ? 'Close' : 'Menu'}</span>
+                  <span style={{ width: '1px', height: '16px', backgroundColor: 'rgba(242,242,235,0.2)' }} />
+                  <span style={{ fontFamily: FONT_BODY, fontSize: '14px', color: palette.surface.stone, fontWeight: '500', cursor: 'pointer' }}>Destinations</span>
+                  <span style={{ fontFamily: FONT_BODY, fontSize: '14px', color: 'rgba(242,242,235,0.7)', cursor: 'pointer' }}>Inspiration</span>
                 </div>
-                <span style={{ width: '1px', height: '16px', backgroundColor: 'rgba(242,242,235,0.2)' }} />
-                <span style={{ fontFamily: FONT_BODY, fontSize: '14px', color: palette.surface.stone, fontWeight: '500', cursor: 'pointer' }}>Destinations</span>
-                <span style={{ fontFamily: FONT_BODY, fontSize: '14px', color: 'rgba(242,242,235,0.7)', cursor: 'pointer' }}>Inspiration</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <LogoStacked color={palette.surface.stone} height={64} />
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <button style={{
-                  fontFamily: FONT_BODY,
-                  backgroundColor: palette.surface.stone,
-                  color: palette.primary.default,
-                  padding: '14px 32px',
-                  borderRadius: '0',
-                  border: 'none',
-                  fontWeight: '500',
-                  fontSize: '13px',
-                }}>
-                  Enquire
-                </button>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <LogoStacked color={palette.surface.stone} height={64} />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <button style={{
+                    fontFamily: FONT_BODY,
+                    backgroundColor: palette.surface.stone,
+                    color: palette.primary.default,
+                    padding: '14px 32px',
+                    borderRadius: '0',
+                    border: 'none',
+                    fontWeight: '500',
+                    fontSize: '13px',
+                  }}>
+                    Enquire
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Floating compact nav (scrolled) */}
+          {/* Compact nav — always visible on mobile, scrolled on desktop */}
           <div style={{
             position: 'absolute',
-            top: '12px',
+            top: mob ? '12px' : '12px',
             left: '50%',
-            transform: logoCompact ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(-12px)',
-            width: '100%',
+            transform: (mob || logoCompact) ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(-12px)',
+            width: mob ? 'calc(100% - 32px)' : '100%',
             maxWidth: '540px',
-            opacity: logoCompact ? 1 : 0,
-            pointerEvents: logoCompact ? 'auto' : 'none',
+            opacity: (mob || logoCompact) ? 1 : 0,
+            pointerEvents: (mob || logoCompact) ? 'auto' : 'none',
             transition: 'opacity 0.4s ease, transform 0.4s ease, background-color 0.3s ease',
           }}>
             <div style={{
               display: 'grid',
               gridTemplateColumns: '1fr auto 1fr',
               alignItems: 'center',
-              backgroundColor: hm.navBg,
-              padding: '12px 20px',
+              backgroundColor: palette.surface.stone,
+              padding: mob ? '10px 16px' : '12px 20px',
               backdropFilter: 'blur(16px)',
-              border: `1px solid ${navBorderColor}`,
+              border: `1px solid ${palette.neutral[200]}`,
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => setMenuOpen(!menuOpen)}>
-                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '18px', height: '12px', position: 'relative' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }} onClick={() => setMenuOpen(!menuOpen)}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: '20px' }}>
                   <div style={{
-                    position: 'absolute', width: '18px', height: '1.5px', backgroundColor: hm.navLinkActive,
-                    top: menuOpen ? '5px' : '1px', transform: menuOpen ? 'rotate(45deg)' : 'none',
+                    width: '20px', height: '1.5px', backgroundColor: palette.primary.default,
+                    transform: menuOpen ? 'translateY(3.25px) rotate(45deg)' : 'none',
                     transition: 'all 0.3s ease',
                   }} />
                   <div style={{
-                    position: 'absolute', width: '18px', height: '1.5px', backgroundColor: hm.navLinkActive,
-                    bottom: menuOpen ? '5px' : '1px', transform: menuOpen ? 'rotate(-45deg)' : 'none',
+                    width: '20px', height: '1.5px', backgroundColor: palette.primary.default,
+                    transform: menuOpen ? 'translateY(-3.25px) rotate(-45deg)' : 'none',
                     transition: 'all 0.3s ease',
                   }} />
                 </div>
                 <span style={{
-                  fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
-                  color: hm.navLinkActive, letterSpacing: '0.08em', textTransform: 'uppercase',
+                  fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400',
+                  color: palette.primary.default, letterSpacing: '1px', textTransform: 'uppercase',
                 }}>{menuOpen ? 'Close' : 'Menu'}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <LogoInline color={hm.navLogoColor} height={28} />
+                <LogoInline color={palette.primary.default} height={mob ? 32 : 28} />
               </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '10px' }}>
                 <button style={{
                   fontFamily: FONT_BODY,
-                  backgroundColor: hm.navBtnBg,
-                  color: hm.navBtnColor,
-                  padding: '8px 20px',
+                  backgroundColor: palette.primary.default,
+                  color: '#FFFFFF',
+                  padding: '10px 16px',
                   borderRadius: '0',
                   border: 'none',
-                  fontWeight: '500',
-                  fontSize: '11px',
-                  letterSpacing: '0.06em',
+                  fontWeight: '400',
+                  fontSize: '12px',
+                  letterSpacing: '1px',
                   textTransform: 'uppercase',
                 }}>
                   Enquire
                 </button>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={hm.navLinkActive} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ cursor: 'pointer', flexShrink: 0 }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ cursor: 'pointer', flexShrink: 0 }}>
                   <circle cx="11" cy="11" r="8" />
                   <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
@@ -286,10 +304,10 @@ export default function HomepagePage() {
           {menuOpen && (
             <div style={{
               position: 'absolute',
-              top: logoCompact ? '64px' : '104px',
+              top: mob ? '64px' : (logoCompact ? '64px' : '104px'),
               left: '50%',
               transform: 'translateX(-50%)',
-              width: '100%',
+              width: mob ? 'calc(100% - 32px)' : '100%',
               maxWidth: '540px',
               zIndex: 10,
               transition: 'top 0.35s ease',
@@ -304,7 +322,7 @@ export default function HomepagePage() {
                 overflow: 'auto',
               }}>
                 {/* Search prompt */}
-                <div data-menu-animate style={{ padding: '36px 28px 60px' }}>
+                <div data-menu-animate style={{ padding: mob ? '28px 20px 40px' : '36px 28px 60px' }}>
                   <style>{`
                     @keyframes menuCursorBlink {
                       0%, 100% { opacity: 1; }
@@ -326,7 +344,7 @@ export default function HomepagePage() {
                       placeholder="Where would you like go?"
                       style={{
                         fontFamily: FONT_HEADING,
-                        fontSize: '26px',
+                        fontSize: mob ? '20px' : '26px',
                         fontWeight: '400',
                         color: palette.primary.default,
                         letterSpacing: '0.02em',
@@ -355,7 +373,7 @@ export default function HomepagePage() {
                 </div>
 
                 {/* Location tags */}
-                <div data-menu-animate style={{ padding: '0 28px 16px' }}>
+                <div data-menu-animate style={{ padding: mob ? '0 20px 16px' : '0 28px 16px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
@@ -388,7 +406,7 @@ export default function HomepagePage() {
                 </div>
 
                 {/* Inspiration tags */}
-                <div data-menu-animate style={{ padding: '8px 28px 28px' }}>
+                <div data-menu-animate style={{ padding: mob ? '8px 20px 24px' : '8px 28px 28px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -420,7 +438,7 @@ export default function HomepagePage() {
                 </div>
 
                 {/* Nav items */}
-                <div style={{ padding: '0 28px' }}>
+                <div style={{ padding: mob ? '0 20px' : '0 28px' }}>
                   {menuNavItems.map((label) => (
                     <div key={label} data-menu-animate style={{
                       borderTop: `1px solid ${accentScale[10]}`,
@@ -442,7 +460,7 @@ export default function HomepagePage() {
                 <div data-menu-animate style={{
                   backgroundColor: palette.primary.default,
                   margin: '12px 0 0',
-                  padding: '20px 28px 24px',
+                  padding: mob ? '20px 20px 24px' : '20px 28px 24px',
                 }}>
                   <p style={{
                     fontFamily: FONT_HEADING, fontSize: '16px', fontWeight: '400',
@@ -489,8 +507,8 @@ export default function HomepagePage() {
         {/* Hero section */}
         <div style={{
           position: 'relative',
-          minHeight: '620px',
-          marginTop: '-104px',
+          minHeight: mob ? '480px' : '620px',
+          marginTop: mob ? '-64px' : '-104px',
           overflow: 'hidden',
         }}>
           {heroSlides.map((slide, i) => (
@@ -513,11 +531,11 @@ export default function HomepagePage() {
           <div style={{
             position: 'relative',
             zIndex: 2,
-            padding: '24px',
+            padding: mob ? '16px' : '24px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'flex-end',
-            minHeight: '620px',
+            minHeight: mob ? '480px' : '620px',
           }}>
             <div style={{
               position: 'absolute',
@@ -526,11 +544,12 @@ export default function HomepagePage() {
               alignItems: 'center',
               justifyContent: 'center',
               pointerEvents: 'none',
+              padding: mob ? '0 16px' : 0,
             }}>
               <h1 style={{
                 fontFamily: FONT_HEADING,
                 color: palette.surface.stone,
-                fontSize: TS.hero,
+                fontSize: mob ? TS['2xl'] : TS.hero,
                 fontWeight: '400',
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
@@ -542,31 +561,17 @@ export default function HomepagePage() {
             </div>
             <div style={{
               display: 'flex',
+              flexDirection: 'row',
               justifyContent: 'space-between',
-              alignItems: 'flex-end',
+              alignItems: mob ? 'center' : 'flex-end',
               width: '100%',
               marginTop: '8px',
             }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <div style={{ display: 'flex', gap: '12px' }}>
-                  <button style={{
-                    fontFamily: FONT_BODY,
-                    backgroundColor: palette.surface.stone,
-                    color: palette.primary.default,
-                    padding: '14px 32px',
-                    borderRadius: '0',
-                    border: 'none',
-                    fontWeight: '500',
-                    fontSize: '15px',
-                  }}>
-                    Explore Destinations
-                  </button>
-                </div>
-              </div>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
+                order: mob ? 0 : 1,
               }}>
                 <span style={{
                   width: '5px',
@@ -588,6 +593,19 @@ export default function HomepagePage() {
                   {heroSlides[heroSlide].city}, {heroSlides[heroSlide].country}
                 </span>
               </div>
+              <button style={{
+                fontFamily: FONT_BODY,
+                backgroundColor: palette.surface.stone,
+                color: palette.primary.default,
+                padding: mob ? '12px 24px' : '14px 32px',
+                borderRadius: '0',
+                border: 'none',
+                fontWeight: '500',
+                fontSize: mob ? '13px' : '15px',
+                order: mob ? 1 : 0,
+              }}>
+                Explore Destinations
+              </button>
             </div>
           </div>
         </div>
@@ -621,17 +639,18 @@ export default function HomepagePage() {
             : heroMode === 'offWhite'
               ? palette.surface.stone
               : '#FFFFFF',
-          padding: '120px 48px 48px',
+          padding: mob ? '64px 20px 32px' : '120px 48px 48px',
           display: 'flex',
+          flexDirection: mob ? 'column' : 'row',
           justifyContent: 'space-between',
-          alignItems: 'flex-end',
-          gap: '48px',
+          alignItems: mob ? 'flex-start' : 'flex-end',
+          gap: mob ? '28px' : '48px',
           transition: 'all 0.3s ease',
         }}>
           <p style={{
-            fontFamily: FONT_BODY,
+            fontFamily: FONT_HEADING,
             color: heroMode === 'dark' ? palette.primary.faded : palette.neutral[600],
-            fontSize: '24px',
+            fontSize: mob ? '18px' : '24px',
             fontWeight: '300',
             maxWidth: '620px',
             lineHeight: 1.7,
@@ -646,11 +665,11 @@ export default function HomepagePage() {
               fontFamily: FONT_BODY,
               backgroundColor: 'transparent',
               color: heroMode === 'dark' ? palette.surface.stone : palette.primary.default,
-              padding: '14px 32px',
+              padding: mob ? '12px 24px' : '14px 32px',
               borderRadius: '0',
               border: `1px solid ${heroMode === 'dark' ? palette.surface.stone : palette.primary.default}`,
               fontWeight: '500',
-              fontSize: '15px',
+              fontSize: mob ? '13px' : '15px',
               transition: 'all 0.3s ease',
             }}>
               Our Story
@@ -661,10 +680,11 @@ export default function HomepagePage() {
         {/* Journey Product Lines */}
         <div style={{
           background: '#FFFFFF',
-          padding: '80px 48px',
+          padding: mob ? '32px 20px' : '80px 48px',
           display: 'flex',
+          flexDirection: mob ? 'column' : 'row',
           justifyContent: 'center',
-          gap: '64px',
+          gap: mob ? '20px' : '64px',
           transition: 'all 0.3s ease',
         }}>
           {[
@@ -674,8 +694,8 @@ export default function HomepagePage() {
             <div key={item.label} style={{
               position: 'relative',
               cursor: 'pointer',
-              flex: 1,
-              aspectRatio: '4 / 3',
+              flex: mob ? 'none' : 1,
+              aspectRatio: mob ? '16 / 9' : '4 / 3',
               overflow: 'hidden',
             }}>
               <img
@@ -700,12 +720,12 @@ export default function HomepagePage() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '24px',
+                padding: mob ? '16px' : '24px',
               }}>
                 <p style={{
                   fontFamily: FONT_HEADING,
                   color: palette.surface.stone,
-                  fontSize: '56px',
+                  fontSize: mob ? '28px' : '56px',
                   fontWeight: '400',
                   letterSpacing: '0.04em',
                   textTransform: 'uppercase',
@@ -719,14 +739,14 @@ export default function HomepagePage() {
                   fontFamily: FONT_BODY,
                   backgroundColor: palette.surface.stone,
                   color: palette.primary.default,
-                  padding: '14px 32px',
+                  padding: mob ? '10px 24px' : '14px 32px',
                   borderRadius: '0',
                   border: 'none',
                   fontWeight: '500',
-                  fontSize: '13px',
+                  fontSize: mob ? '12px' : '13px',
                   letterSpacing: '0.04em',
                   textTransform: 'uppercase',
-                  marginTop: '24px',
+                  marginTop: mob ? '16px' : '24px',
                   cursor: 'pointer',
                 }}>
                   Explore
@@ -739,21 +759,23 @@ export default function HomepagePage() {
         {/* Destinations Module */}
         <div style={{
           background: palette.surface.stone,
-          padding: '80px 0 0',
+          padding: mob ? '48px 0 48px' : '80px 0 0',
           transition: 'all 0.3s ease',
           overflow: 'hidden',
         }}>
           {/* Top row */}
           <div style={{
             display: 'flex',
+            flexDirection: mob ? 'column' : 'row',
             justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            marginBottom: '48px',
-            padding: '0 48px',
+            alignItems: mob ? 'flex-start' : 'flex-start',
+            marginBottom: mob ? '24px' : '48px',
+            padding: mob ? '0 20px' : '0 48px',
+            gap: mob ? '16px' : 0,
           }}>
             <h2 style={{
               fontFamily: FONT_HEADING,
-              fontSize: '32px',
+              fontSize: mob ? '24px' : '32px',
               fontWeight: '400',
               color: palette.primary.default,
               letterSpacing: '0.02em',
@@ -761,148 +783,81 @@ export default function HomepagePage() {
             }}>
               Destinations
             </h2>
-            <button style={{
-              fontFamily: FONT_BODY,
-              backgroundColor: palette.primary.default,
-              color: palette.surface.stone,
-              padding: '14px 32px',
-              borderRadius: '0',
-              border: 'none',
-              fontWeight: '500',
-              fontSize: '13px',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              cursor: 'pointer',
-              flexShrink: 0,
-            }}>
-              View All Destinations
-            </button>
+            {!mob && (
+              <button style={{
+                fontFamily: FONT_BODY,
+                backgroundColor: palette.primary.default,
+                color: palette.surface.stone,
+                padding: '14px 32px',
+                borderRadius: '0',
+                border: 'none',
+                fontWeight: '500',
+                fontSize: '13px',
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                cursor: 'pointer',
+                flexShrink: 0,
+              }}>
+                View All Destinations
+              </button>
+            )}
           </div>
 
           {/* Content row */}
-          <div style={{
-            display: 'flex',
-            gap: '48px',
-            alignItems: 'flex-end',
-          }}>
-            {/* Description text */}
-            <div style={{ padding: '0 64px 80px 48px', flexShrink: 0, width: '30%' }}>
-              <p style={{
-                fontFamily: FONT_BODY,
-                fontSize: '18px',
-                fontWeight: '300',
-                color: palette.primary.default,
-                lineHeight: 1.7,
-                margin: 0,
-              }}>
-                If you are looking for the best holiday destinations, Cox &amp; Kings offers worldwide holidays to some of the most fascinating parts of the globe.
-              </p>
-
-              {/* "You are here" anchor */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '36px', cursor: 'pointer' }}>
-                <style>{`
-                  @keyframes youAreHerePing {
-                    0% { transform: scale(1); opacity: 0.45; }
-                    70% { transform: scale(2.4); opacity: 0; }
-                    100% { transform: scale(2.4); opacity: 0; }
-                  }
-                  @keyframes youAreHerePing2 {
-                    0% { transform: scale(1); opacity: 0.25; }
-                    70% { transform: scale(3.2); opacity: 0; }
-                    100% { transform: scale(3.2); opacity: 0; }
-                  }
-                `}</style>
-                <div style={{ position: 'relative', width: '18px', height: '18px', flexShrink: 0 }}>
-                  <span style={{
-                    position: 'absolute',
-                    top: '50%', left: '50%',
-                    width: '10px', height: '10px',
-                    marginTop: '-5px', marginLeft: '-5px',
-                    borderRadius: '50%',
-                    backgroundColor: accentScale[80],
-                    animation: 'youAreHerePing 2.4s cubic-bezier(0, 0, 0.2, 1) infinite',
-                  }} />
-                  <span style={{
-                    position: 'absolute',
-                    top: '50%', left: '50%',
-                    width: '10px', height: '10px',
-                    marginTop: '-5px', marginLeft: '-5px',
-                    borderRadius: '50%',
-                    backgroundColor: accentScale[80],
-                    animation: 'youAreHerePing2 2.4s cubic-bezier(0, 0, 0.2, 1) infinite',
-                    animationDelay: '0.6s',
-                  }} />
-                  <span style={{
-                    position: 'absolute',
-                    top: '50%', left: '50%',
-                    width: '10px', height: '10px',
-                    marginTop: '-5px', marginLeft: '-5px',
-                    borderRadius: '50%',
-                    backgroundColor: palette.primary.default,
-                    zIndex: 1,
-                  }} />
-                </div>
-                <span style={{
+          {mob ? (
+            <>
+              {/* Mobile: description */}
+              <div style={{ padding: '0 24px 32px' }}>
+                <p style={{
                   fontFamily: FONT_BODY,
-                  fontSize: '11px',
-                  fontWeight: '600',
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
+                  fontSize: '20px',
+                  fontWeight: '400',
                   color: palette.primary.default,
-                }}>You are here — Start exploring</span>
+                  lineHeight: 1.55,
+                  margin: 0,
+                }}>
+                  If you are looking for the best holiday destinations, Cox &amp; Kings offers worldwide holidays to some of the most fascinating parts of the globe.
+                </p>
               </div>
-            </div>
 
-            {/* Shapes slider */}
-            <div
-              style={{
-                flex: 1,
-                overflow: 'hidden',
-                alignSelf: 'stretch',
-                display: 'flex',
-                alignItems: 'flex-end',
-                cursor: destDrag.current.active ? 'grabbing' : 'grab',
-                userSelect: 'none',
-              }}
-              onPointerDown={(e) => {
-                destDrag.current = { active: true, dragged: false, startX: e.clientX, startSlide: destSlide };
-                e.currentTarget.setPointerCapture(e.pointerId);
-              }}
-              onPointerMove={(e) => {
-                if (!destDrag.current.active) return;
-                const dx = e.clientX - destDrag.current.startX;
-                if (Math.abs(dx) > 5) destDrag.current.dragged = true;
-                const slideWidth = 400 + 28;
-                const slidesOffset = Math.round(-dx / slideWidth);
-                if (Math.abs(dx) > slideWidth * 0.2) {
-                  const next = Math.max(0, Math.min(destRegions.length - 1, destDrag.current.startSlide + slidesOffset));
-                  if (next !== destSlide) setDestSlide(next);
-                }
-              }}
-              onPointerUp={() => { destDrag.current.active = false; }}
-              onPointerCancel={() => { destDrag.current.active = false; }}
-            >
-              <div style={{
-                display: 'flex',
-                gap: '28px',
-                alignItems: 'flex-end',
-                transform: `translateX(-${destSlide * (400 + 28)}px)`,
-                transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-              }}>
+              {/* Mobile: horizontal scroll shapes — edge bleed */}
+              <div
+                ref={destScrollRef}
+                onScroll={(e) => {
+                  const el = e.currentTarget;
+                  const cardW = el.scrollWidth / destRegions.length;
+                  const idx = Math.round(el.scrollLeft / cardW);
+                  if (idx !== destSlide && idx >= 0 && idx < destRegions.length) setDestSlide(idx);
+                }}
+                style={{
+                  overflowX: 'auto',
+                  overflowY: 'hidden',
+                  WebkitOverflowScrolling: 'touch',
+                  display: 'flex',
+                  gap: '16px',
+                  paddingLeft: '24px',
+                  paddingRight: '24px',
+                  paddingBottom: '8px',
+                  msOverflowStyle: 'none',
+                  scrollbarWidth: 'none',
+                  scrollSnapType: 'x mandatory',
+                }}
+              >
+                <style>{`
+                  .dest-mob-scroll::-webkit-scrollbar { display: none; }
+                `}</style>
                 {destRegions.map((region, idx) => {
-                  const isActive = idx === destSlide;
                   const hasImage = !!region.image;
-                  const clipId = `dest-clip-${idx}`;
+                  const clipId = `dest-clip-mob-${idx}`;
                   const vb = region.viewBox.split(' ').map(Number);
                   return (
-                    <div key={region.name} style={{
+                    <div key={region.name} className="dest-mob-scroll" style={{
                       position: 'relative',
                       flexShrink: 0,
-                      width: '400px',
+                      width: '38vw',
+                      scrollSnapAlign: 'start',
                     }}
-                      onClick={() => { if (!destDrag.current.dragged) setDestSlide(idx); }}
-                      onMouseEnter={() => setDestHover(idx)}
-                      onMouseLeave={() => setDestHover(-1)}
+                      onClick={() => setDestSlide(idx)}
                     >
                       <svg viewBox={region.viewBox} xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: 'auto', display: 'block', overflow: 'hidden' }}>
                         <defs>
@@ -919,52 +874,26 @@ export default function HomepagePage() {
                                 x="0" y="0"
                                 width={vb[2]} height={vb[3]}
                                 preserveAspectRatio="xMidYMid slice"
-                                style={{
-                                  opacity: (isActive || destHover === idx) ? 1 : 0,
-                                  transition: 'opacity 0.6s ease, transform 0.5s ease',
-                                  transformOrigin: `${vb[2] / 2}px ${vb[3] / 2}px`,
-                                  transform: destHover === idx ? 'scale(1.05)' : 'scale(1)',
-                                }}
                               />
-                              <rect
-                                x="0" y="0"
-                                width={vb[2]} height={vb[3]}
-                                fill="#102037"
-                                fillOpacity="0.10"
-                                style={{
-                                  opacity: (isActive || destHover === idx) ? 1 : 0,
-                                  transition: 'opacity 0.6s ease',
-                                }}
+                              <rect x="0" y="0" width={vb[2]} height={vb[3]}
+                                fill="#102037" fillOpacity="0.15"
                               />
                             </>
                           )}
-                          <rect
-                            x="0" y="0"
-                            width={vb[2]} height={vb[3]}
-                            fill={palette.primary.default}
-                            style={{
-                              opacity: destHover === idx && !isActive ? 0.25 : 0,
-                              transition: 'opacity 0.3s ease',
-                              pointerEvents: 'none',
-                            }}
-                          />
                         </g>
                       </svg>
                       <div style={{
-                        position: 'absolute',
-                        inset: 0,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '16px',
+                        position: 'absolute', inset: 0,
+                        display: 'flex', alignItems: 'center',
+                        justifyContent: 'center', padding: '12px',
                       }}>
                         <p style={{
                           fontFamily: FONT_HEADING,
                           color: palette.surface.stone,
-                          fontSize: '40px',
+                          fontSize: '22px',
                           fontWeight: '400',
                           textAlign: 'center',
-                          lineHeight: 1.15,
+                          lineHeight: 1.1,
                           margin: 0,
                           whiteSpace: 'pre-line',
                         }}>
@@ -975,89 +904,301 @@ export default function HomepagePage() {
                   );
                 })}
               </div>
-            </div>
-          </div>
 
-          {/* Region navigation bar */}
-          <div style={{ display: 'flex', gap: '48px', marginTop: '80px', paddingBottom: '48px' }}>
-            <div style={{ flexShrink: 0, width: '30%', padding: '0 0 0 48px', display: 'flex', alignItems: 'center' }}>
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              {/* Mobile: bottom nav */}
+              <div style={{ padding: '24px 24px 0', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div
-                  onClick={() => setDestSlide((prev) => (prev - 1 + destRegions.length) % destRegions.length)}
-                  style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                  onClick={() => {
+                    const next = (destSlide - 1 + destRegions.length) % destRegions.length;
+                    setDestSlide(next);
+                    if (destScrollRef.current) {
+                      const cardW = destScrollRef.current.scrollWidth / destRegions.length;
+                      destScrollRef.current.scrollTo({ left: next * cardW, behavior: 'smooth' });
+                    }
+                  }}
+                  style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', flexShrink: 0 }}
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="15 18 9 12 15 6" />
                   </svg>
                 </div>
-                <span style={{
-                  fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
-                  color: palette.neutral[400], letterSpacing: '0.06em', textTransform: 'uppercase',
-                }}>
-                  {destSlide + 1} / {destRegions.length}
-                </span>
+                <div style={{ flex: 1, position: 'relative' }}>
+                  <div style={{ height: '1px', backgroundColor: palette.neutral[200], width: '100%' }} />
+                  <div style={{
+                    position: 'absolute', top: 0, left: 0, height: '1px',
+                    backgroundColor: palette.primary.default,
+                    width: `${((destSlide + 1) / destRegions.length) * 100}%`,
+                    transition: 'width 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+                  }} />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px' }}>
+                    <span style={{
+                      fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
+                      color: palette.primary.default, letterSpacing: '0.03em',
+                    }}>
+                      {destRegions[destSlide].name.replace('\n', ' ')}
+                    </span>
+                    <span style={{
+                      fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
+                      color: palette.neutral[400], letterSpacing: '0.06em',
+                    }}>
+                      {destSlide + 1} / {destRegions.length}
+                    </span>
+                  </div>
+                </div>
                 <div
-                  onClick={() => setDestSlide((prev) => (prev + 1) % destRegions.length)}
-                  style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                  onClick={() => {
+                    const next = (destSlide + 1) % destRegions.length;
+                    setDestSlide(next);
+                    if (destScrollRef.current) {
+                      const cardW = destScrollRef.current.scrollWidth / destRegions.length;
+                      destScrollRef.current.scrollTo({ left: next * cardW, behavior: 'smooth' });
+                    }
+                  }}
+                  style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', flexShrink: 0 }}
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="9 18 15 12 9 6" />
                   </svg>
                 </div>
               </div>
-            </div>
-            <div style={{ flex: 1, overflow: 'hidden' }}>
-              <div style={{
-                position: 'relative',
-                width: `${destRegions.length * (400 + 28) - 28}px`,
-                transform: `translateX(-${destSlide * (400 + 28)}px)`,
-                transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-              }}>
+            </>
+          ) : (
+            <div style={{
+              display: 'flex',
+              gap: '48px',
+              alignItems: 'flex-end',
+            }}>
+              {/* Description text */}
+              <div style={{ padding: '0 64px 80px 48px', flexShrink: 0, width: '30%' }}>
+                <p style={{
+                  fontFamily: FONT_BODY,
+                  fontSize: '18px',
+                  fontWeight: '300',
+                  color: palette.primary.default,
+                  lineHeight: 1.7,
+                  margin: 0,
+                }}>
+                  If you are looking for the best holiday destinations, Cox &amp; Kings offers worldwide holidays to some of the most fascinating parts of the globe.
+                </p>
+
+                {/* "You are here" anchor */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '36px', cursor: 'pointer' }}>
+                  <style>{`
+                    @keyframes youAreHerePing {
+                      0% { transform: scale(1); opacity: 0.45; }
+                      70% { transform: scale(2.4); opacity: 0; }
+                      100% { transform: scale(2.4); opacity: 0; }
+                    }
+                    @keyframes youAreHerePing2 {
+                      0% { transform: scale(1); opacity: 0.25; }
+                      70% { transform: scale(3.2); opacity: 0; }
+                      100% { transform: scale(3.2); opacity: 0; }
+                    }
+                  `}</style>
+                  <div style={{ position: 'relative', width: '18px', height: '18px', flexShrink: 0 }}>
+                    <span style={{
+                      position: 'absolute', top: '50%', left: '50%',
+                      width: '10px', height: '10px', marginTop: '-5px', marginLeft: '-5px',
+                      borderRadius: '50%', backgroundColor: accentScale[80],
+                      animation: 'youAreHerePing 2.4s cubic-bezier(0, 0, 0.2, 1) infinite',
+                    }} />
+                    <span style={{
+                      position: 'absolute', top: '50%', left: '50%',
+                      width: '10px', height: '10px', marginTop: '-5px', marginLeft: '-5px',
+                      borderRadius: '50%', backgroundColor: accentScale[80],
+                      animation: 'youAreHerePing2 2.4s cubic-bezier(0, 0, 0.2, 1) infinite',
+                      animationDelay: '0.6s',
+                    }} />
+                    <span style={{
+                      position: 'absolute', top: '50%', left: '50%',
+                      width: '10px', height: '10px', marginTop: '-5px', marginLeft: '-5px',
+                      borderRadius: '50%', backgroundColor: palette.primary.default, zIndex: 1,
+                    }} />
+                  </div>
+                  <span style={{
+                    fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '600',
+                    letterSpacing: '0.12em', textTransform: 'uppercase', color: palette.primary.default,
+                  }}>You are here — Start exploring</span>
+                </div>
+              </div>
+
+              {/* Shapes slider */}
+              <div
+                style={{
+                  flex: 1,
+                  overflow: 'hidden',
+                  alignSelf: 'stretch',
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  cursor: destDrag.current.active ? 'grabbing' : 'grab',
+                  userSelect: 'none',
+                }}
+                onPointerDown={(e) => {
+                  destDrag.current = { active: true, dragged: false, startX: e.clientX, startSlide: destSlide };
+                  e.currentTarget.setPointerCapture(e.pointerId);
+                }}
+                onPointerMove={(e) => {
+                  if (!destDrag.current.active) return;
+                  const dx = e.clientX - destDrag.current.startX;
+                  if (Math.abs(dx) > 5) destDrag.current.dragged = true;
+                  const slideWidth = 400 + 28;
+                  const slidesOffset = Math.round(-dx / slideWidth);
+                  if (Math.abs(dx) > slideWidth * 0.2) {
+                    const next = Math.max(0, Math.min(destRegions.length - 1, destDrag.current.startSlide + slidesOffset));
+                    if (next !== destSlide) setDestSlide(next);
+                  }
+                }}
+                onPointerUp={() => { destDrag.current.active = false; }}
+                onPointerCancel={() => { destDrag.current.active = false; }}
+              >
                 <div style={{
-                  height: '1px',
-                  backgroundColor: palette.neutral[200],
-                  width: '100%',
-                }}/>
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  height: '1px',
-                  backgroundColor: palette.primary.default,
-                  width: `${((destSlide + 1) / destRegions.length) * 100}%`,
-                  transition: 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-                }}/>
-                <div style={{ display: 'flex' }}>
-                  {destRegions.map((region, i) => (
-                    <div
-                      key={region.name}
-                      onClick={() => setDestSlide(i)}
-                      style={{
-                        width: '400px',
-                        marginRight: i < destRegions.length - 1 ? '28px' : 0,
+                  display: 'flex',
+                  gap: '28px',
+                  alignItems: 'flex-end',
+                  transform: `translateX(-${destSlide * (400 + 28)}px)`,
+                  transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                }}>
+                  {destRegions.map((region, idx) => {
+                    const isActive = idx === destSlide;
+                    const hasImage = !!region.image;
+                    const clipId = `dest-clip-${idx}`;
+                    const vb = region.viewBox.split(' ').map(Number);
+                    return (
+                      <div key={region.name} style={{
+                        position: 'relative',
                         flexShrink: 0,
-                        cursor: 'pointer',
+                        width: '400px',
                       }}
-                    >
-                      <span style={{
-                        display: 'block',
-                        marginTop: '12px',
-                        fontFamily: FONT_BODY,
-                        fontSize: '11px',
-                        fontWeight: i === destSlide ? '500' : '400',
-                        color: i === destSlide ? palette.primary.default : palette.neutral[400],
-                        letterSpacing: '0.03em',
-                        whiteSpace: 'nowrap',
-                        transition: 'color 0.3s ease',
-                      }}>
-                        {region.name.replace('\n', ' ')}
-                      </span>
-                    </div>
-                  ))}
+                        onClick={() => { if (!destDrag.current.dragged) setDestSlide(idx); }}
+                        onMouseEnter={() => setDestHover(idx)}
+                        onMouseLeave={() => setDestHover(-1)}
+                      >
+                        <svg viewBox={region.viewBox} xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: 'auto', display: 'block', overflow: 'hidden' }}>
+                          <defs>
+                            <clipPath id={clipId}>
+                              <path d={region.d} />
+                            </clipPath>
+                          </defs>
+                          <g clipPath={`url(#${clipId})`}>
+                            <path d={region.d} fill={palette.primary.default} />
+                            {hasImage && (
+                              <>
+                                <image
+                                  href={region.image}
+                                  x="0" y="0"
+                                  width={vb[2]} height={vb[3]}
+                                  preserveAspectRatio="xMidYMid slice"
+                                  style={{
+                                    opacity: (isActive || destHover === idx) ? 1 : 0,
+                                    transition: 'opacity 0.6s ease, transform 0.5s ease',
+                                    transformOrigin: `${vb[2] / 2}px ${vb[3] / 2}px`,
+                                    transform: destHover === idx ? 'scale(1.05)' : 'scale(1)',
+                                  }}
+                                />
+                                <rect x="0" y="0" width={vb[2]} height={vb[3]}
+                                  fill="#102037" fillOpacity="0.10"
+                                  style={{ opacity: (isActive || destHover === idx) ? 1 : 0, transition: 'opacity 0.6s ease' }}
+                                />
+                              </>
+                            )}
+                            <rect x="0" y="0" width={vb[2]} height={vb[3]}
+                              fill={palette.primary.default}
+                              style={{ opacity: destHover === idx && !isActive ? 0.25 : 0, transition: 'opacity 0.3s ease', pointerEvents: 'none' }}
+                            />
+                          </g>
+                        </svg>
+                        <div style={{
+                          position: 'absolute', inset: 0,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px',
+                        }}>
+                          <p style={{
+                            fontFamily: FONT_HEADING, color: palette.surface.stone,
+                            fontSize: '40px', fontWeight: '400', textAlign: 'center',
+                            lineHeight: 1.15, margin: 0, whiteSpace: 'pre-line',
+                          }}>
+                            {region.name}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
-          </div>
+          )}
+
+          {/* Region navigation bar — desktop only */}
+          {!mob && (
+            <div style={{ display: 'flex', gap: '48px', marginTop: '80px', paddingBottom: '48px' }}>
+              <div style={{ flexShrink: 0, width: '30%', padding: '0 0 0 48px', display: 'flex', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <div
+                    onClick={() => setDestSlide((prev) => (prev - 1 + destRegions.length) % destRegions.length)}
+                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                  </div>
+                  <span style={{
+                    fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
+                    color: palette.neutral[400], letterSpacing: '0.06em', textTransform: 'uppercase',
+                  }}>
+                    {destSlide + 1} / {destRegions.length}
+                  </span>
+                  <div
+                    onClick={() => setDestSlide((prev) => (prev + 1) % destRegions.length)}
+                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div style={{ flex: 1, overflow: 'hidden' }}>
+                <div style={{
+                  position: 'relative',
+                  width: `${destRegions.length * (400 + 28) - 28}px`,
+                  transform: `translateX(-${destSlide * (400 + 28)}px)`,
+                  transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                }}>
+                  <div style={{ height: '1px', backgroundColor: palette.neutral[200], width: '100%' }}/>
+                  <div style={{
+                    position: 'absolute', top: 0, left: 0, height: '1px',
+                    backgroundColor: palette.primary.default,
+                    width: `${((destSlide + 1) / destRegions.length) * 100}%`,
+                    transition: 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                  }}/>
+                  <div style={{ display: 'flex' }}>
+                    {destRegions.map((region, i) => (
+                      <div
+                        key={region.name}
+                        onClick={() => setDestSlide(i)}
+                        style={{
+                          width: '400px',
+                          marginRight: i < destRegions.length - 1 ? '28px' : 0,
+                          flexShrink: 0,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <span style={{
+                          display: 'block', marginTop: '12px',
+                          fontFamily: FONT_BODY, fontSize: '11px',
+                          fontWeight: i === destSlide ? '500' : '400',
+                          color: i === destSlide ? palette.primary.default : palette.neutral[400],
+                          letterSpacing: '0.03em', whiteSpace: 'nowrap',
+                          transition: 'color 0.3s ease',
+                        }}>
+                          {region.name.replace('\n', ' ')}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Spacer */}
@@ -1067,7 +1208,7 @@ export default function HomepagePage() {
             : heroMode === 'offWhite'
               ? palette.surface.stone
               : '#FFFFFF',
-          padding: '120px 48px',
+          padding: mob ? '60px 20px' : '120px 48px',
           transition: 'all 0.3s ease',
         }} />
       </div>
