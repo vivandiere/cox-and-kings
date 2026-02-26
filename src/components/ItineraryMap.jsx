@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Polyline, Popup, useMap } from 'react-
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { BedDouble, UtensilsCrossed, Coffee, MapPin, Clock } from 'lucide-react';
-import { palette, brandDecorativeDeep, uiAccents } from '../tokens/index.js';
+import { palette, brandDecorativeDeep } from '../tokens/index.js';
 import { FONT_HEADING, FONT_BODY, TS } from '../tokens/index.js';
 import { useAccent } from '../components/AccentContext.jsx';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -117,8 +117,8 @@ export default function ItineraryMap() {
     { hex: palette.primary.muted, label: 'Muted Navy' },
     ...(!isPrimaryAccent ? [{ hex: accent.hex, label: 'Active Accent' }] : []),
     { hex: brandDecorativeDeep.warmSandDeep.hex, label: 'Warm Sand' },
-    { hex: uiAccents.terracotta.hex, label: 'Terracotta' },
-    { hex: uiAccents.khakiGold.hex, label: 'Golden Khaki' },
+    { hex: '#D4836A', label: 'Terracotta' },
+    { hex: '#A08C4A', label: 'Golden Khaki' },
     { hex: palette.semantic.success, label: 'Teal' },
     { hex: palette.semantic.warning, label: 'Amber' },
   ];

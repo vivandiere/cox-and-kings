@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { palette, brandAccents, brandDecorative, brandDecorativeDeep, uiAccents, buildAccentScale, lightAccents } from '../tokens/index.js';
+import { palette, brandAccents, brandDecorative, brandDecorativeDeep, buildAccentScale, lightAccents } from '../tokens/index.js';
 import { FONT_HEADING, FONT_BODY, FONT_MONO, TS } from '../tokens/index.js';
 import { LogoMark, LogoInline, LogoStacked } from '../components/Logo.jsx';
 import { useAccent } from '../components/AccentContext.jsx';
@@ -154,7 +154,7 @@ export default function FoundationsPage() {
             ))}
           </div>
 
-          <p style={sectionLabel}>Brand (Deeper Variants)</p>
+          <p style={sectionLabel}>UI Accent Options (higher contrast)</p>
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '16px' }}>
             {Object.entries(brandDecorativeDeep).map(([key, value]) => (
               <button
@@ -186,37 +186,6 @@ export default function FoundationsPage() {
             ))}
           </div>
 
-          <p style={sectionLabel}>UI Accent Options (higher contrast)</p>
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            {Object.entries(uiAccents).map(([key, value]) => (
-              <button
-                key={key}
-                onClick={() => setActiveAccent(key)}
-                style={{
-                  fontFamily: FONT_BODY,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '10px 14px',
-                  borderRadius: '8px',
-                  border: activeAccent === key ? `2px solid ${value.hex}` : '2px solid transparent',
-                  backgroundColor: activeAccent === key ? `${value.hex}30` : palette.surface.stone,
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease',
-                }}
-              >
-                <div style={{
-                  width: '20px',
-                  height: '20px',
-                  borderRadius: '5px',
-                  backgroundColor: value.hex,
-                }}/>
-                <span style={{ fontWeight: '500', color: palette.primary.default, fontSize: '13px' }}>
-                  {value.name}
-                </span>
-              </button>
-            ))}
-          </div>
 
           <p style={{ marginTop: '12px', fontSize: '14px', color: palette.neutral[500], fontFamily: FONT_BODY }}>
             {accent.desc}

@@ -153,22 +153,12 @@ export default function ColorPalette() {
   };
   
   const brandDecorativeDeep = {
-    warmSandDeep: { name: 'Warm Sand Deep', hex: '#B58474', desc: 'Brand compound — legible warm sand' },
-    creamDeep: { name: 'Soft Cream Deep', hex: '#9A8A5A', desc: 'Brand compound — legible ochre cream' },
-    mistDeep: { name: 'Cool Mist Deep', hex: '#566A9B', desc: 'Brand compound — deeper blue-grey' },
+    warmSandDeep: { name: 'Warm Sand Deep', hex: '#C4897A', desc: 'UI accent — legible warm sand, good contrast' },
+    creamDeep: { name: 'Soft Cream Deep', hex: '#9A8A5A', desc: 'UI accent — legible ochre cream' },
+    mistDeep: { name: 'Cool Mist Deep', hex: '#566A9B', desc: 'UI accent — deeper blue-grey' },
   };
   
-  const uiAccents = {
-    sandDeep: { name: 'Desert Sand', hex: '#C4897A', desc: 'Deeper sand — good contrast on light surfaces' },
-    khaki: { name: 'Soft Khaki', hex: '#8A8562', desc: 'Earthy neutral — safari-friendly, legible' },
-    khakiGold: { name: 'Golden Khaki', hex: '#A08C4A', desc: 'Warmer gold-toned khaki — luxe feel' },
-    terracotta: { name: 'Soft Terracotta', hex: '#D4836A', desc: 'Warm, earthy, very travel-appropriate' },
-    periwinkle: { name: 'Dusty Periwinkle', hex: '#7B8CDE', desc: 'Soft but distinctive, modern feel' },
-    rose: { name: 'Dusty Rose', hex: '#C4727E', desc: 'Sophisticated warmth, luxury feel' },
-    amber: { name: 'Muted Amber', hex: '#C9944A', desc: 'Golden hour warmth, premium' },
-  };
-  
-  const accents = { ...brandAccents, ...brandDecorative, ...brandDecorativeDeep, ...uiAccents };
+  const accents = { ...brandAccents, ...brandDecorative, ...brandDecorativeDeep };
 
   const palette = {
     surface: {
@@ -431,7 +421,7 @@ export default function ColorPalette() {
             ))}
           </div>
 
-          <p style={sectionLabel}>Brand (Deeper Variants)</p>
+          <p style={sectionLabel}>UI Accent Options (higher contrast)</p>
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '16px' }}>
             {Object.entries(brandDecorativeDeep).map(([key, value]) => (
               <button
@@ -463,37 +453,6 @@ export default function ColorPalette() {
             ))}
           </div>
 
-          <p style={sectionLabel}>UI Accent Options (higher contrast)</p>
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            {Object.entries(uiAccents).map(([key, value]) => (
-              <button
-                key={key}
-                onClick={() => setActiveAccent(key)}
-                style={{
-                  fontFamily: FONT_BODY,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '10px 14px',
-                  borderRadius: '8px',
-                  border: activeAccent === key ? `2px solid ${value.hex}` : '2px solid transparent',
-                  backgroundColor: activeAccent === key ? `${value.hex}30` : palette.surface.stone,
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease',
-                }}
-              >
-                <div style={{
-                  width: '20px',
-                  height: '20px',
-                  borderRadius: '5px',
-                  backgroundColor: value.hex,
-                }}/>
-                <span style={{ fontWeight: '500', color: palette.primary.default, fontSize: '13px' }}>
-                  {value.name}
-                </span>
-              </button>
-            ))}
-          </div>
           
           <p style={{ marginTop: '12px', fontSize: '14px', color: palette.neutral[500], fontFamily: FONT_BODY }}>
             {accent.desc}

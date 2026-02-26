@@ -3,7 +3,6 @@ export {
   brandAccents,
   brandDecorative,
   brandDecorativeDeep,
-  uiAccents,
   allAccents,
   lightAccents,
   buildAccentScale,

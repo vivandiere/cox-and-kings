@@ -38,28 +38,18 @@ export const brandAccents = {
 };
 
 export const brandDecorative = {
-  warmSand: { name: 'Warm Sand', hex: '#E5BDB1', desc: 'Brand decorative — soft blush sand. Sparingly as backgrounds, interactive maps' },
-  cream: { name: 'Soft Cream', hex: '#F8F1CD', desc: 'Brand decorative — warm cream. Sparingly as backgrounds, interactive maps' },
-  mist: { name: 'Cool Mist', hex: '#DAE0EF', desc: 'Brand decorative — soft blue-grey. Sparingly as backgrounds, interactive maps' },
+  warmSand: { name: 'Warm Sand', hex: '#E5BDB1', desc: 'Brand decorative — soft blush sand (use sparingly as backgrounds)' },
+  cream: { name: 'Soft Cream', hex: '#F8F1CD', desc: 'Brand decorative — warm cream (use sparingly as backgrounds)' },
+  mist: { name: 'Cool Mist', hex: '#DAE0EF', desc: 'Brand decorative — soft blue-grey (use sparingly as backgrounds)' },
 };
 
 export const brandDecorativeDeep = {
-  warmSandDeep: { name: 'Warm Sand Deep', hex: '#B58474', desc: 'Brand compound — legible warm sand' },
-  creamDeep: { name: 'Soft Cream Deep', hex: '#9A8A5A', desc: 'Brand compound — legible ochre cream' },
-  mistDeep: { name: 'Cool Mist Deep', hex: '#566A9B', desc: 'Brand compound — deeper blue-grey' },
+  warmSandDeep: { name: 'Warm Sand Deep', hex: '#C4897A', desc: 'UI accent — legible warm sand, good contrast' },
+  creamDeep: { name: 'Soft Cream Deep', hex: '#9A8A5A', desc: 'UI accent — legible ochre cream' },
+  mistDeep: { name: 'Cool Mist Deep', hex: '#566A9B', desc: 'UI accent — deeper blue-grey' },
 };
 
-export const uiAccents = {
-  sandDeep: { name: 'Desert Sand', hex: '#C4897A', desc: 'Deeper sand — good contrast on light surfaces' },
-  khaki: { name: 'Soft Khaki', hex: '#8A8562', desc: 'Earthy neutral — safari-friendly, legible' },
-  khakiGold: { name: 'Golden Khaki', hex: '#A08C4A', desc: 'Warmer gold-toned khaki — luxe feel' },
-  terracotta: { name: 'Soft Terracotta', hex: '#D4836A', desc: 'Warm, earthy, very travel-appropriate' },
-  periwinkle: { name: 'Dusty Periwinkle', hex: '#7B8CDE', desc: 'Soft but distinctive, modern feel' },
-  rose: { name: 'Dusty Rose', hex: '#C4727E', desc: 'Sophisticated warmth, luxury feel' },
-  amber: { name: 'Muted Amber', hex: '#C9944A', desc: 'Golden hour warmth, premium' },
-};
-
-export const allAccents = { ...brandAccents, ...brandDecorative, ...brandDecorativeDeep, ...uiAccents };
+export const allAccents = { ...brandAccents, ...brandDecorative, ...brandDecorativeDeep };
 
 export const lightAccents = ['warmSand', 'cream', 'mist'];
 
