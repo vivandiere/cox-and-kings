@@ -723,7 +723,7 @@ export default function FoundationsPage() {
             const [productTab, setProductTab] = useState(0);
 
             const binaryLabels = ['Small Group Tours', 'Tailormade Journeys'];
-            const multiLabels = ['All Destinations', 'Small Group', 'Tailormade', 'River Cruises', 'Rail Journeys'];
+            const multiLabels = ['Asia', 'Europe', 'Americas', 'Africa', 'Middle East'];
 
             const sgtProducts = [
               { title: 'The Grand Tour of India', location: 'Agra, India', days: 17, price: '£3,495', img: '/images/hero-01.png' },
@@ -744,7 +744,16 @@ export default function FoundationsPage() {
 
             return (
               <div style={{ marginTop: '40px' }}>
-                <p style={{ ...sectionLabel, marginBottom: '16px' }}>Tab Styles</p>
+                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '16px' }}>
+                  <p style={{ ...sectionLabel, marginBottom: 0 }}>Tab Styles</p>
+                  <Link to="/tabs" target="_blank" style={{
+                    fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '400',
+                    color: palette.neutral[400], textDecoration: 'none', letterSpacing: '0.04em',
+                    display: 'inline-flex', alignItems: 'center', gap: '5px',
+                  }}>
+                    Mobile Exploration &#8599;
+                  </Link>
+                </div>
 
                 {/* ── Style A: Underline ── */}
                 <div style={{ marginBottom: '40px' }}>
@@ -919,85 +928,6 @@ export default function FoundationsPage() {
                   </div>
                 </div>
 
-                {/* ── Live Demo: Product Carousel with binary tabs ── */}
-                <div style={{ marginTop: '48px', paddingTop: '32px', borderTop: `1px solid ${palette.neutral[200]}` }}>
-                  <p style={{ ...sectionLabel, marginBottom: '16px' }}>Tab Demo &mdash; Product Carousel</p>
-
-                  {/* Binary pill tabs */}
-                  <div style={{
-                    display: 'inline-flex', gap: '4px', padding: '4px',
-                    backgroundColor: palette.neutral[100], borderRadius: '32px', marginBottom: '28px',
-                  }}>
-                    {binaryLabels.map((label, i) => (
-                      <button key={label} onClick={() => setProductTab(i)} style={{
-                        ...tabBase,
-                        padding: '10px 24px',
-                        fontSize: '13px',
-                        fontWeight: '500',
-                        letterSpacing: '0.02em',
-                        borderRadius: '28px',
-                        backgroundColor: productTab === i ? '#FFFFFF' : 'transparent',
-                        color: productTab === i ? palette.primary.default : palette.neutral[500],
-                        boxShadow: productTab === i ? '0 1px 4px rgba(16,32,55,0.1)' : 'none',
-                      }}>{label}</button>
-                    ))}
-                  </div>
-
-                  {/* Product cards row */}
-                  <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-                    {activeProducts.map((p) => (
-                      <div key={p.title} style={{
-                        width: '260px', display: 'flex', flexDirection: 'column',
-                        backgroundColor: palette.surface.stone,
-                        boxShadow: '0 2px 12px rgba(16,32,55,0.08)',
-                        padding: '6px 6px 0',
-                      }}>
-                        <div style={{ position: 'relative' }}>
-                          <img src={p.img} alt={p.title}
-                            style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block', borderRadius: '24px' }}
-                          />
-                          <span style={{
-                            position: 'absolute', top: '12px', left: '12px',
-                            fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '500',
-                            letterSpacing: '0.08em', textTransform: 'uppercase',
-                            backgroundColor: isPrimaryAccent ? palette.surface.stone : accent.hex,
-                            color: isPrimaryAccent ? palette.primary.default : (isLightAccent ? palette.primary.default : '#FFFFFF'),
-                            padding: '5px 10px', borderRadius: '6px',
-                          }}>
-                            {productTab === 0 ? 'Small Group Tour' : 'Tailormade'}
-                          </span>
-                          <span style={{
-                            position: 'absolute', bottom: '12px', right: '12px',
-                            fontFamily: 'chainprinter, "Courier New", monospace',
-                            color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
-                            letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
-                          }}>{p.location}</span>
-                        </div>
-                        <div style={{ padding: '16px 14px 20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                          <h4 style={{
-                            fontFamily: FONT_HEADING, fontSize: '18px', fontWeight: '500',
-                            color: palette.primary.default, margin: '0 0 6px',
-                          }}>{p.title}</h4>
-                          <p style={{
-                            fontFamily: FONT_BODY, fontSize: '13px', fontWeight: '300',
-                            color: palette.neutral[500], margin: '0 0 12px',
-                          }}>{p.days} days &middot; From {p.price}pp</p>
-                          <div style={{ marginTop: 'auto' }}>
-                            <button style={{
-                              ...tabBase,
-                              fontWeight: '500', fontSize: '13px',
-                              backgroundColor: 'transparent',
-                              color: palette.primary.default,
-                              padding: 0,
-                              textDecoration: 'underline',
-                              textUnderlineOffset: '3px',
-                            }}>Explore →</button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
               </div>
             );
           })()}
@@ -1031,16 +961,32 @@ export default function FoundationsPage() {
                           alt="The Grand Tour of India"
                           style={{ width: '100%', height: '230px', objectFit: 'cover', display: 'block', borderRadius: '24px' }}
                         />
-                        <span style={{
+                        <div style={{
                           position: 'absolute', top: '14px', left: '14px',
-                          fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
-                          letterSpacing: '0.08em', textTransform: 'uppercase',
-                          backgroundColor: isPrimaryAccent ? palette.surface.stone : accent.hex,
-                          color: isPrimaryAccent ? palette.primary.default : (isLightAccent ? palette.primary.default : '#FFFFFF'),
-                          padding: '6px 12px', borderRadius: '6px',
+                          display: 'flex', alignItems: 'center', gap: '6px',
                         }}>
-                          Small Group Tour
-                        </span>
+                          <span style={{
+                            fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
+                            letterSpacing: '0.08em', textTransform: 'uppercase',
+                            backgroundColor: isPrimaryAccent ? palette.surface.stone : accent.hex,
+                            color: isPrimaryAccent ? palette.primary.default : (isLightAccent ? palette.primary.default : '#FFFFFF'),
+                            padding: '6px 12px', borderRadius: '6px',
+                          }}>
+                            Small Group Tour
+                          </span>
+                          <span style={{ display: 'flex', alignItems: 'center' }}>
+                            <span style={{
+                              fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '600',
+                              letterSpacing: '0.08em', textTransform: 'uppercase',
+                              backgroundColor: palette.primary.default, color: '#FFFFFF',
+                              padding: '6px 12px 6px 12px', borderRadius: '6px 0 0 6px',
+                              lineHeight: '16px',
+                            }}>Save £500</span>
+                            <svg width="10" height="28" viewBox="0 0 10 28" style={{ display: 'block' }}>
+                              <polygon points="0,0 10,14 0,28" fill={palette.primary.default} />
+                            </svg>
+                          </span>
+                        </div>
                         <span style={{
                           position: 'absolute', bottom: '14px', right: '14px',
                           fontFamily: 'chainprinter, "Courier New", monospace',
@@ -1315,6 +1261,132 @@ export default function FoundationsPage() {
 
             </div>
           </div>
+
+          <div style={{ height: '1px', backgroundColor: palette.neutral[300], margin: '40px 0' }} />
+          {/* ════════════════ TAB DEMO — PRODUCT CAROUSEL ════════════════ */}
+          {(() => {
+            const [productTab, setProductTab] = useState(0);
+            const tabBase = {
+              fontFamily: FONT_BODY, cursor: 'pointer', border: 'none',
+              transition: 'all 0.3s ease', whiteSpace: 'nowrap',
+            };
+            const binaryLabels = ['Small Group Tours', 'Tailormade Journeys'];
+            const sgtProducts = [
+              { title: 'The Grand Tour of India', location: 'Agra, India', days: 17, price: '£4,095', img: '/images/hero-01.png', stops: ['Delhi', 'Agra', 'Jaipur', 'Udaipur', 'Varanasi'], level: 2 },
+              { title: 'Highlights of Japan', location: 'Kyoto, Japan', days: 12, price: '£4,295', img: '/images/dest-far-east.png', stops: ['Tokyo', 'Hakone', 'Kyoto', 'Hiroshima'], level: 1 },
+              { title: 'Morocco Discovery', location: 'Marrakech, Morocco', days: 10, price: '£2,195', img: '/images/dest-north-africa-middle-east.png', stops: ['Marrakech', 'Atlas Mountains', 'Sahara', 'Fes'], level: 2 },
+            ];
+            const tmProducts = [
+              { title: 'Kerala & the Backwaters', location: 'Kerala, India', days: 14, price: '£3,895', img: '/images/dest-india-subcontinent.png', stops: ['Cochin', 'Munnar', 'Periyar', 'Kumarakom'], level: 1 },
+              { title: 'Patagonia Explorer', location: 'Torres del Paine, Chile', days: 16, price: '£5,495', img: '/images/dest-south-america.png', stops: ['Buenos Aires', 'El Calafate', 'Torres del Paine'], level: 3 },
+              { title: 'Silk Road Adventure', location: 'Samarkand, Uzbekistan', days: 15, price: '£4,195', img: '/images/dest-central-asia.png', stops: ['Tashkent', 'Samarkand', 'Bukhara', 'Khiva'], level: 2 },
+            ];
+            const activeProducts = productTab === 0 ? sgtProducts : tmProducts;
+            return (
+              <div>
+                <p style={{ ...sectionLabel, marginBottom: '16px' }}>Tab Demo &mdash; Product Carousel</p>
+
+                <div style={{
+                  display: 'inline-flex', gap: '4px', padding: '4px',
+                  backgroundColor: palette.neutral[100], borderRadius: '32px', marginBottom: '28px',
+                }}>
+                  {binaryLabels.map((label, i) => (
+                    <button key={label} onClick={() => setProductTab(i)} style={{
+                      ...tabBase,
+                      padding: '10px 24px',
+                      fontSize: '13px',
+                      fontWeight: '500',
+                      letterSpacing: '0.02em',
+                      borderRadius: '28px',
+                      backgroundColor: productTab === i ? '#FFFFFF' : 'transparent',
+                      color: productTab === i ? palette.primary.default : palette.neutral[500],
+                      boxShadow: productTab === i ? '0 1px 4px rgba(16,32,55,0.1)' : 'none',
+                    }}>{label}</button>
+                  ))}
+                </div>
+
+                <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+                  {activeProducts.map((p) => (
+                    <div key={p.title} style={{
+                      width: '300px', display: 'flex', flexDirection: 'column',
+                      backgroundColor: palette.surface.stone,
+                      boxShadow: '0 2px 12px rgba(16,32,55,0.08)',
+                      padding: '6px 6px 0',
+                    }}>
+                      <div style={{ position: 'relative', zIndex: 1, marginBottom: '-16px' }}>
+                        <img src={p.img} alt={p.title}
+                          style={{ width: '100%', height: '200px', objectFit: 'cover', display: 'block', borderRadius: '24px' }}
+                        />
+                        <span style={{
+                          position: 'absolute', top: '14px', left: '14px',
+                          fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
+                          letterSpacing: '0.08em', textTransform: 'uppercase',
+                          backgroundColor: isPrimaryAccent ? palette.surface.stone : accent.hex,
+                          color: isPrimaryAccent ? palette.primary.default : (isLightAccent ? palette.primary.default : '#FFFFFF'),
+                          padding: '6px 12px', borderRadius: '6px',
+                        }}>
+                          {productTab === 0 ? 'Small Group Tour' : 'Tailormade'}
+                        </span>
+                        <span style={{
+                          position: 'absolute', bottom: '14px', right: '14px',
+                          fontFamily: 'chainprinter, "Courier New", monospace',
+                          color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
+                          letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
+                        }}>{p.location}</span>
+                      </div>
+                      <div style={{ padding: '28px 18px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                        <h4 style={{
+                          fontFamily: FONT_HEADING, fontSize: TS.lg, fontWeight: '500',
+                          color: palette.primary.default, marginBottom: '6px', lineHeight: 1.2,
+                        }}>{p.title}</h4>
+                        <p style={{
+                          fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '500',
+                          color: palette.primary.default, letterSpacing: '0.04em',
+                          textTransform: 'uppercase', marginBottom: '14px',
+                        }}>
+                          {p.days} Days &bull; Limited to 18 Guests
+                        </p>
+                        <p style={{
+                          fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300',
+                          color: palette.neutral[400], textTransform: 'uppercase',
+                          letterSpacing: '0.06em', marginBottom: '6px',
+                        }}>Itinerary</p>
+                        <p style={{
+                          fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '500',
+                          color: palette.primary.default, lineHeight: 1.6, marginBottom: '18px',
+                        }}>
+                          {p.stops.map((s, i) => (
+                            <React.Fragment key={s}>{s}{i < p.stops.length - 1 && <span style={{ margin: '0 6px', color: palette.neutral[300] }}>&bull;</span>}</React.Fragment>
+                          ))}
+                        </p>
+                        <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                          <p style={{
+                            fontFamily: FONT_BODY, fontSize: TS.bodyLg, fontWeight: '400',
+                            color: isPrimaryAccent ? palette.primary.default : accent.hex,
+                          }}>From {p.price}</p>
+                          <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px' }}>
+                            <span style={{
+                              fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '500',
+                              color: palette.neutral[400], textTransform: 'uppercase',
+                              letterSpacing: '0.06em',
+                            }}>Activity Level:</span>
+                            <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end' }}>
+                              {[8, 12, 16].map((h, i) => (
+                                <div key={i} style={{
+                                  width: '4px', height: `${h}px`, borderRadius: '1px',
+                                  backgroundColor: i < p.level ? palette.primary.default : palette.neutral[200],
+                                }}/>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
 
           <div style={{ height: '1px', backgroundColor: palette.neutral[300], margin: '40px 0' }} />
           {/* ════════════════ PRODUCT CARDS — DETAILED ════════════════ */}

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import gsap from 'gsap';
+import { Phone, Mail, BookOpen } from 'lucide-react';
 import { palette, buildAccentScale } from '../tokens/index.js';
 import { FONT_HEADING, FONT_BODY, FONT_MONO, TS } from '../tokens/index.js';
 import { LogoInline, LogoStacked } from '../components/Logo.jsx';
@@ -167,6 +168,60 @@ export default function HomepagePage() {
           backgroundColor: palette.primary.default,
         }}
       >
+        {/* ═══════ UTILITY TOP BAR ═══════ */}
+        <div style={{
+          backgroundColor: palette.primary.default,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: mob ? '10px 16px' : '11px 40px',
+          fontFamily: FONT_BODY,
+          fontSize: mob ? '11px' : '12px',
+          letterSpacing: '0.04em',
+          color: palette.surface.stone,
+          borderBottom: `1px solid ${palette.primary.light}`,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: mob ? '14px' : '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+              <Phone size={mob ? 13 : 14} strokeWidth={1.5} />
+              <span style={{ fontWeight: 400 }}>020 3936 0647</span>
+            </div>
+            <span style={{ color: palette.primary.faded, fontSize: mob ? '10px' : '12px' }}>|</span>
+            <span style={{ fontWeight: 400, color: palette.primary.faded }}>
+              {mob ? 'Opens 9am' : 'We will open at 9am GMT'}
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: mob ? '16px' : '24px' }}>
+            {[
+              { label: 'Brochures', icon: BookOpen },
+              { label: 'Newsletter', icon: Mail },
+            ].map(({ label, icon: Icon }) => (
+              <a
+                key={label}
+                href="#"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  color: palette.surface.stone,
+                  textDecoration: 'none',
+                  fontWeight: 400,
+                  fontSize: mob ? '11px' : '12px',
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  transition: 'opacity 0.15s ease',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+              >
+                {!mob && <Icon size={13} strokeWidth={1.5} />}
+                {label}
+              </a>
+            ))}
+          </div>
+        </div>
+
         {/* Sticky nav */}
         <div style={{
           position: 'sticky',
@@ -193,15 +248,15 @@ export default function HomepagePage() {
               }}>
                 <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => setMenuOpen(!menuOpen)}>
-                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '18px', height: '12px', position: 'relative' }}>
+                    <div style={{ width: '18px', height: '10px', position: 'relative' }}>
                       <div style={{
-                        position: 'absolute', width: '18px', height: '1.5px', backgroundColor: palette.surface.stone,
-                        top: menuOpen ? '5px' : '1px', transform: menuOpen ? 'rotate(45deg)' : 'none',
+                        position: 'absolute', left: 0, width: '18px', height: '2px', backgroundColor: palette.surface.stone,
+                        top: menuOpen ? '4px' : 0, transform: menuOpen ? 'rotate(45deg)' : 'none',
                         transition: 'all 0.3s ease',
                       }} />
                       <div style={{
-                        position: 'absolute', width: '18px', height: '1.5px', backgroundColor: palette.surface.stone,
-                        bottom: menuOpen ? '5px' : '1px', transform: menuOpen ? 'rotate(-45deg)' : 'none',
+                        position: 'absolute', left: 0, width: '18px', height: '2px', backgroundColor: palette.surface.stone,
+                        top: menuOpen ? '4px' : '8px', transform: menuOpen ? 'rotate(-45deg)' : 'none',
                         transition: 'all 0.3s ease',
                       }} />
                     </div>
@@ -257,15 +312,15 @@ export default function HomepagePage() {
               border: `1px solid ${palette.neutral[200]}`,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }} onClick={() => setMenuOpen(!menuOpen)}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: '20px' }}>
+                <div style={{ width: '20px', height: '10px', position: 'relative' }}>
                   <div style={{
-                    width: '20px', height: '1.5px', backgroundColor: palette.primary.default,
-                    transform: menuOpen ? 'translateY(3.25px) rotate(45deg)' : 'none',
+                    position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: palette.primary.default,
+                    top: menuOpen ? '4px' : 0, transform: menuOpen ? 'rotate(45deg)' : 'none',
                     transition: 'all 0.3s ease',
                   }} />
                   <div style={{
-                    width: '20px', height: '1.5px', backgroundColor: palette.primary.default,
-                    transform: menuOpen ? 'translateY(-3.25px) rotate(-45deg)' : 'none',
+                    position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: palette.primary.default,
+                    top: menuOpen ? '4px' : '8px', transform: menuOpen ? 'rotate(-45deg)' : 'none',
                     transition: 'all 0.3s ease',
                   }} />
                 </div>
