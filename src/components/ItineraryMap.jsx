@@ -116,11 +116,9 @@ export default function ItineraryMap() {
     { hex: palette.primary.default, label: 'Primary' },
     { hex: palette.primary.muted, label: 'Muted Navy' },
     ...(!isPrimaryAccent ? [{ hex: accent.hex, label: 'Active Accent' }] : []),
-    { hex: brandDecorativeDeep.warmSandDeep.hex, label: 'Warm Sand' },
-    { hex: '#D4836A', label: 'Terracotta' },
-    { hex: '#A08C4A', label: 'Golden Khaki' },
-    { hex: palette.semantic.success, label: 'Teal' },
-    { hex: palette.semantic.warning, label: 'Amber' },
+    { hex: brandDecorativeDeep.warmSandDeep.hex, label: 'Warm Sand Deep' },
+    { hex: brandDecorativeDeep.creamDeep.hex, label: 'Soft Cream Deep' },
+    { hex: brandDecorativeDeep.mistDeep.hex, label: 'Cool Mist Deep' },
   ];
 
   return (
