@@ -747,9 +747,9 @@ export default function FoundationsPage() {
                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '16px' }}>
                   <p style={{ ...sectionLabel, marginBottom: 0 }}>Tab Styles</p>
                   <Link to="/tabs" target="_blank" style={{
-                    fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '400',
-                    color: palette.neutral[400], textDecoration: 'none', letterSpacing: '0.04em',
-                    display: 'inline-flex', alignItems: 'center', gap: '5px',
+                    fontFamily: FONT_BODY, fontSize: '14px', fontWeight: '500',
+                    color: palette.primary.default, textDecoration: 'underline',
+                    display: 'inline-flex', alignItems: 'center', gap: '6px',
                   }}>
                     Mobile Exploration &#8599;
                   </Link>
