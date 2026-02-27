@@ -166,7 +166,7 @@ function DesktopFrame({ children, label }) {
 
 // ── Option 1 — Current site rebrand ──────────────────────────────────────────
 
-function Opt1DrawerContent({ headingSize = '28px', activeSection, onSectionClick }) {
+function Opt1DrawerContent({ activeSection, onSectionClick }) {
   return (
     <div style={{ padding: '28px 24px' }}>
       {PRIMARY_NAV.map(item => (
@@ -176,7 +176,7 @@ function Opt1DrawerContent({ headingSize = '28px', activeSection, onSectionClick
           borderLeft: activeSection === item.label ? `2px solid ${palette.primary.default}` : '2px solid transparent',
           paddingLeft: '10px',
         }}>
-          <span style={{ fontFamily: FONT_HEADING, fontSize: headingSize, fontWeight: '300', color: palette.primary.default, lineHeight: 1.15 }}>{item.label}</span>
+          <span style={{ fontFamily: FONT_HEADING, fontSize: TS.lg, fontWeight: '300', color: palette.primary.default, lineHeight: 1.15 }}>{item.label}</span>
           {item.hasArrow && <ChevronRight size={18} strokeWidth={1} color={palette.neutral[400]} />}
         </div>
       ))}
@@ -253,7 +253,7 @@ function Opt1Desktop() {
         {open && (
           <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
             <div style={{ width: '380px', flexShrink: 0, backgroundColor: '#FFFFFF', overflowY: 'auto', scrollbarWidth: 'none' }}>
-              <Opt1DrawerContent headingSize="30px" activeSection={activeSection} onSectionClick={setActiveSection} />
+              <Opt1DrawerContent activeSection={activeSection} onSectionClick={setActiveSection} />
             </div>
             {activeSection === 'Destinations' && (
               <div style={{ flex: 1, backgroundColor: palette.surface.stone, overflowY: 'auto', scrollbarWidth: 'none', padding: '24px' }}>

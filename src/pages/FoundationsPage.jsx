@@ -712,6 +712,53 @@ export default function FoundationsPage() {
           </div>
 
           <div style={{ height: '1px', backgroundColor: palette.neutral[300], margin: '40px 0' }} />
+
+          {/* ════════════════ TAGS ════════════════ */}
+          <p style={{ ...sectionLabel, marginBottom: '12px' }}>Tags</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div>
+              <p style={{ ...sectionLabel, fontSize: '10px', marginBottom: '10px' }}>Filled — destination &amp; filter tags</p>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                {['India', 'Peru', 'Uzbekistan', 'Japan', 'Morocco', 'Greece'].map(label => (
+                  <span key={label} style={{
+                    fontFamily: FONT_BODY,
+                    fontSize: TS.sm,
+                    fontWeight: '400',
+                    color: palette.primary.default,
+                    backgroundColor: palette.neutral[100],
+                    border: `1px solid ${palette.neutral[200]}`,
+                    padding: '7px 14px',
+                    borderRadius: '20px',
+                    letterSpacing: '0.06em',
+                    textTransform: 'uppercase',
+                    whiteSpace: 'nowrap',
+                  }}>{label}</span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p style={{ ...sectionLabel, fontSize: '10px', marginBottom: '10px' }}>Outline — secondary / "view all" action</p>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                {['Specialist Tours', 'Solo Travel', 'Wildlife', 'Cultural', 'View all →'].map(label => (
+                  <span key={label} style={{
+                    fontFamily: FONT_BODY,
+                    fontSize: TS.sm,
+                    fontWeight: '400',
+                    color: palette.primary.default,
+                    backgroundColor: 'transparent',
+                    border: `1px solid ${palette.neutral[200]}`,
+                    padding: '7px 14px',
+                    borderRadius: '20px',
+                    letterSpacing: '0.06em',
+                    textTransform: 'uppercase',
+                    whiteSpace: 'nowrap',
+                  }}>{label}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ height: '1px', backgroundColor: palette.neutral[300], margin: '40px 0' }} />
           {/* ════════════════ TAB STYLES ════════════════ */}
           {(() => {
             const [tabStyleA, setTabStyleA] = useState(0);
