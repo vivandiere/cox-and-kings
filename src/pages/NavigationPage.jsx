@@ -193,10 +193,14 @@ function Opt1DrawerContent({ activeSection, onSectionClick }) {
             {item.hasArrow && <ChevronRight size={13} strokeWidth={1.5} color={palette.neutral[400]} />}
           </div>
         ))}
-        <div style={{ height: '1px', backgroundColor: palette.neutral[200], margin: '20px 0' }} />
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Phone size={13} strokeWidth={1.5} color={palette.neutral[500]} />
-          <span style={{ fontFamily: FONT_MONO, fontSize: '12px', color: palette.neutral[500], letterSpacing: '0.04em' }}>020 3993 3757</span>
+      </div>
+      {/* CTA footer — breaks out of parent padding to span full width */}
+      <div style={{ backgroundColor: palette.primary.default, margin: '20px -24px -28px', padding: '20px 24px 28px' }}>
+        <p style={{ fontFamily: FONT_HEADING, fontSize: '15px', fontWeight: '400', color: palette.surface.stone, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>Speak to our experts</p>
+        <p style={{ fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '300', color: palette.surface.stone, opacity: 0.7, lineHeight: 1.6, letterSpacing: '0.04em' }}>MON–FRI &nbsp;9:00am – 6:00pm<br />SAT &nbsp;10:00am – 4:30pm</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
+          <span style={{ fontFamily: FONT_BODY, fontSize: '15px', fontWeight: '500', color: palette.surface.stone, letterSpacing: '0.06em' }}>020 3993 4424</span>
+          <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.surface.stone, color: palette.primary.default, padding: '8px 20px', border: 'none', fontWeight: '400', fontSize: '11px', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}>Enquire</button>
         </div>
       </div>
     </div>
