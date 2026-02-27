@@ -95,7 +95,8 @@ export default function MapPage() {
           <ItineraryMap />
         </div>
 
-        <div style={{
+        {/* Navigational map — hidden for phase 1 launch */}
+        {false && <div style={{
           ...card,
           marginTop: '24px',
           marginBottom: '24px',
@@ -265,7 +266,7 @@ export default function MapPage() {
               )}
             </div>
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );
