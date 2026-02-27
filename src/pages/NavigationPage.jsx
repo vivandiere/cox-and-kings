@@ -211,9 +211,9 @@ function Opt1Mobile() {
   const [open, setOpen] = useState(true);
   return (
     <HeroShell mob>
-      {/* Top bar */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 20 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', backgroundColor: palette.primary.default, padding: '0 16px', height: '52px' }}>
+      {/* Top bar + drawer — fills full hero height */}
+      <div style={{ position: 'absolute', inset: 0, zIndex: 20, display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', backgroundColor: palette.primary.default, padding: '0 16px', height: '52px', flexShrink: 0 }}>
           <div onClick={() => setOpen(!open)} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
             <div style={{ width: '18px', height: '10px', position: 'relative' }}>
               <div style={{ position: 'absolute', left: 0, width: '18px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : 0, transform: open ? 'rotate(45deg)' : 'none', transition: 'all 0.3s ease' }} />
@@ -226,7 +226,7 @@ function Opt1Mobile() {
           </div>
         </div>
         {open && (
-          <div style={{ backgroundColor: '#FFFFFF', overflowY: 'auto', maxHeight: '500px', scrollbarWidth: 'none' }}>
+          <div style={{ flex: 1, backgroundColor: '#FFFFFF', overflowY: 'auto', scrollbarWidth: 'none' }}>
             <Opt1DrawerContent activeSection={null} />
           </div>
         )}
@@ -296,11 +296,11 @@ function TagPill({ label }) {
   );
 }
 
-function Opt2Menu({ mob = false }) {
+function Opt2Menu({ mob = false, fill = false }) {
   const [search, setSearch] = useState('');
   const [focused, setFocused] = useState(false);
   return (
-    <div style={{ backgroundColor: palette.surface.stone, border: `1px solid ${palette.neutral[200]}`, borderTop: 'none', overflowY: 'auto', maxHeight: mob ? '520px' : '560px', scrollbarWidth: 'none' }}>
+    <div style={{ backgroundColor: palette.surface.stone, border: `1px solid ${palette.neutral[200]}`, borderTop: 'none', overflowY: 'auto', ...(fill ? { flex: 1 } : { maxHeight: mob ? '520px' : '560px' }), scrollbarWidth: 'none' }}>
       <style>{`@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}.opt2-input::placeholder{color:${palette.neutral[300]};opacity:1}`}</style>
 
       {/* Search */}
@@ -364,8 +364,8 @@ function Opt2Mobile() {
   return (
     <HeroShell mob>
       {/* Floating compact nav bar */}
-      <div style={{ position: 'absolute', top: '10px', left: '12px', right: '12px', zIndex: 20 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', backgroundColor: palette.surface.stone, padding: '9px 14px', border: `1px solid ${palette.neutral[200]}` }}>
+      <div style={{ position: 'absolute', top: '10px', left: '12px', right: '12px', bottom: '10px', zIndex: 20, display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', backgroundColor: palette.surface.stone, padding: '9px 14px', border: `1px solid ${palette.neutral[200]}`, flexShrink: 0 }}>
           <div onClick={() => setOpen(!open)} style={{ display: 'flex', alignItems: 'center', gap: '7px', cursor: 'pointer' }}>
             <div style={{ width: '17px', height: '9px', position: 'relative' }}>
               <div style={{ position: 'absolute', left: 0, width: '17px', height: '2px', backgroundColor: palette.primary.default, top: open ? '3.5px' : 0, transform: open ? 'rotate(45deg)' : 'none', transition: 'all 0.3s ease' }} />
@@ -378,7 +378,7 @@ function Opt2Mobile() {
             <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.primary.default, color: '#FFFFFF', padding: '7px 12px', border: 'none', fontWeight: '400', fontSize: '10px', letterSpacing: '1px', textTransform: 'uppercase', cursor: 'pointer' }}>Enquire</button>
           </div>
         </div>
-        {open && <Opt2Menu mob />}
+        {open && <Opt2Menu mob fill />}
       </div>
     </HeroShell>
   );
