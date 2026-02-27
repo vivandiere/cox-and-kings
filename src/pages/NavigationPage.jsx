@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { palette, brandDecorativeDeep } from '../tokens/index.js';
 import { FONT_HEADING, FONT_BODY, FONT_MONO, TS } from '../tokens/index.js';
-import { ChevronLeft, ChevronRight, X, Menu, Phone, BookOpen, Mail } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Menu, Phone, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { LogoInline, LogoCompact } from '../components/Logo.jsx';
 
@@ -53,32 +53,14 @@ function HeroShell({ children, mob = false }) {
         borderBottom: `1px solid ${palette.primary.light}`,
         flexShrink: 0,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: mob ? '10px' : '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Phone size={mob ? 11 : 13} strokeWidth={1.5} color={palette.surface.stone} />
-            <span style={{ fontFamily: FONT_BODY, fontSize: mob ? '10px' : '11px', fontWeight: '400', color: palette.surface.stone, letterSpacing: '0.04em' }}>020 3936 0647</span>
-          </div>
-          <span style={{ color: palette.primary.faded, fontSize: '10px' }}>|</span>
-          <span style={{ fontFamily: FONT_BODY, fontSize: mob ? '9px' : '11px', fontWeight: '400', color: palette.primary.faded, letterSpacing: '0.02em' }}>
-            {mob ? 'Opens 9am' : 'We will open at 9am GMT'}
-          </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <Phone size={mob ? 11 : 13} strokeWidth={1.5} color={palette.surface.stone} />
+          <span style={{ fontFamily: FONT_BODY, fontSize: mob ? '10px' : '11px', fontWeight: '400', color: palette.surface.stone, letterSpacing: '0.04em' }}>020 3936 0647</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: mob ? '12px' : '20px' }}>
-          {!mob && (
-            <>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}>
-                <BookOpen size={12} strokeWidth={1.5} color={palette.surface.stone} />
-                <span style={{ fontFamily: FONT_BODY, fontSize: '11px', color: palette.surface.stone, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Brochures</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}>
-                <Mail size={12} strokeWidth={1.5} color={palette.surface.stone} />
-                <span style={{ fontFamily: FONT_BODY, fontSize: '11px', color: palette.surface.stone, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Newsletter</span>
-              </div>
-            </>
-          )}
-          {mob && (
-            <span style={{ fontFamily: FONT_BODY, fontSize: '10px', color: palette.surface.stone, letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}>Brochures</span>
-          )}
+        <div style={{ display: 'flex', alignItems: 'center', gap: mob ? '8px' : '10px' }}>
+          <span style={{ fontFamily: FONT_BODY, fontSize: mob ? '9px' : '11px', fontWeight: '400', color: palette.surface.stone, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer' }}>Subscribe</span>
+          <span style={{ color: palette.surface.stone, fontSize: mob ? '9px' : '11px', opacity: 0.5 }}>·</span>
+          <span style={{ fontFamily: FONT_BODY, fontSize: mob ? '9px' : '11px', fontWeight: '400', color: palette.surface.stone, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer' }}>Brochures</span>
         </div>
       </div>
 
@@ -236,7 +218,7 @@ function Opt1Mobile() {
           </div>
           <LogoInline color={palette.surface.stone} height={20} />
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.surface.stone, color: palette.primary.default, padding: '7px 14px', border: 'none', fontWeight: '500', fontSize: '11px', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}>Enquire</button>
+            <Search size={18} strokeWidth={1.5} color={palette.surface.stone} style={{ cursor: 'pointer' }} />
           </div>
         </div>
         {open && (
@@ -265,7 +247,7 @@ function Opt1Desktop() {
           </div>
           <LogoInline color={palette.surface.stone} height={22} />
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.surface.stone, color: palette.primary.default, padding: '10px 20px', border: 'none', fontWeight: '500', fontSize: '13px', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}>Enquire</button>
+            <Search size={20} strokeWidth={1.5} color={palette.surface.stone} style={{ cursor: 'pointer' }} />
           </div>
         </div>
         {open && (
