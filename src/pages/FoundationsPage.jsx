@@ -1056,7 +1056,7 @@ export default function FoundationsPage() {
                 );
               })()}
 
-              {/* Card 2 — Sans-led dark */}
+              {/* Card 2 — V1 base, Chainprinter tags, no rounded borders */}
               {(() => {
                 const stops = ['Marrakech', 'Atlas Mountains', 'Sahara', 'Fes'];
                 return (
@@ -1065,44 +1065,48 @@ export default function FoundationsPage() {
                       fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300',
                       color: palette.neutral[400], textTransform: 'uppercase',
                       letterSpacing: '0.08em', marginBottom: '8px', textAlign: 'center',
-                    }}>V2 &mdash; Sans-led, All Ceno</p>
+                    }}>V2 &mdash; Chainprinter tags, no rounded borders</p>
                     <div style={{
                       flex: 1, display: 'flex', flexDirection: 'column',
-                      backgroundColor: palette.primary.default,
-                      borderRadius: '16px',
-                      overflow: 'hidden',
-                      boxShadow: '0 2px 12px rgba(16,32,55,0.15)',
+                      backgroundColor: palette.surface.stone,
+                      borderRadius: '0',
+                      boxShadow: '0 2px 12px rgba(16,32,55,0.08)',
+                      padding: '6px 6px 0',
                     }}>
-                      <div style={{ padding: '20px 24px 14px' }}>
-                        <span style={{
-                          fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
-                          letterSpacing: '0.08em', textTransform: 'uppercase',
-                          color: isPrimaryAccent ? palette.primary.faded : accent.hex,
-                        }}>
-                          Tailormade
-                        </span>
-                        <h4 style={{
-                          fontFamily: FONT_BODY, fontSize: TS.xl, fontWeight: '500',
-                          color: '#FFFFFF', marginTop: '6px', marginBottom: '4px', lineHeight: 1.15,
-                        }}>
-                          Morocco Uncovered
-                        </h4>
-                        <p style={{
-                          fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '400',
-                          color: palette.primary.faded, letterSpacing: '0.04em',
-                          textTransform: 'uppercase',
-                        }}>
-                          12 Days &bull; Private Journey
-                        </p>
-                      </div>
-                      <div style={{ position: 'relative' }}>
+                      <div style={{ position: 'relative', zIndex: 1, marginBottom: '-16px' }}>
                         <img
                           src="/images/hero-02.png"
                           alt="Morocco Uncovered"
-                          style={{ width: '100%', height: '200px', objectFit: 'cover', display: 'block' }}
+                          style={{ width: '100%', height: '230px', objectFit: 'cover', display: 'block', borderRadius: '0' }}
                         />
+                        <div style={{
+                          position: 'absolute', top: '14px', left: '14px',
+                          display: 'flex', alignItems: 'center', gap: '6px',
+                        }}>
+                          <span style={{
+                            fontFamily: FONT_MONO, fontSize: '11px', fontWeight: '400',
+                            letterSpacing: '0.08em', textTransform: 'uppercase',
+                            backgroundColor: isPrimaryAccent ? palette.surface.stone : accent.hex,
+                            color: isPrimaryAccent ? palette.primary.default : (isLightAccent ? palette.primary.default : '#FFFFFF'),
+                            padding: '6px 12px', borderRadius: '6px',
+                          }}>
+                            Tailormade
+                          </span>
+                          <span style={{ display: 'flex', alignItems: 'center' }}>
+                            <span style={{
+                              fontFamily: FONT_MONO, fontSize: '10px', fontWeight: '400',
+                              letterSpacing: '0.08em', textTransform: 'uppercase',
+                              backgroundColor: palette.primary.default, color: '#FFFFFF',
+                              padding: '6px 12px', borderRadius: '6px 0 0 6px',
+                              lineHeight: '16px',
+                            }}>Save £300</span>
+                            <svg width="10" height="28" viewBox="0 0 10 28" style={{ display: 'block' }}>
+                              <polygon points="0,0 10,14 0,28" fill={palette.primary.default} />
+                            </svg>
+                          </span>
+                        </div>
                         <span style={{
-                          position: 'absolute', bottom: '12px', right: '14px',
+                          position: 'absolute', bottom: '14px', right: '14px',
                           fontFamily: FONT_MONO,
                           color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
                           letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
@@ -1110,42 +1114,55 @@ export default function FoundationsPage() {
                           Marrakech, Morocco
                         </span>
                       </div>
-                      <div style={{ padding: '16px 24px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                      <div style={{ padding: '28px 18px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                        <h4 style={{
+                          fontFamily: FONT_HEADING, fontSize: TS.lg, fontWeight: '500',
+                          color: palette.primary.default, marginBottom: '6px', lineHeight: 1.2,
+                        }}>
+                          Morocco Uncovered
+                        </h4>
+                        <p style={{
+                          fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '500',
+                          color: palette.primary.default, letterSpacing: '0.04em',
+                          textTransform: 'uppercase', marginBottom: '14px',
+                        }}>
+                          12 Days &bull; Private Journey
+                        </p>
                         <p style={{
                           fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300',
-                          color: palette.primary.faded, textTransform: 'uppercase',
-                          letterSpacing: '0.06em', marginBottom: '6px', opacity: 0.7,
+                          color: palette.neutral[400], textTransform: 'uppercase',
+                          letterSpacing: '0.06em', marginBottom: '6px',
                         }}>
                           Itinerary
                         </p>
                         <p style={{
-                          fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '400',
-                          color: palette.surface.stone, lineHeight: 1.6, marginBottom: '18px',
+                          fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '500',
+                          color: palette.primary.default, lineHeight: 1.6, marginBottom: '18px',
                         }}>
                           {stops.map((s, i) => (
-                            <React.Fragment key={s}>{s}{i < stops.length - 1 && <span style={{ margin: '0 6px', color: palette.primary.muted }}>&bull;</span>}</React.Fragment>
+                            <React.Fragment key={s}>{s}{i < stops.length - 1 && <span style={{ margin: '0 6px', color: palette.neutral[300] }}>&bull;</span>}</React.Fragment>
                           ))}
                         </p>
                         <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                           <p style={{
-                            fontFamily: FONT_BODY, fontSize: TS.bodyLg, fontWeight: '700',
-                            color: isPrimaryAccent ? palette.surface.stone : accent.hex,
+                            fontFamily: FONT_BODY, fontSize: TS.bodyLg, fontWeight: '400',
+                            color: isPrimaryAccent ? palette.primary.default : accent.hex,
                           }}>
                             From £3,250
                           </p>
                           <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px' }}>
                             <span style={{
-                              fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '500',
-                              color: palette.primary.faded, textTransform: 'uppercase',
-                              letterSpacing: '0.06em', opacity: 0.7,
+                              fontFamily: FONT_MONO, fontSize: '10px', fontWeight: '400',
+                              color: palette.neutral[400], textTransform: 'uppercase',
+                              letterSpacing: '0.06em',
                             }}>
                               Activity Level:
                             </span>
                             <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end' }}>
                               {[8, 12, 16].map((h, i) => (
                                 <div key={i} style={{
-                                  width: '4px', height: `${h}px`, borderRadius: '1px',
-                                  backgroundColor: i < 3 ? palette.surface.stone : palette.primary.muted,
+                                  width: '4px', height: `${h}px`, borderRadius: '0',
+                                  backgroundColor: i < 2 ? palette.primary.default : palette.neutral[200],
                                 }}/>
                               ))}
                             </div>
