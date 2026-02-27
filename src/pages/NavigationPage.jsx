@@ -250,12 +250,13 @@ function Opt1Desktop() {
             </div>
           </div>
           <LogoInline color={palette.surface.stone} height={22} />
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '20px' }}>
+            <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.surface.stone, color: palette.primary.default, padding: '8px 20px', border: 'none', fontWeight: '400', fontSize: '11px', letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer' }}>Enquire</button>
             <Search size={20} strokeWidth={1.5} color={palette.surface.stone} style={{ cursor: 'pointer' }} />
           </div>
         </div>
         {open && (
-          <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+          <div style={{ width: '60%', display: 'flex', overflow: 'hidden' }}>
             <div style={{ width: '380px', flexShrink: 0, backgroundColor: '#FFFFFF', overflowY: 'auto', scrollbarWidth: 'none' }}>
               <Opt1DrawerContent activeSection={activeSection} onSectionClick={setActiveSection} />
             </div>
