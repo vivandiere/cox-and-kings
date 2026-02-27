@@ -134,13 +134,14 @@ function HeroShell({ children, mob = false }) {
             border: 'none', fontWeight: '500',
             fontSize: mob ? '12px' : '14px',
             cursor: 'pointer', pointerEvents: 'auto',
+            whiteSpace: 'nowrap',
           }}>
             Explore Destinations
           </button>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: palette.surface.stone, opacity: 0.6, display: 'inline-block' }} />
-            <span style={{ fontFamily: FONT_MONO, color: palette.surface.stone, fontSize: '10px', fontWeight: '400', letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7 }}>
-              India, Indian Subcontinent
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: '5px', textAlign: 'right' }}>
+            <span style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: palette.surface.stone, opacity: 0.6, display: 'inline-block', flexShrink: 0, marginBottom: '2px' }} />
+            <span style={{ fontFamily: FONT_MONO, color: palette.surface.stone, fontSize: '8px', fontWeight: '400', letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7, lineHeight: 1.3 }}>
+              India,<br />Indian Subcontinent
             </span>
           </div>
         </div>
@@ -226,14 +227,17 @@ function Opt1Mobile() {
     <HeroShell mob>
       {/* Top bar */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 20 }}>
-        <div style={{ display: 'flex', alignItems: 'center', backgroundColor: palette.primary.default, padding: '0 16px', height: '44px' }}>
-          <button onClick={() => setOpen(!open)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: palette.surface.stone, padding: '4px', marginRight: '12px', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-            {open ? <X size={18} strokeWidth={1.5} /> : <Menu size={18} strokeWidth={1.5} />}
-          </button>
-          <div style={{ display: 'flex', overflowX: 'auto', scrollbarWidth: 'none' }}>
-            {PRIMARY_NAV.map(item => (
-              <span key={item.label} style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500', letterSpacing: '0.08em', textTransform: 'uppercase', color: palette.surface.stone, whiteSpace: 'nowrap', padding: '0 10px', opacity: 0.9 }}>{item.label}</span>
-            ))}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', backgroundColor: palette.primary.default, padding: '0 16px', height: '52px' }}>
+          <div onClick={() => setOpen(!open)} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+            <div style={{ width: '18px', height: '10px', position: 'relative' }}>
+              <div style={{ position: 'absolute', left: 0, width: '18px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : 0, transform: open ? 'rotate(45deg)' : 'none', transition: 'all 0.3s ease' }} />
+              <div style={{ position: 'absolute', left: 0, width: '18px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : '8px', transform: open ? 'rotate(-45deg)' : 'none', transition: 'all 0.3s ease' }} />
+            </div>
+            <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '400', color: palette.surface.stone, letterSpacing: '1px', textTransform: 'uppercase' }}>{open ? 'Close' : 'Menu'}</span>
+          </div>
+          <LogoInline color={palette.surface.stone} height={26} />
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.surface.stone, color: palette.primary.default, padding: '7px 14px', border: 'none', fontWeight: '500', fontSize: '11px', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}>Enquire</button>
           </div>
         </div>
         {open && (
@@ -253,13 +257,18 @@ function Opt1Desktop() {
     <HeroShell>
       {/* Top bar + drawer */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', zIndex: 20 }}>
-        <div style={{ display: 'flex', alignItems: 'center', backgroundColor: palette.primary.default, padding: '0 24px', height: '48px', flexShrink: 0 }}>
-          <button onClick={() => setOpen(!open)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: palette.surface.stone, padding: '4px', marginRight: '12px', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-            {open ? <X size={18} strokeWidth={1.5} /> : <Menu size={18} strokeWidth={1.5} />}
-          </button>
-          {PRIMARY_NAV.map(item => (
-            <span key={item.label} style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500', letterSpacing: '0.08em', textTransform: 'uppercase', color: palette.surface.stone, whiteSpace: 'nowrap', padding: '0 12px', opacity: 0.9 }}>{item.label}</span>
-          ))}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', backgroundColor: palette.primary.default, padding: '0 24px', height: '56px', flexShrink: 0 }}>
+          <div onClick={() => setOpen(!open)} style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+            <div style={{ width: '20px', height: '10px', position: 'relative' }}>
+              <div style={{ position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : 0, transform: open ? 'rotate(45deg)' : 'none', transition: 'all 0.3s ease' }} />
+              <div style={{ position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : '8px', transform: open ? 'rotate(-45deg)' : 'none', transition: 'all 0.3s ease' }} />
+            </div>
+            <span style={{ fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400', color: palette.surface.stone, letterSpacing: '1px', textTransform: 'uppercase' }}>{open ? 'Close' : 'Menu'}</span>
+          </div>
+          <LogoInline color={palette.surface.stone} height={28} />
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.surface.stone, color: palette.primary.default, padding: '10px 20px', border: 'none', fontWeight: '500', fontSize: '13px', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}>Enquire</button>
+          </div>
         </div>
         {open && (
           <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
