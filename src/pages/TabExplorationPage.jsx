@@ -73,7 +73,7 @@ function DesktopFrame({ children, label }) {
   );
 }
 
-function RegionPanel({ region, compact: isCompact, variant = 'V1' }) {
+function RegionPanel({ region, compact: isCompact, variant = 'V1', showBorder = true }) {
   const products = REGION_PRODUCTS[region] || [];
 
   const cardW = isCompact ? '220px' : '320px';
@@ -89,7 +89,7 @@ function RegionPanel({ region, compact: isCompact, variant = 'V1' }) {
             <div key={p.title} style={{
               minWidth: cardW, maxWidth: cardW, display: 'flex', flexDirection: 'column', flexShrink: 0,
               backgroundColor: palette.surface.stone, boxShadow: '0 2px 12px rgba(16,32,55,0.08)',
-              border: `1px solid ${palette.neutral[200]}`, padding: '4px 4px 0',
+              border: showBorder ? `1px solid ${palette.neutral[200]}` : 'none', padding: '4px 4px 0',
             }}>
               <div style={{ position: 'relative', marginBottom: '-12px' }}>
                 <img src={p.img} alt={p.title} style={{ width: '100%', height: imgH, objectFit: 'cover', display: 'block', borderRadius: '16px' }} />
@@ -143,7 +143,7 @@ function RegionPanel({ region, compact: isCompact, variant = 'V1' }) {
             <div key={p.title} style={{
               minWidth: cardW, maxWidth: cardW, display: 'flex', flexDirection: 'column', flexShrink: 0,
               backgroundColor: palette.surface.stone, boxShadow: '0 2px 12px rgba(16,32,55,0.08)',
-              border: `1px solid ${palette.neutral[200]}`, padding: '4px 4px 0', borderRadius: '0',
+              border: showBorder ? `1px solid ${palette.neutral[200]}` : 'none', padding: '4px 4px 0', borderRadius: '0',
             }}>
               <div style={{ position: 'relative', marginBottom: '-12px' }}>
                 <img src={p.img} alt={p.title} style={{ width: '100%', height: imgH, objectFit: 'cover', display: 'block', borderRadius: '0' }} />
@@ -200,7 +200,7 @@ function RegionPanel({ region, compact: isCompact, variant = 'V1' }) {
             <div key={p.title} style={{
               minWidth: cardW, maxWidth: cardW, display: 'flex', flexDirection: 'column', flexShrink: 0,
               backgroundColor: '#FFFFFF', boxShadow: '0 2px 12px rgba(16,32,55,0.08)',
-              border: `1px solid ${palette.neutral[100]}`, borderRadius: '16px', overflow: 'hidden',
+              border: showBorder ? `1px solid ${palette.neutral[100]}` : 'none', borderRadius: '16px', overflow: 'hidden',
             }}>
               <div style={{ position: 'relative' }}>
                 <img src={p.img} alt={p.title} style={{ width: '100%', height: imgH, objectFit: 'cover', display: 'block' }} />
@@ -255,7 +255,7 @@ function RegionPanel({ region, compact: isCompact, variant = 'V1' }) {
 }
 
 
-function PatternA({ variant }) {
+function PatternA({ variant, showBorder }) {
   const [active, setActive] = useState(0);
   const scrollRef = useRef(null);
 
@@ -284,13 +284,13 @@ function PatternA({ variant }) {
           background: 'linear-gradient(to right, transparent, #FFFFFF)', pointerEvents: 'none',
         }} />
       </div>
-      <RegionPanel region={REGIONS[active]} compact variant={variant} />
+      <RegionPanel region={REGIONS[active]} compact variant={variant} showBorder={showBorder} />
     </>
   );
 }
 
 
-function PatternB({ variant }) {
+function PatternB({ variant, showBorder }) {
   const [active, setActive] = useState(0);
   const [open, setOpen] = useState(false);
 
@@ -329,13 +329,13 @@ function PatternB({ variant }) {
           </div>
         )}
       </div>
-      <RegionPanel region={REGIONS[active]} compact variant={variant} />
+      <RegionPanel region={REGIONS[active]} compact variant={variant} showBorder={showBorder} />
     </>
   );
 }
 
 
-function PatternC({ variant }) {
+function PatternC({ variant, showBorder }) {
   const [active, setActive] = useState(0);
 
   return (
@@ -356,13 +356,13 @@ function PatternC({ variant }) {
           }}>{r}</button>
         ))}
       </div>
-      <RegionPanel region={REGIONS[active]} compact variant={variant} />
+      <RegionPanel region={REGIONS[active]} compact variant={variant} showBorder={showBorder} />
     </>
   );
 }
 
 
-function PatternD({ variant }) {
+function PatternD({ variant, showBorder }) {
   const [expanded, setExpanded] = useState(0);
 
   return (
@@ -384,7 +384,7 @@ function PatternD({ variant }) {
               color: palette.neutral[400],
             }} />
           </button>
-          {expanded === i && <RegionPanel region={r} compact variant={variant} />}
+          {expanded === i && <RegionPanel region={r} compact variant={variant} showBorder={showBorder} />}
         </div>
       ))}
     </div>
@@ -392,7 +392,7 @@ function PatternD({ variant }) {
 }
 
 
-function PatternADesktop({ variant }) {
+function PatternADesktop({ variant, showBorder }) {
   const [active, setActive] = useState(0);
 
   return (
@@ -412,13 +412,13 @@ function PatternADesktop({ variant }) {
           }}>{r}</button>
         ))}
       </div>
-      <RegionPanel region={REGIONS[active]} variant={variant} />
+      <RegionPanel region={REGIONS[active]} variant={variant} showBorder={showBorder} />
     </>
   );
 }
 
 
-function PatternBDesktop({ variant }) {
+function PatternBDesktop({ variant, showBorder }) {
   const [active, setActive] = useState(0);
 
   return (
@@ -438,13 +438,13 @@ function PatternBDesktop({ variant }) {
           }}>{r}</button>
         ))}
       </div>
-      <RegionPanel region={REGIONS[active]} variant={variant} />
+      <RegionPanel region={REGIONS[active]} variant={variant} showBorder={showBorder} />
     </>
   );
 }
 
 
-function PatternCDesktop({ variant }) {
+function PatternCDesktop({ variant, showBorder }) {
   const [active, setActive] = useState(0);
 
   return (
@@ -465,13 +465,13 @@ function PatternCDesktop({ variant }) {
           }}>{r}</button>
         ))}
       </div>
-      <RegionPanel region={REGIONS[active]} variant={variant} />
+      <RegionPanel region={REGIONS[active]} variant={variant} showBorder={showBorder} />
     </>
   );
 }
 
 
-function PatternDDesktop({ variant }) {
+function PatternDDesktop({ variant, showBorder }) {
   const [active, setActive] = useState(0);
 
   return (
@@ -491,7 +491,7 @@ function PatternDDesktop({ variant }) {
           }}>{r}</button>
         ))}
       </div>
-      <RegionPanel region={REGIONS[active]} variant={variant} />
+      <RegionPanel region={REGIONS[active]} variant={variant} showBorder={showBorder} />
     </>
   );
 }
@@ -499,6 +499,7 @@ function PatternDDesktop({ variant }) {
 
 export default function TabExplorationPage() {
   const [cardVariant, setCardVariant] = useState('V1');
+  const [showBorder, setShowBorder] = useState(true);
   const [winW, setWinW] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
   useEffect(() => {
     const h = () => setWinW(window.innerWidth);
@@ -558,22 +559,41 @@ export default function TabExplorationPage() {
           Each is shown at mobile (375px) and desktop width.
         </p>
 
-        {/* Card variant toggle */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '24px' }}>
-          <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300', color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-            Card Style
-          </span>
-          <div style={{ display: 'flex', gap: '4px' }}>
-            {['V1', 'V2', 'V3'].map((v) => (
-              <button key={v} onClick={() => setCardVariant(v)} style={{
-                border: `1px solid ${cardVariant === v ? palette.primary.default : palette.neutral[200]}`,
-                backgroundColor: cardVariant === v ? palette.primary.default : 'transparent',
-                color: cardVariant === v ? '#FFFFFF' : palette.neutral[500],
-                fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '500',
-                letterSpacing: '0.04em', padding: '6px 16px',
-                borderRadius: '4px', cursor: 'pointer', transition: 'all 0.15s ease',
-              }}>{v}</button>
-            ))}
+        {/* Card variant + border toggles */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginTop: '24px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300', color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              Card Style
+            </span>
+            <div style={{ display: 'flex', gap: '4px' }}>
+              {['V1', 'V2', 'V3'].map((v) => (
+                <button key={v} onClick={() => setCardVariant(v)} style={{
+                  border: `1px solid ${cardVariant === v ? palette.primary.default : palette.neutral[200]}`,
+                  backgroundColor: cardVariant === v ? palette.primary.default : 'transparent',
+                  color: cardVariant === v ? '#FFFFFF' : palette.neutral[500],
+                  fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '500',
+                  letterSpacing: '0.04em', padding: '6px 16px',
+                  borderRadius: '4px', cursor: 'pointer', transition: 'all 0.15s ease',
+                }}>{v}</button>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300', color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              Borders
+            </span>
+            <div style={{ display: 'flex', gap: '4px' }}>
+              {[['On', true], ['Off', false]].map(([label, val]) => (
+                <button key={label} onClick={() => setShowBorder(val)} style={{
+                  border: `1px solid ${showBorder === val ? palette.primary.default : palette.neutral[200]}`,
+                  backgroundColor: showBorder === val ? palette.primary.default : 'transparent',
+                  color: showBorder === val ? '#FFFFFF' : palette.neutral[500],
+                  fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '500',
+                  letterSpacing: '0.04em', padding: '6px 16px',
+                  borderRadius: '4px', cursor: 'pointer', transition: 'all 0.15s ease',
+                }}>{label}</button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -588,10 +608,10 @@ export default function TabExplorationPage() {
         </p>
         <div style={frameRow}>
           <MobileFrame label="Mobile — 375px">
-            <PatternA variant={cardVariant} />
+            <PatternA variant={cardVariant} showBorder={showBorder} />
           </MobileFrame>
           <DesktopFrame label="Desktop">
-            <PatternADesktop variant={cardVariant} />
+            <PatternADesktop variant={cardVariant} showBorder={showBorder} />
           </DesktopFrame>
         </div>
       </div>
@@ -606,10 +626,10 @@ export default function TabExplorationPage() {
         </p>
         <div style={frameRow}>
           <MobileFrame label="Mobile — 375px">
-            <PatternB variant={cardVariant} />
+            <PatternB variant={cardVariant} showBorder={showBorder} />
           </MobileFrame>
           <DesktopFrame label="Desktop">
-            <PatternBDesktop variant={cardVariant} />
+            <PatternBDesktop variant={cardVariant} showBorder={showBorder} />
           </DesktopFrame>
         </div>
       </div>
@@ -624,10 +644,10 @@ export default function TabExplorationPage() {
         </p>
         <div style={frameRow}>
           <MobileFrame label="Mobile — 375px">
-            <PatternC variant={cardVariant} />
+            <PatternC variant={cardVariant} showBorder={showBorder} />
           </MobileFrame>
           <DesktopFrame label="Desktop">
-            <PatternCDesktop variant={cardVariant} />
+            <PatternCDesktop variant={cardVariant} showBorder={showBorder} />
           </DesktopFrame>
         </div>
       </div>
@@ -642,10 +662,10 @@ export default function TabExplorationPage() {
         </p>
         <div style={frameRow}>
           <MobileFrame label="Mobile — 375px">
-            <PatternD variant={cardVariant} />
+            <PatternD variant={cardVariant} showBorder={showBorder} />
           </MobileFrame>
           <DesktopFrame label="Desktop">
-            <PatternDDesktop variant={cardVariant} />
+            <PatternDDesktop variant={cardVariant} showBorder={showBorder} />
           </DesktopFrame>
         </div>
       </div>
