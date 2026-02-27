@@ -247,7 +247,7 @@ export default function HomepagePage() {
                 padding: '20px 24px',
               }}>
                 <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => setMenuOpen(!menuOpen)}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'default' }}>
                     <div style={{ width: '18px', height: '10px', position: 'relative' }}>
                       <div style={{
                         position: 'absolute', left: 0, width: '18px', height: '2px', backgroundColor: palette.surface.stone,
@@ -311,7 +311,7 @@ export default function HomepagePage() {
               backdropFilter: 'blur(16px)',
               border: `1px solid ${palette.neutral[200]}`,
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }} onClick={() => setMenuOpen(!menuOpen)}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'default' }}>
                 <div style={{ width: '20px', height: '10px', position: 'relative' }}>
                   <div style={{
                     position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: palette.primary.default,

@@ -1,5 +1,5 @@
-export const FONT_HEADING = "'Meso', Georgia, 'Times New Roman', serif";
-export const FONT_BODY = "'Ceno', system-ui, -apple-system, sans-serif";
+export const FONT_HEADING = "'Meso VF', Georgia, 'Times New Roman', serif";
+export const FONT_BODY = "'Ceno VF', system-ui, -apple-system, sans-serif";
 export const FONT_MONO = "'chainprinter', 'Courier New', monospace";
 
 export const TS = {

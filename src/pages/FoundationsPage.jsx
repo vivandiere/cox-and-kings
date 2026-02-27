@@ -989,7 +989,7 @@ export default function FoundationsPage() {
                         </div>
                         <span style={{
                           position: 'absolute', bottom: '14px', right: '14px',
-                          fontFamily: 'chainprinter, "Courier New", monospace',
+                          fontFamily: FONT_MONO,
                           color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
                           letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
                         }}>
@@ -1103,7 +1103,7 @@ export default function FoundationsPage() {
                         />
                         <span style={{
                           position: 'absolute', bottom: '12px', right: '14px',
-                          fontFamily: 'chainprinter, "Courier New", monospace',
+                          fontFamily: FONT_MONO,
                           color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
                           letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
                         }}>
@@ -1190,7 +1190,7 @@ export default function FoundationsPage() {
                     </span>
                     <span style={{
                       position: 'absolute', bottom: '12px', right: '14px',
-                      fontFamily: 'chainprinter, "Courier New", monospace',
+                      fontFamily: FONT_MONO,
                       color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
                       letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
                     }}>
@@ -1329,7 +1329,7 @@ export default function FoundationsPage() {
                         </span>
                         <span style={{
                           position: 'absolute', bottom: '14px', right: '14px',
-                          fontFamily: 'chainprinter, "Courier New", monospace',
+                          fontFamily: FONT_MONO,
                           color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
                           letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
                         }}>{p.location}</span>
@@ -1423,7 +1423,7 @@ export default function FoundationsPage() {
                 </span>
                 <span style={{
                   position: 'absolute', bottom: '14px', right: '14px',
-                  fontFamily: 'chainprinter, "Courier New", monospace',
+                  fontFamily: FONT_MONO,
                   color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
                   letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
                 }}>
@@ -1597,7 +1597,7 @@ export default function FoundationsPage() {
                 />
                 <span style={{
                   position: 'absolute', bottom: '14px', right: '14px',
-                  fontFamily: 'chainprinter, "Courier New", monospace',
+                  fontFamily: FONT_MONO,
                   color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
                   letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
                 }}>
@@ -1629,7 +1629,7 @@ export default function FoundationsPage() {
                 }}/>
                 <span style={{
                   position: 'absolute', bottom: '14px', right: '14px', zIndex: 1,
-                  fontFamily: 'chainprinter, "Courier New", monospace',
+                  fontFamily: FONT_MONO,
                   color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
                   letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
                 }}>

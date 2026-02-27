@@ -56,8 +56,8 @@ function LogoStacked({ color = 'currentColor', height = 64 }) {
 /* ────────────────────────────────────────────────────
    Font Constants
    ──────────────────────────────────────────────────── */
-const FONT_HEADING = "'Meso', Georgia, 'Times New Roman', serif";
-const FONT_BODY    = "'Ceno', system-ui, -apple-system, sans-serif";
+const FONT_HEADING = "'Meso VF', Georgia, 'Times New Roman', serif";
+const FONT_BODY    = "'Ceno VF', system-ui, -apple-system, sans-serif";
 const FONT_MONO    = "'chainprinter', 'Courier New', monospace";
 
 export default function ColorPalette() {
