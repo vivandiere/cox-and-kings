@@ -288,7 +288,7 @@ function Opt1Desktop() {
 
 function TagPill({ label }) {
   return (
-    <span style={{ fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400', color: palette.primary.light, backgroundColor: palette.primary.tint, padding: '7px 14px', borderRadius: '20px', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer', whiteSpace: 'nowrap' }}>{label}</span>
+    <span style={{ fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400', color: palette.primary.default, backgroundColor: palette.neutral[100], border: `1px solid ${palette.neutral[200]}`, padding: '7px 14px', borderRadius: '20px', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer', whiteSpace: 'nowrap' }}>{label}</span>
   );
 }
 
@@ -318,7 +318,7 @@ function Opt2Menu({ mob = false }) {
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
           {LOCATION_TAGS.map(tag => <TagPill key={tag} label={tag} />)}
-          <span style={{ fontFamily: FONT_BODY, fontSize: '12px', color: palette.primary.light, backgroundColor: 'transparent', padding: '7px 14px', borderRadius: '20px', border: `1px solid ${palette.primary.tint}`, letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer', whiteSpace: 'nowrap' }}>View all →</span>
+          <span style={{ fontFamily: FONT_BODY, fontSize: '12px', color: palette.primary.default, backgroundColor: 'transparent', padding: '7px 14px', borderRadius: '20px', border: `1px solid ${palette.neutral[200]}`, letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer', whiteSpace: 'nowrap' }}>View all →</span>
         </div>
       </div>
 
