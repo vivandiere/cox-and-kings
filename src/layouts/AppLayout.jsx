@@ -2,7 +2,7 @@ import React from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 import { palette } from '../tokens/index.js';
 import { FONT_HEADING, FONT_BODY, TS } from '../tokens/index.js';
-import { LogoInline } from '../components/Logo.jsx';
+import { LogoCompact } from '../components/Logo.jsx';
 
 const navGroups = [
   {
@@ -56,7 +56,7 @@ export default function AppLayout() {
         overflowY: 'auto',
       }}>
         <div style={{ marginBottom: '32px' }}>
-          <LogoInline color={palette.surface.stone} height={24} />
+          <LogoCompact color={palette.surface.stone} height={24} />
         </div>
 
         {navGroups.map((group, gi) => (

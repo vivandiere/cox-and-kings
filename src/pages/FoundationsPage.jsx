@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { palette, brandAccents, brandDecorative, brandDecorativeDeep, buildAccentScale, lightAccents } from '../tokens/index.js';
 import { FONT_HEADING, FONT_BODY, FONT_MONO, TS } from '../tokens/index.js';
-import { LogoMark, LogoInline, LogoStacked } from '../components/Logo.jsx';
+import { LogoMark, LogoInline, LogoCompact, LogoStacked } from '../components/Logo.jsx';
 import { useAccent } from '../components/AccentContext.jsx';
 import { Link } from 'react-router-dom';
 
@@ -228,6 +228,8 @@ export default function FoundationsPage() {
           }}>
             <p style={sectionLabel}>Inline Logo — On Stone</p>
             <LogoInline color={palette.primary.default} height={36} />
+            <p style={{ ...sectionLabel, marginTop: '8px' }}>Compact Logo — On Stone</p>
+            <LogoCompact color={palette.primary.default} height={36} />
           </div>
 
           <div style={{
