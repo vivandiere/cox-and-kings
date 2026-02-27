@@ -41,7 +41,7 @@ const REGION_PRODUCTS = {
 
 function MobileFrame({ children, label }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
       <span style={{ fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '400', color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.1em' }}>
         {label}
       </span>
@@ -707,7 +707,7 @@ export default function TabExplorationPage() {
           </ul>
         </div>
 
-      </div>{/* /content */}
-    </div>{/* /page */}
+      </div>
+    </div>
   );
 }

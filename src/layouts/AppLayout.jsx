@@ -29,6 +29,12 @@ const navGroups = [
       { to: '/enquiry', label: 'Enquiry' },
     ],
   },
+  {
+    label: 'Patterns',
+    items: [
+      { to: '/tabs', label: 'Tab Exploration', internalLink: true },
+    ],
+  },
 ];
 
 export default function AppLayout() {
@@ -76,6 +82,28 @@ export default function AppLayout() {
             )}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
               {group.items.map((item) => {
+                if (item.internalLink) {
+                  return (
+                    <a
+                      key={item.to}
+                      href={item.to}
+                      style={{
+                        fontFamily: FONT_BODY,
+                        fontSize: '13px',
+                        fontWeight: '400',
+                        color: palette.primary.faded,
+                        textDecoration: 'none',
+                        padding: '8px 12px',
+                        borderRadius: '6px',
+                        transition: 'all 0.15s ease',
+                        letterSpacing: '0.02em',
+                        display: 'block',
+                      }}
+                    >
+                      {item.label}
+                    </a>
+                  );
+                }
                 if (item.external) {
                   return (
                     <a
