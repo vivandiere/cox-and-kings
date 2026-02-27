@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { palette, brandDecorativeDeep } from '../tokens/index.js';
 import { FONT_HEADING, FONT_BODY, FONT_MONO, TS } from '../tokens/index.js';
 import { ChevronLeft, ChevronRight, X, Menu, Phone, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { LogoInline, LogoCompact } from '../components/Logo.jsx';
+import { LogoInline, LogoCompact, LogoStacked } from '../components/Logo.jsx';
 
 const WARM_ACCENT = brandDecorativeDeep.warmSandDeep.hex;
 
@@ -360,6 +360,117 @@ function Opt2Menu({ mob = false, fill = false }) {
   );
 }
 
+// ── Option 1b — Transparent → compact scroll transition ──────────────────────
+
+function Opt1bDesktop() {
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('Destinations');
+  const ref = useRef(null);
+  const NAV_H = 68;
+
+  const handleScroll = () => {
+    if (!ref.current) return;
+    const s = ref.current.scrollTop > 80;
+    setScrolled(s);
+    if (!s) setOpen(false);
+  };
+
+  return (
+    <div ref={ref} onScroll={handleScroll} style={{ height: '100%', overflowY: 'auto', scrollbarWidth: 'none', backgroundColor: palette.primary.default }}>
+
+      {/* Sticky nav + drawer */}
+      <div style={{ position: 'sticky', top: 0, zIndex: 20 }}>
+        <div style={{
+          backgroundColor: scrolled ? palette.primary.default : 'transparent',
+          transition: 'background-color 0.35s ease',
+          display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center',
+          padding: '0 32px', height: `${NAV_H}px`,
+        }}>
+          {/* Hamburger */}
+          <div onClick={() => setOpen(o => !o)} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+            <div style={{ width: '20px', height: '10px', position: 'relative' }}>
+              <div style={{ position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : 0, transform: open ? 'rotate(45deg)' : 'none', transition: 'all 0.3s ease' }} />
+              <div style={{ position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : '8px', transform: open ? 'rotate(-45deg)' : 'none', transition: 'all 0.3s ease' }} />
+            </div>
+          </div>
+          {/* Logo — stacked when transparent, inline when scrolled */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {scrolled
+              ? <LogoInline color={palette.surface.stone} height={22} />
+              : <LogoStacked color={palette.surface.stone} height={44} />
+            }
+          </div>
+          {/* Right actions */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '20px' }}>
+            {scrolled && (
+              <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.surface.stone, color: palette.primary.default, padding: '8px 20px', border: 'none', fontWeight: '400', fontSize: '11px', letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer' }}>Enquire</button>
+            )}
+            <Search size={20} strokeWidth={1.5} color={palette.surface.stone} style={{ cursor: 'pointer' }} />
+          </div>
+        </div>
+
+        {/* Drawer — compact state only */}
+        {scrolled && open && (
+          <div style={{ display: 'flex', width: '60%', height: '480px', overflow: 'hidden' }}>
+            <div style={{ width: '380px', flexShrink: 0, backgroundColor: '#FFFFFF', overflowY: 'auto', scrollbarWidth: 'none' }}>
+              <Opt1DrawerContent activeSection={activeSection} onSectionClick={setActiveSection} />
+            </div>
+            {activeSection === 'Destinations' && (
+              <div style={{ flex: 1, backgroundColor: palette.surface.stone, overflowY: 'auto', scrollbarWidth: 'none', padding: '24px' }}>
+                <div style={{ display: 'flex', gap: '10px', marginBottom: '14px' }}>
+                  {FEATURED_DESTINATIONS.map(dest => (
+                    <div key={dest.label} style={{ flex: 1, position: 'relative', height: '110px', borderRadius: '4px', overflow: 'hidden', cursor: 'pointer' }}>
+                      <img src={dest.img} alt={dest.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(16,32,55,0.28)' }} />
+                      <span style={{ position: 'absolute', bottom: '8px', left: 0, right: 0, textAlign: 'center', fontFamily: FONT_MONO, fontSize: '9px', color: '#FFFFFF', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{dest.label}</span>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ backgroundColor: palette.primary.default, padding: '11px 14px', cursor: 'pointer', marginBottom: '4px' }}>
+                  <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.surface.stone, letterSpacing: '0.1em', textTransform: 'uppercase' }}>All Destinations</span>
+                </div>
+                {DESTINATIONS_LIST.map(dest => (
+                  <div key={dest} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '9px 8px', borderBottom: `1px solid ${palette.neutral[200]}`, cursor: 'pointer' }}>
+                    <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.primary.default, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{dest}</span>
+                    <ChevronRight size={12} strokeWidth={1.5} color={palette.neutral[400]} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Hero — slides under sticky nav via negative margin-top */}
+      <div style={{ position: 'relative', height: '640px', marginTop: `-${NAV_H}px`, zIndex: 1 }}>
+        <img src="/images/hero-01.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        <div style={{ position: 'absolute', inset: 0, backgroundColor: '#10203719' }} />
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 5, pointerEvents: 'none' }}>
+          <h1 style={{ fontFamily: FONT_HEADING, color: palette.surface.stone, fontSize: TS['4xl'], fontWeight: '400', letterSpacing: '0.08em', textTransform: 'uppercase', lineHeight: 1.05, textAlign: 'center' }}>Guided by Curiosity</h1>
+        </div>
+        <div style={{ position: 'absolute', bottom: 2, left: 0, right: 0, zIndex: 5, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', padding: '16px 24px', pointerEvents: 'none' }}>
+          <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.surface.stone, color: palette.primary.default, padding: '13px 28px', border: 'none', fontWeight: '500', fontSize: '14px', cursor: 'pointer', whiteSpace: 'nowrap', pointerEvents: 'auto' }}>Explore Destinations</button>
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: '5px', textAlign: 'right' }}>
+            <span style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: palette.surface.stone, opacity: 0.6, display: 'inline-block', flexShrink: 0, marginBottom: '2px' }} />
+            <span style={{ fontFamily: FONT_MONO, color: palette.surface.stone, fontSize: '8px', letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7, lineHeight: 1.3 }}>India,<br />Indian Subcontinent</span>
+          </div>
+        </div>
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 6, display: 'flex', height: '2px' }}>
+          {[0, 1, 2, 3].map(i => <div key={i} style={{ flex: 1, height: '2px', backgroundColor: palette.primary.default, opacity: i === 0 ? 1 : 0.15 }} />)}
+        </div>
+      </div>
+
+      {/* Content below fold — scroll here to trigger compact nav */}
+      <div style={{ backgroundColor: palette.surface.stone, minHeight: '360px', padding: '40px 32px' }}>
+        <p style={{ fontFamily: FONT_MONO, fontSize: '9px', color: palette.neutral[400], letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '10px' }}>↑ Scroll back to restore transparent nav</p>
+        <p style={{ fontFamily: FONT_HEADING, fontSize: TS.lg, fontWeight: '300', color: palette.primary.default, marginBottom: '6px' }}>Page content below the fold</p>
+        <p style={{ fontFamily: FONT_BODY, fontSize: '13px', fontWeight: '300', color: palette.neutral[500], lineHeight: 1.6 }}>Once scrolled, the hamburger opens the full Option 1a drawer pattern.</p>
+      </div>
+    </div>
+  );
+}
+
 function Opt2Mobile() {
   const [open, setOpen] = useState(true);
   return (
@@ -464,7 +575,12 @@ export default function NavigationPage() {
           <p style={sectionDesc}>Replicates the existing Cox & Kings navigation structure with new design tokens. Full-width drawer slides over the hero. Desktop splits into a left nav column and a right destinations panel.</p>
           {viewMode === 'mobile'
             ? <MobileFrame label="Mobile — 375px"><Opt1Mobile /></MobileFrame>
-            : <DesktopFrame label="Desktop"><Opt1Desktop /></DesktopFrame>
+            : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
+                <DesktopFrame label="Option 1a — Full-width drawer"><Opt1Desktop /></DesktopFrame>
+                <DesktopFrame label="Option 1b — Transparent nav → compact on scroll (↓ scroll within frame)"><Opt1bDesktop /></DesktopFrame>
+              </div>
+            )
           }
         </div>
 

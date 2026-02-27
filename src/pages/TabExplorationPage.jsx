@@ -402,9 +402,9 @@ function PatternADesktop({ variant, showBorder }) {
       }}>
         {REGIONS.map((r, i) => (
           <button key={r} onClick={() => setActive(i)} style={{
-            border: 'none', cursor: 'pointer', flex: 1, textAlign: 'center',
+            border: 'none', cursor: 'pointer', textAlign: 'center',
             fontFamily: FONT_BODY, fontSize: '13px', fontWeight: active === i ? '500' : '400',
-            letterSpacing: '0.03em', padding: '14px 16px',
+            letterSpacing: '0.03em', padding: '14px 24px',
             color: active === i ? palette.primary.default : palette.neutral[400],
             backgroundColor: 'transparent',
             borderBottom: active === i ? `2px solid ${palette.primary.default}` : '2px solid transparent',
@@ -428,9 +428,9 @@ function PatternBDesktop({ variant, showBorder }) {
       }}>
         {REGIONS.map((r, i) => (
           <button key={r} onClick={() => setActive(i)} style={{
-            border: 'none', cursor: 'pointer', flex: 1, textAlign: 'center',
+            border: 'none', cursor: 'pointer', textAlign: 'center',
             fontFamily: FONT_BODY, fontSize: '13px', fontWeight: active === i ? '500' : '400',
-            letterSpacing: '0.03em', padding: '14px 16px',
+            letterSpacing: '0.03em', padding: '14px 24px',
             color: active === i ? palette.primary.default : palette.neutral[400],
             backgroundColor: 'transparent',
             borderBottom: active === i ? `2px solid ${palette.primary.default}` : '2px solid transparent',
@@ -596,7 +596,7 @@ export default function TabExplorationPage() {
         <div style={{ marginBottom: '48px' }}>
           <Link to="/foundations" style={{
             fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400',
-            color: palette.neutral[400], textDecoration: 'none', letterSpacing: '0.04em',
+            color: palette.primary.default, textDecoration: 'underline', textUnderlineOffset: '3px', letterSpacing: '0.04em',
             display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '20px',
           }}>
             <ChevronLeft size={14} strokeWidth={1.5} /> Back to Foundations
