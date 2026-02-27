@@ -3,7 +3,7 @@ import { palette, brandDecorativeDeep } from '../tokens/index.js';
 import { FONT_HEADING, FONT_BODY, FONT_MONO, TS } from '../tokens/index.js';
 import { ChevronLeft, ChevronRight, X, Menu, Phone, BookOpen, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { LogoInline } from '../components/Logo.jsx';
+import { LogoInline, LogoCompact } from '../components/Logo.jsx';
 
 const WARM_ACCENT = brandDecorativeDeep.warmSandDeep.hex;
 
@@ -228,14 +228,13 @@ function Opt1Mobile() {
       {/* Top bar */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 20 }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', backgroundColor: palette.primary.default, padding: '0 16px', height: '52px' }}>
-          <div onClick={() => setOpen(!open)} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+          <div onClick={() => setOpen(!open)} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
             <div style={{ width: '18px', height: '10px', position: 'relative' }}>
               <div style={{ position: 'absolute', left: 0, width: '18px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : 0, transform: open ? 'rotate(45deg)' : 'none', transition: 'all 0.3s ease' }} />
               <div style={{ position: 'absolute', left: 0, width: '18px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : '8px', transform: open ? 'rotate(-45deg)' : 'none', transition: 'all 0.3s ease' }} />
             </div>
-            <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '400', color: palette.surface.stone, letterSpacing: '1px', textTransform: 'uppercase' }}>{open ? 'Close' : 'Menu'}</span>
           </div>
-          <LogoInline color={palette.surface.stone} height={26} />
+          <LogoInline color={palette.surface.stone} height={20} />
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.surface.stone, color: palette.primary.default, padding: '7px 14px', border: 'none', fontWeight: '500', fontSize: '11px', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}>Enquire</button>
           </div>
@@ -258,14 +257,13 @@ function Opt1Desktop() {
       {/* Top bar + drawer */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', zIndex: 20 }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', backgroundColor: palette.primary.default, padding: '0 24px', height: '56px', flexShrink: 0 }}>
-          <div onClick={() => setOpen(!open)} style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+          <div onClick={() => setOpen(!open)} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
             <div style={{ width: '20px', height: '10px', position: 'relative' }}>
               <div style={{ position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : 0, transform: open ? 'rotate(45deg)' : 'none', transition: 'all 0.3s ease' }} />
               <div style={{ position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : '8px', transform: open ? 'rotate(-45deg)' : 'none', transition: 'all 0.3s ease' }} />
             </div>
-            <span style={{ fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400', color: palette.surface.stone, letterSpacing: '1px', textTransform: 'uppercase' }}>{open ? 'Close' : 'Menu'}</span>
           </div>
-          <LogoInline color={palette.surface.stone} height={28} />
+          <LogoInline color={palette.surface.stone} height={22} />
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.surface.stone, color: palette.primary.default, padding: '10px 20px', border: 'none', fontWeight: '500', fontSize: '13px', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}>Enquire</button>
           </div>
@@ -389,7 +387,7 @@ function Opt2Mobile() {
             </div>
             <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '400', color: palette.primary.default, letterSpacing: '1px', textTransform: 'uppercase' }}>{open ? 'Close' : 'Menu'}</span>
           </div>
-          <LogoInline color={palette.primary.default} height={26} />
+          <LogoCompact color={palette.primary.default} height={20} />
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.primary.default, color: '#FFFFFF', padding: '7px 12px', border: 'none', fontWeight: '400', fontSize: '10px', letterSpacing: '1px', textTransform: 'uppercase', cursor: 'pointer' }}>Enquire</button>
           </div>
@@ -414,7 +412,7 @@ function Opt2Desktop() {
             </div>
             <span style={{ fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400', color: palette.primary.default, letterSpacing: '1px', textTransform: 'uppercase' }}>{open ? 'Close' : 'Menu'}</span>
           </div>
-          <LogoInline color={palette.primary.default} height={28} />
+          <LogoCompact color={palette.primary.default} height={22} />
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '10px' }}>
             <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.primary.default, color: '#FFFFFF', padding: '10px 18px', border: 'none', fontWeight: '400', fontSize: '12px', letterSpacing: '1px', textTransform: 'uppercase', cursor: 'pointer' }}>Enquire</button>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ cursor: 'pointer' }}>
