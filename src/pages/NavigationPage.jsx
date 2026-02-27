@@ -360,7 +360,7 @@ function Opt2Menu({ mob = false, fill = false }) {
   );
 }
 
-// ── Option 1b — Transparent → compact scroll transition ──────────────────────
+// ── Option 1b — Transparent → compact on scroll ───────────────────────────────
 
 function Opt1bDesktop() {
   const [scrolled, setScrolled] = useState(false);
@@ -368,6 +368,9 @@ function Opt1bDesktop() {
   const [activeSection, setActiveSection] = useState('Destinations');
   const ref = useRef(null);
   const NAV_H = 68;
+
+  // compact = dark nav bar: triggered by scroll OR by opening the menu
+  const compact = scrolled || open;
 
   const handleScroll = () => {
     if (!ref.current) return;
@@ -377,12 +380,16 @@ function Opt1bDesktop() {
   };
 
   return (
-    <div ref={ref} onScroll={handleScroll} style={{ height: '100%', overflowY: 'auto', scrollbarWidth: 'none', backgroundColor: palette.primary.default }}>
+    // No background colour here — hero provides the dark look; about section has its own bg
+    <div ref={ref} onScroll={handleScroll} style={{ height: '100%', overflowY: 'auto', scrollbarWidth: 'none' }}>
 
-      {/* Sticky nav + drawer */}
-      <div style={{ position: 'sticky', top: 0, zIndex: 20 }}>
+      {/* Sticky nav — always exactly NAV_H tall in the flow.
+          Drawer is position:absolute so it floats over the hero without pushing it down. */}
+      <div style={{ position: 'sticky', top: 0, zIndex: 20, height: `${NAV_H}px` }}>
+
+        {/* Nav bar */}
         <div style={{
-          backgroundColor: scrolled ? palette.primary.default : 'transparent',
+          backgroundColor: compact ? palette.primary.default : 'transparent',
           transition: 'background-color 0.35s ease',
           display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center',
           padding: '0 32px', height: `${NAV_H}px`,
@@ -394,30 +401,42 @@ function Opt1bDesktop() {
               <div style={{ position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : '8px', transform: open ? 'rotate(-45deg)' : 'none', transition: 'all 0.3s ease' }} />
             </div>
           </div>
-          {/* Logo — stacked when transparent, inline when scrolled */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {scrolled
-              ? <LogoInline color={palette.surface.stone} height={22} />
-              : <LogoStacked color={palette.surface.stone} height={44} />
-            }
+
+          {/* Logo — crossfade stacked ↔ inline, wordmarks aligned to same Y (no jump).
+              Stacked wordmark centre ≈ 10.9px from SVG top → SVG top at 23px in container. */}
+          <div style={{ position: 'relative', width: '174px', height: `${NAV_H}px` }}>
+            <div style={{ position: 'absolute', top: '23px', left: 0, right: 0, display: 'flex', justifyContent: 'center', opacity: compact ? 0 : 1, transition: 'opacity 0.35s ease', pointerEvents: compact ? 'none' : 'auto' }}>
+              <LogoStacked color={palette.surface.stone} height={52} />
+            </div>
+            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: compact ? 1 : 0, transition: 'opacity 0.35s ease', pointerEvents: compact ? 'auto' : 'none' }}>
+              <LogoInline color={palette.surface.stone} height={22} />
+            </div>
           </div>
-          {/* Right actions */}
+
+          {/* Right — Enquire always shown; outlined on hero, solid on compact */}
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '20px' }}>
-            {scrolled && (
-              <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.surface.stone, color: palette.primary.default, padding: '8px 20px', border: 'none', fontWeight: '400', fontSize: '11px', letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer' }}>Enquire</button>
-            )}
+            <button style={{
+              fontFamily: FONT_BODY,
+              backgroundColor: compact ? palette.surface.stone : 'transparent',
+              color: compact ? palette.primary.default : palette.surface.stone,
+              padding: '8px 20px',
+              border: `1px solid ${palette.surface.stone}`,
+              fontWeight: '400', fontSize: '11px', letterSpacing: '0.08em',
+              textTransform: 'uppercase', cursor: 'pointer',
+              transition: 'all 0.35s ease',
+            }}>Enquire</button>
             <Search size={20} strokeWidth={1.5} color={palette.surface.stone} style={{ cursor: 'pointer' }} />
           </div>
         </div>
 
-        {/* Drawer — compact state only */}
-        {scrolled && open && (
-          <div style={{ display: 'flex', width: '60%', height: '480px', overflow: 'hidden' }}>
-            <div style={{ width: '380px', flexShrink: 0, backgroundColor: '#FFFFFF', overflowY: 'auto', scrollbarWidth: 'none' }}>
+        {/* Drawer — absolutely positioned so it overlays the hero without shifting page flow */}
+        {open && (
+          <div style={{ position: 'absolute', top: `${NAV_H}px`, left: 0, width: '60%', display: 'flex', zIndex: 30 }}>
+            <div style={{ width: '380px', flexShrink: 0, backgroundColor: '#FFFFFF' }}>
               <Opt1DrawerContent activeSection={activeSection} onSectionClick={setActiveSection} />
             </div>
             {activeSection === 'Destinations' && (
-              <div style={{ flex: 1, backgroundColor: palette.surface.stone, overflowY: 'auto', scrollbarWidth: 'none', padding: '24px' }}>
+              <div style={{ flex: 1, backgroundColor: palette.surface.stone, padding: '24px' }}>
                 <div style={{ display: 'flex', gap: '10px', marginBottom: '14px' }}>
                   {FEATURED_DESTINATIONS.map(dest => (
                     <div key={dest.label} style={{ flex: 1, position: 'relative', height: '110px', borderRadius: '4px', overflow: 'hidden', cursor: 'pointer' }}>
@@ -461,11 +480,33 @@ function Opt1bDesktop() {
         </div>
       </div>
 
-      {/* Content below fold — scroll here to trigger compact nav */}
-      <div style={{ backgroundColor: palette.surface.stone, minHeight: '360px', padding: '40px 32px' }}>
-        <p style={{ fontFamily: FONT_MONO, fontSize: '9px', color: palette.neutral[400], letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '10px' }}>↑ Scroll back to restore transparent nav</p>
-        <p style={{ fontFamily: FONT_HEADING, fontSize: TS.lg, fontWeight: '300', color: palette.primary.default, marginBottom: '6px' }}>Page content below the fold</p>
-        <p style={{ fontFamily: FONT_BODY, fontSize: '13px', fontWeight: '300', color: palette.neutral[500], lineHeight: 1.6 }}>Once scrolled, the hamburger opens the full Option 1a drawer pattern.</p>
+      {/* About section — replicates homepage brand statement */}
+      <div style={{
+        backgroundColor: palette.surface.stone,
+        padding: '120px 48px 48px',
+        display: 'flex', flexDirection: 'row',
+        justifyContent: 'space-between', alignItems: 'flex-end',
+        gap: '48px',
+      }}>
+        <p style={{
+          fontFamily: FONT_HEADING,
+          color: palette.neutral[600],
+          fontSize: '24px', fontWeight: '300',
+          maxWidth: '620px', lineHeight: 1.7,
+          textAlign: 'left', margin: 0,
+        }}>
+          Since 1758, Cox &amp; Kings has helped curious travellers go beyond the obvious — crafting enriching, immersive journeys to the world's most remarkable destinations, built on a heritage of trust and expertise.
+        </p>
+        <div style={{ flexShrink: 0 }}>
+          <button style={{
+            fontFamily: FONT_BODY,
+            backgroundColor: 'transparent',
+            color: palette.primary.default,
+            padding: '14px 32px',
+            border: `1px solid ${palette.primary.default}`,
+            fontWeight: '500', fontSize: '15px', cursor: 'pointer',
+          }}>Our Story</button>
+        </div>
       </div>
     </div>
   );
@@ -475,7 +516,7 @@ function Opt2Mobile() {
   const [open, setOpen] = useState(true);
   return (
     <HeroShell mob>
-      {/* Floating compact nav bar */}
+      {/* Floating scrolled nav bar */}
       <div style={{ position: 'absolute', top: '10px', left: '12px', right: '12px', bottom: '10px', zIndex: 20, display: 'flex', flexDirection: 'column' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', backgroundColor: palette.surface.stone, padding: '9px 14px', border: `1px solid ${palette.neutral[200]}`, flexShrink: 0 }}>
           <div onClick={() => setOpen(!open)} style={{ display: 'flex', alignItems: 'center', gap: '7px', cursor: 'pointer' }}>
@@ -500,7 +541,7 @@ function Opt2Desktop() {
   const [open, setOpen] = useState(true);
   return (
     <HeroShell>
-      {/* Floating compact nav bar — centred */}
+      {/* Floating scrolled nav bar — centred */}
       <div style={{ position: 'absolute', top: '14px', left: '50%', transform: 'translateX(-50%)', width: '560px', zIndex: 20 }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', backgroundColor: palette.surface.stone, padding: '11px 20px', border: `1px solid ${palette.neutral[200]}` }}>
           <div onClick={() => setOpen(!open)} style={{ display: 'flex', alignItems: 'center', gap: '9px', cursor: 'pointer' }}>
