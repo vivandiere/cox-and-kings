@@ -19,6 +19,7 @@ import JourneyFinderPage from './pages/JourneyFinderPage.jsx';
 import InspirationPage from './pages/InspirationPage.jsx';
 import EnquiryPage from './pages/EnquiryPage.jsx';
 import TabExplorationPage from './pages/TabExplorationPage.jsx';
+import NavigationPage from './pages/NavigationPage.jsx';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -28,6 +29,7 @@ createRoot(document.getElementById('root')).render(
           {/* Fullscreen — no sidebar layout */}
           <Route path="/homepage" element={<HomepagePage />} />
           <Route path="/tabs" element={<TabExplorationPage />} />
+          <Route path="/navigation" element={<NavigationPage />} />
 
           {/* All other pages use the sidebar layout */}
           <Route element={<AppLayout />}>

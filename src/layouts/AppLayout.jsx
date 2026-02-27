@@ -33,6 +33,7 @@ const navGroups = [
     label: 'Patterns',
     items: [
       { to: '/tabs', label: 'Tab Exploration', internalLink: true },
+      { to: '/navigation', label: 'Navigation', internalLink: true },
     ],
   },
 ];
