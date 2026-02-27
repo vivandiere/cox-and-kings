@@ -172,7 +172,7 @@ function Opt1DrawerContent({ activeSection, onSectionClick }) {
       {PRIMARY_NAV.map(item => (
         <div key={item.label} onClick={() => onSectionClick && onSectionClick(item.label)} style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          marginBottom: '6px', paddingBottom: '6px', cursor: 'pointer',
+          marginBottom: '4px', paddingBottom: '12px', cursor: 'pointer',
           borderLeft: activeSection === item.label ? `2px solid ${palette.primary.default}` : '2px solid transparent',
           paddingLeft: '10px',
         }}>
@@ -448,7 +448,7 @@ export default function NavigationPage() {
 
       <div style={{ padding: '48px 56px' }}>
         <div style={{ marginBottom: '56px' }}>
-          <Link to="/foundations" style={{ fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400', color: palette.neutral[400], textDecoration: 'none', letterSpacing: '0.04em', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '20px' }}>
+          <Link to="/foundations" style={{ fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400', color: palette.primary.default, textDecoration: 'underline', textUnderlineOffset: '3px', letterSpacing: '0.04em', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '20px' }}>
             <ChevronLeft size={14} strokeWidth={1.5} /> Back to Foundations
           </Link>
           <h1 style={{ fontFamily: FONT_HEADING, fontSize: TS['2xl'], fontWeight: '300', color: palette.primary.default, marginBottom: '8px' }}>Navigation Exploration</h1>
