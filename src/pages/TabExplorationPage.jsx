@@ -93,18 +93,18 @@ function RegionPanel({ region, compact: isCompact, variant = 'V1', showBorder = 
             }}>
               <div style={{ position: 'relative', marginBottom: '-12px' }}>
                 <img src={p.img} alt={p.title} style={{ width: '100%', height: imgH, objectFit: 'cover', display: 'block', borderRadius: '16px' }} />
-                <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'nowrap' }}>
                   <span style={{
                     fontFamily: FONT_BODY, fontSize: '9px', fontWeight: '500',
-                    letterSpacing: '0.08em', textTransform: 'uppercase',
+                    letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap',
                     backgroundColor: palette.surface.stone, color: palette.primary.default,
-                    padding: '4px 8px', borderRadius: '4px',
+                    padding: '4px 8px', borderRadius: '4px', lineHeight: '16px',
                   }}>Small Group Tour</span>
                   {p.offer && (
-                    <span style={{ display: 'flex', alignItems: 'center' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
                       <span style={{
                         fontFamily: FONT_BODY, fontSize: '9px', fontWeight: '600',
-                        letterSpacing: '0.08em', textTransform: 'uppercase',
+                        letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap',
                         backgroundColor: palette.primary.default, color: '#FFFFFF',
                         padding: '4px 10px', borderRadius: '4px 0 0 4px', lineHeight: '16px',
                       }}>{p.offer}</span>
@@ -147,18 +147,18 @@ function RegionPanel({ region, compact: isCompact, variant = 'V1', showBorder = 
             }}>
               <div style={{ position: 'relative', marginBottom: '-12px' }}>
                 <img src={p.img} alt={p.title} style={{ width: '100%', height: imgH, objectFit: 'cover', display: 'block', borderRadius: '0' }} />
-                <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'nowrap' }}>
                   <span style={{
                     fontFamily: FONT_MONO, fontSize: '9px', fontWeight: '400',
-                    letterSpacing: '0.08em', textTransform: 'uppercase',
+                    letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap',
                     backgroundColor: palette.surface.stone, color: palette.primary.default,
-                    padding: '4px 8px', borderRadius: '4px',
+                    padding: '4px 8px', borderRadius: '4px', lineHeight: '16px',
                   }}>Small Group Tour</span>
                   {p.offer && (
-                    <span style={{ display: 'flex', alignItems: 'center' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
                       <span style={{
                         fontFamily: FONT_MONO, fontSize: '9px', fontWeight: '400',
-                        letterSpacing: '0.08em', textTransform: 'uppercase',
+                        letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap',
                         backgroundColor: palette.primary.default, color: '#FFFFFF',
                         padding: '4px 10px', borderRadius: '4px 0 0 4px', lineHeight: '16px',
                       }}>{p.offer}</span>
@@ -204,18 +204,18 @@ function RegionPanel({ region, compact: isCompact, variant = 'V1', showBorder = 
             }}>
               <div style={{ position: 'relative' }}>
                 <img src={p.img} alt={p.title} style={{ width: '100%', height: imgH, objectFit: 'cover', display: 'block' }} />
-                <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'nowrap' }}>
                   <span style={{
                     fontFamily: FONT_BODY, fontSize: '9px', fontWeight: '500',
-                    letterSpacing: '0.08em', textTransform: 'uppercase',
+                    letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap',
                     backgroundColor: palette.primary.default, color: '#FFFFFF',
-                    padding: '4px 8px', borderRadius: '4px',
+                    padding: '4px 8px', borderRadius: '4px', lineHeight: '16px',
                   }}>Small Group Tour</span>
                   {p.offer && (
-                    <span style={{ display: 'flex', alignItems: 'center' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
                       <span style={{
                         fontFamily: FONT_BODY, fontSize: '9px', fontWeight: '600',
-                        letterSpacing: '0.08em', textTransform: 'uppercase',
+                        letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap',
                         backgroundColor: palette.surface.stone, color: palette.primary.default,
                         padding: '4px 10px', borderRadius: '4px 0 0 4px', lineHeight: '16px',
                       }}>{p.offer}</span>
