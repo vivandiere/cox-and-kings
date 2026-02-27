@@ -496,9 +496,6 @@ export default function FoundationsPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
             <div>
               <p style={sectionLabel}>Meso — Headers</p>
-              <h2 style={{ fontFamily: FONT_HEADING, color: palette.primary.default, fontSize: TS.xl, fontWeight: '700', marginBottom: '8px' }}>
-                Bold 700
-              </h2>
               <h2 style={{ fontFamily: FONT_HEADING, color: palette.primary.default, fontSize: TS.xl, fontWeight: '500', marginBottom: '8px' }}>
                 Medium 500
               </h2>
@@ -521,8 +518,7 @@ export default function FoundationsPage() {
                 Cox &amp; Kings, established in 1758, is the world's longest-established travel company. From the majestic palaces of Rajasthan to the serene backwaters of Kerala, every journey tells a story.
               </p>
               <p style={{ fontFamily: FONT_BODY, color: palette.neutral[500], fontSize: '14px', lineHeight: 1.6, marginBottom: '12px' }}>
-                <strong style={{ fontWeight: '700' }}>Bold 700</strong> &middot;
-                <span style={{ fontWeight: '500' }}> Medium 500</span> &middot;
+                <span style={{ fontWeight: '500' }}>Medium 500</span> &middot;
                 <span style={{ fontWeight: '400' }}> Regular 400</span> &middot;
                 <span style={{ fontWeight: '300' }}> Light 300</span>
               </p>
