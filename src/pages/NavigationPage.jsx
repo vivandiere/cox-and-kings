@@ -3,17 +3,18 @@ import { palette, brandDecorativeDeep } from '../tokens/index.js';
 import { FONT_HEADING, FONT_BODY, FONT_MONO, TS } from '../tokens/index.js';
 import { ChevronLeft, ChevronRight, X, Menu, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { LogoInline } from '../components/Logo.jsx';
 
 const WARM_ACCENT = brandDecorativeDeep.warmSandDeep.hex; // #C4897A
+
+// ── Nav content data ─────────────────────────────────────────────────────────
 
 const PRIMARY_NAV = [
   { label: 'Destinations', hasArrow: true },
   { label: 'Small group tours', hasArrow: false },
   { label: 'Tailor-made journeys', hasArrow: false },
 ];
-
 const POPULAR = ['India', 'Peru', 'Uzbekistan'];
-
 const SECONDARY_NAV = [
   { label: 'Holiday Types', hasArrow: true },
   { label: 'Solo Travel' },
@@ -24,19 +25,20 @@ const SECONDARY_NAV = [
   { label: 'Brochure' },
   { label: 'Contact Us' },
 ];
-
 const DESTINATIONS_LIST = [
   'Africa', 'Central America', 'Central Asia', 'Europe', 'Far East',
   'Indian Ocean', 'Indian Subcontinent', 'North Africa & Middle East',
   'North America', 'Polar', 'South America',
 ];
-
 const FEATURED_DESTINATIONS = [
   { label: 'Indian Subcontinent', img: '/images/dest-india-subcontinent.png' },
   { label: 'South America', img: '/images/dest-south-america.png' },
 ];
+const LOCATION_TAGS = ['India', 'Peru', 'Uzbekistan', 'Japan', 'Morocco', 'Greece'];
+const INSPIRATION_TAGS = ['Specialist Tours', 'Solo Travel', 'Wildlife', 'Cultural'];
+const MENU_NAV_ITEMS = ['Small Group Tours', 'Tailormade Journeys', 'Travel Brochures'];
 
-// ── Shared frames ────────────────────────────────────────────────────────────
+// ── Shared frames ─────────────────────────────────────────────────────────────
 
 function MobileFrame({ children, label }) {
   return (
@@ -74,33 +76,28 @@ function DesktopFrame({ children, label }) {
   );
 }
 
-// ── Shared nav top bar ───────────────────────────────────────────────────────
+// ── Option 1 components ───────────────────────────────────────────────────────
 
-function NavTopBar({ isOpen, onToggle, transparent = false }) {
+function Opt1TopBar({ isOpen, onToggle }) {
   return (
     <div style={{
       display: 'flex', alignItems: 'center',
-      backgroundColor: transparent ? 'transparent' : palette.primary.default,
-      padding: '0 16px', height: '48px',
-      position: 'relative', zIndex: 30,
+      backgroundColor: palette.primary.default,
+      padding: '0 16px', height: '48px', zIndex: 30,
     }}>
       <button onClick={onToggle} style={{
         background: 'none', border: 'none', cursor: 'pointer',
         color: palette.surface.stone, padding: '4px', marginRight: '12px',
         display: 'flex', alignItems: 'center', flexShrink: 0,
       }}>
-        {isOpen
-          ? <X size={18} strokeWidth={1.5} />
-          : <Menu size={18} strokeWidth={1.5} />
-        }
+        {isOpen ? <X size={18} strokeWidth={1.5} /> : <Menu size={18} strokeWidth={1.5} />}
       </button>
       <div style={{ display: 'flex', overflowX: 'auto', scrollbarWidth: 'none' }}>
         {PRIMARY_NAV.map(item => (
           <span key={item.label} style={{
             fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
             letterSpacing: '0.08em', textTransform: 'uppercase',
-            color: palette.surface.stone, whiteSpace: 'nowrap',
-            padding: '0 12px', opacity: 0.9,
+            color: palette.surface.stone, whiteSpace: 'nowrap', padding: '0 12px', opacity: 0.9,
           }}>{item.label}</span>
         ))}
       </div>
@@ -108,62 +105,36 @@ function NavTopBar({ isOpen, onToggle, transparent = false }) {
   );
 }
 
-// ── Shared drawer content ────────────────────────────────────────────────────
-
-function DrawerContent({ paddingLeft = '24px', headingSize = '28px', activeSection, onSectionClick }) {
+function Opt1DrawerContent({ headingSize = '28px', activeSection, onSectionClick }) {
   return (
-    <div style={{ padding: `28px ${paddingLeft === '24px' ? '24px' : paddingLeft} 28px 24px` }}>
+    <div style={{ padding: '28px 24px' }}>
       {PRIMARY_NAV.map(item => (
-        <div
-          key={item.label}
-          onClick={() => onSectionClick && onSectionClick(item.label)}
-          style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            marginBottom: '6px', paddingBottom: '6px', cursor: 'pointer',
-            borderLeft: activeSection === item.label
-              ? `2px solid ${palette.primary.default}`
-              : '2px solid transparent',
-            paddingLeft: '10px',
-          }}
-        >
-          <span style={{
-            fontFamily: FONT_HEADING, fontSize: headingSize, fontWeight: '300',
-            color: palette.primary.default, lineHeight: 1.15,
-          }}>
+        <div key={item.label} onClick={() => onSectionClick && onSectionClick(item.label)} style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          marginBottom: '6px', paddingBottom: '6px', cursor: 'pointer',
+          borderLeft: activeSection === item.label ? `2px solid ${palette.primary.default}` : '2px solid transparent',
+          paddingLeft: '10px',
+        }}>
+          <span style={{ fontFamily: FONT_HEADING, fontSize: headingSize, fontWeight: '300', color: palette.primary.default, lineHeight: 1.15 }}>
             {item.label}
           </span>
-          {item.hasArrow && (
-            <ChevronRight size={headingSize === '28px' ? 18 : 22} strokeWidth={1} color={palette.neutral[400]} />
-          )}
+          {item.hasArrow && <ChevronRight size={18} strokeWidth={1} color={palette.neutral[400]} />}
         </div>
       ))}
 
       <div style={{ height: '1px', backgroundColor: palette.neutral[200], margin: '20px 0 20px 12px' }} />
 
       <div style={{ paddingLeft: '12px' }}>
-        <p style={{
-          fontFamily: FONT_MONO, fontSize: '10px', color: WARM_ACCENT,
-          letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '14px',
-        }}>Popular</p>
+        <p style={{ fontFamily: FONT_MONO, fontSize: '10px', color: WARM_ACCENT, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '14px' }}>Popular</p>
         {POPULAR.map(dest => (
-          <p key={dest} style={{
-            fontFamily: FONT_MONO, fontSize: '13px', color: palette.primary.default,
-            letterSpacing: '0.08em', textTransform: 'uppercase',
-            marginBottom: '14px', cursor: 'pointer',
-          }}>{dest}</p>
+          <p key={dest} style={{ fontFamily: FONT_MONO, fontSize: '13px', color: palette.primary.default, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '14px', cursor: 'pointer' }}>{dest}</p>
         ))}
 
         <div style={{ height: '1px', backgroundColor: palette.neutral[200], margin: '20px 0' }} />
 
         {SECONDARY_NAV.map(item => (
-          <div key={item.label} style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            marginBottom: '15px', cursor: 'pointer',
-          }}>
-            <span style={{
-              fontFamily: FONT_MONO, fontSize: '12px', color: palette.primary.default,
-              letterSpacing: '0.08em', textTransform: 'uppercase',
-            }}>{item.label}</span>
+          <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '15px', cursor: 'pointer' }}>
+            <span style={{ fontFamily: FONT_MONO, fontSize: '12px', color: palette.primary.default, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{item.label}</span>
             {item.hasArrow && <ChevronRight size={13} strokeWidth={1.5} color={palette.neutral[400]} />}
           </div>
         ))}
@@ -171,263 +142,284 @@ function DrawerContent({ paddingLeft = '24px', headingSize = '28px', activeSecti
         <div style={{ height: '1px', backgroundColor: palette.neutral[200], margin: '20px 0' }} />
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Phone size={13} strokeWidth={1.5} color={palette.neutral[500]} />
+          <span style={{ fontFamily: FONT_MONO, fontSize: '12px', color: palette.neutral[500], letterSpacing: '0.04em' }}>020 3993 3757</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Opt1DestinationsPanel() {
+  return (
+    <div style={{ flex: 1, backgroundColor: palette.surface.stone, overflowY: 'auto', scrollbarWidth: 'none', padding: '28px' }}>
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
+        {FEATURED_DESTINATIONS.map(dest => (
+          <div key={dest.label} style={{ flex: 1, position: 'relative', height: '120px', borderRadius: '4px', overflow: 'hidden', cursor: 'pointer' }}>
+            <img src={dest.img} alt={dest.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(16,32,55,0.28)' }} />
+            <span style={{ position: 'absolute', bottom: '10px', left: 0, right: 0, textAlign: 'center', fontFamily: FONT_MONO, fontSize: '10px', color: '#FFFFFF', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{dest.label}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ backgroundColor: palette.primary.default, padding: '13px 16px', cursor: 'pointer', marginBottom: '4px' }}>
+        <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.surface.stone, letterSpacing: '0.1em', textTransform: 'uppercase' }}>All Destinations</span>
+      </div>
+      {DESTINATIONS_LIST.map(dest => (
+        <div key={dest} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 8px', borderBottom: `1px solid ${palette.neutral[200]}`, cursor: 'pointer' }}>
+          <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.primary.default, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{dest}</span>
+          <ChevronRight size={13} strokeWidth={1.5} color={palette.neutral[400]} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Opt1Mobile() {
+  const [open, setOpen] = useState(true);
+  return (
+    <div style={{ position: 'relative', height: '100%' }}>
+      <img src="/images/hero-01.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+      <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(16,32,55,0.4)' }} />
+      <div style={{ position: 'relative', zIndex: 30 }}>
+        <Opt1TopBar isOpen={open} onToggle={() => setOpen(!open)} />
+      </div>
+      {open && (
+        <div style={{ position: 'absolute', top: '48px', left: 0, right: 0, bottom: 0, backgroundColor: '#FFFFFF', overflowY: 'auto', zIndex: 20, scrollbarWidth: 'none' }}>
+          <Opt1DrawerContent activeSection={null} />
+        </div>
+      )}
+      {!open && (
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', pointerEvents: 'none' }}>
+          <p style={{ fontFamily: FONT_HEADING, fontSize: TS.lg, fontWeight: '300', color: '#FFFFFF', lineHeight: 1.3 }}>Journeys by<br />people who work<br />as experts.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Opt1Desktop() {
+  const [open, setOpen] = useState(true);
+  const [activeSection, setActiveSection] = useState('Destinations');
+  return (
+    <div style={{ position: 'relative', height: '100%' }}>
+      <img src="/images/hero-01.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+      <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(16,32,55,0.4)' }} />
+      <div style={{ position: 'relative', zIndex: 30 }}>
+        <Opt1TopBar isOpen={open} onToggle={() => setOpen(!open)} />
+      </div>
+      {open && (
+        <div style={{ position: 'absolute', top: '48px', left: 0, right: 0, bottom: 0, display: 'flex', zIndex: 20 }}>
+          <div style={{ width: '420px', flexShrink: 0, backgroundColor: '#FFFFFF', overflowY: 'auto', scrollbarWidth: 'none' }}>
+            <Opt1DrawerContent headingSize="32px" activeSection={activeSection} onSectionClick={setActiveSection} />
+          </div>
+          {activeSection === 'Destinations' && <Opt1DestinationsPanel />}
+        </div>
+      )}
+      {!open && (
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', pointerEvents: 'none' }}>
+          <p style={{ fontFamily: FONT_HEADING, fontSize: TS['2xl'], fontWeight: '300', color: '#FFFFFF', lineHeight: 1.3 }}>Journeys by people<br />who work as experts.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Option 2 components ───────────────────────────────────────────────────────
+
+function TagPill({ label }) {
+  return (
+    <span style={{
+      fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400',
+      color: palette.primary.light, backgroundColor: palette.primary.tint,
+      padding: '7px 14px', borderRadius: '20px',
+      letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer',
+      whiteSpace: 'nowrap',
+    }}>{label}</span>
+  );
+}
+
+function Opt2Menu({ mob = false }) {
+  const [search, setSearch] = useState('');
+  const [focused, setFocused] = useState(false);
+
+  return (
+    <div style={{
+      backgroundColor: palette.surface.stone,
+      border: `1px solid ${palette.neutral[200]}`,
+      borderTop: 'none',
+      maxHeight: mob ? '540px' : '580px',
+      overflowY: 'auto',
+      scrollbarWidth: 'none',
+    }}>
+      {/* Search */}
+      <div style={{ padding: mob ? '24px 20px 32px' : '32px 28px 48px' }}>
+        <style>{`
+          @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+          .opt2-input::placeholder { color: ${palette.neutral[300]}; opacity: 1; }
+        `}</style>
+        <div style={{ position: 'relative', display: 'inline-block', width: '100%' }}>
+          <input
+            className="opt2-input"
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            placeholder="Where would you like to go?"
+            style={{
+              fontFamily: FONT_HEADING,
+              fontSize: mob ? '20px' : '24px',
+              fontWeight: '400',
+              color: palette.primary.default,
+              letterSpacing: '0.02em',
+              border: 'none', outline: 'none',
+              background: 'transparent',
+              width: '100%', padding: 0,
+              caretColor: focused ? palette.primary.default : 'transparent',
+            }}
+          />
+          {!search && !focused && (
+            <span style={{
+              position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)',
+              width: '2px', height: mob ? '22px' : '26px',
+              backgroundColor: palette.neutral[300],
+              animation: 'blink 1s ease-in-out infinite',
+              pointerEvents: 'none',
+            }} />
+          )}
+        </div>
+      </div>
+
+      {/* Destination tags */}
+      <div style={{ padding: mob ? '0 20px 16px' : '0 28px 16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
+          </svg>
+          <span style={{ fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300', color: palette.primary.default, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Destinations</span>
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+          {LOCATION_TAGS.map(tag => <TagPill key={tag} label={tag} />)}
           <span style={{
-            fontFamily: FONT_MONO, fontSize: '12px', color: palette.neutral[500], letterSpacing: '0.04em',
-          }}>020 3993 3757</span>
+            fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400',
+            color: palette.primary.light, backgroundColor: 'transparent',
+            padding: '7px 14px', borderRadius: '20px',
+            border: `1px solid ${palette.primary.tint}`,
+            letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer', whiteSpace: 'nowrap',
+          }}>View all →</span>
         </div>
       </div>
-    </div>
-  );
-}
 
-// ── Pattern A — Mobile ───────────────────────────────────────────────────────
-
-function PatternA_Mobile() {
-  const [open, setOpen] = useState(true);
-  return (
-    <div style={{ position: 'relative', height: '100%' }}>
-      <img src="/images/hero-01.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-      <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(16,32,55,0.4)' }} />
-      <div style={{ position: 'relative', zIndex: 30 }}>
-        <NavTopBar isOpen={open} onToggle={() => setOpen(!open)} />
-      </div>
-      {open && (
-        <div style={{
-          position: 'absolute', top: '48px', left: 0, right: 0, bottom: 0,
-          backgroundColor: '#FFFFFF', overflowY: 'auto', zIndex: 20, scrollbarWidth: 'none',
-        }}>
-          <DrawerContent activeSection={null} />
+      {/* Inspiration tags */}
+      <div style={{ padding: mob ? '8px 20px 24px' : '8px 28px 24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          </svg>
+          <span style={{ fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300', color: palette.primary.default, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Inspiration</span>
         </div>
-      )}
-      {!open && (
-        <div style={{
-          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-          textAlign: 'center', pointerEvents: 'none',
-        }}>
-          <p style={{ fontFamily: FONT_HEADING, fontSize: TS.lg, fontWeight: '300', color: '#FFFFFF', lineHeight: 1.3 }}>
-            Journeys by<br />people who work<br />as experts.
-          </p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+          {INSPIRATION_TAGS.map(tag => <TagPill key={tag} label={tag} />)}
         </div>
-      )}
-    </div>
-  );
-}
-
-// ── Pattern A — Desktop ──────────────────────────────────────────────────────
-
-function PatternA_Desktop() {
-  const [open, setOpen] = useState(true);
-  const [activeSection, setActiveSection] = useState('Destinations');
-  return (
-    <div style={{ position: 'relative', height: '100%' }}>
-      <img src="/images/hero-01.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-      <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(16,32,55,0.4)' }} />
-      <div style={{ position: 'relative', zIndex: 30 }}>
-        <NavTopBar isOpen={open} onToggle={() => setOpen(!open)} />
       </div>
-      {open && (
-        <div style={{
-          position: 'absolute', top: '48px', left: 0, right: 0, bottom: 0,
-          display: 'flex', zIndex: 20,
-        }}>
-          {/* Left column */}
-          <div style={{
-            width: '420px', flexShrink: 0,
-            backgroundColor: '#FFFFFF', overflowY: 'auto', scrollbarWidth: 'none',
-          }}>
-            <DrawerContent
-              headingSize="32px"
-              activeSection={activeSection}
-              onSectionClick={setActiveSection}
-            />
+
+      {/* Nav rows */}
+      <div style={{ padding: mob ? '0 20px' : '0 28px' }}>
+        {MENU_NAV_ITEMS.map(label => (
+          <div key={label} style={{ borderTop: `1px solid ${palette.neutral[100]}`, padding: '18px 0', cursor: 'pointer' }}>
+            <span style={{ fontFamily: FONT_HEADING, fontSize: '16px', fontWeight: '400', color: palette.primary.default, letterSpacing: '0.06em' }}>{label}</span>
           </div>
+        ))}
+      </div>
 
-          {/* Right column — destinations panel */}
-          {activeSection === 'Destinations' && (
-            <div style={{
-              flex: 1, backgroundColor: palette.surface.stone,
-              overflowY: 'auto', scrollbarWidth: 'none', padding: '28px 28px',
-            }}>
-              <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
-                {FEATURED_DESTINATIONS.map(dest => (
-                  <div key={dest.label} style={{ flex: 1, position: 'relative', height: '130px', borderRadius: '4px', overflow: 'hidden', cursor: 'pointer' }}>
-                    <img src={dest.img} alt={dest.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(16,32,55,0.28)' }} />
-                    <span style={{
-                      position: 'absolute', bottom: '10px', left: 0, right: 0,
-                      textAlign: 'center', fontFamily: FONT_MONO, fontSize: '10px',
-                      color: '#FFFFFF', letterSpacing: '0.1em', textTransform: 'uppercase',
-                    }}>{dest.label}</span>
-                  </div>
-                ))}
-              </div>
-              <div style={{
-                backgroundColor: palette.primary.default, padding: '13px 16px',
-                cursor: 'pointer', marginBottom: '4px',
-              }}>
-                <span style={{
-                  fontFamily: FONT_MONO, fontSize: '11px', color: palette.surface.stone,
-                  letterSpacing: '0.1em', textTransform: 'uppercase',
-                }}>All Destinations</span>
-              </div>
-              {DESTINATIONS_LIST.map(dest => (
-                <div key={dest} style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  padding: '10px 8px', borderBottom: `1px solid ${palette.neutral[200]}`, cursor: 'pointer',
-                }}>
-                  <span style={{
-                    fontFamily: FONT_MONO, fontSize: '11px', color: palette.primary.default,
-                    letterSpacing: '0.08em', textTransform: 'uppercase',
-                  }}>{dest}</span>
-                  <ChevronRight size={13} strokeWidth={1.5} color={palette.neutral[400]} />
-                </div>
-              ))}
+      {/* CTA footer */}
+      <div style={{ backgroundColor: palette.primary.default, margin: '12px 0 0', padding: mob ? '20px 20px 24px' : '20px 28px 24px' }}>
+        <p style={{ fontFamily: FONT_HEADING, fontSize: '16px', fontWeight: '400', color: palette.surface.stone, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>Speak to our experts</p>
+        <p style={{ fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '300', color: palette.surface.stone, opacity: 0.7, lineHeight: 1.6, letterSpacing: '0.04em' }}>
+          MON–FRI &nbsp;9:00am – 6:00pm<br />SAT &nbsp;10:00am – 4:30pm
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
+          <span style={{ fontFamily: FONT_BODY, fontSize: '15px', fontWeight: '500', color: palette.surface.stone, letterSpacing: '0.06em' }}>020 3993 4424</span>
+          <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.surface.stone, color: palette.primary.default, padding: '8px 20px', border: 'none', fontWeight: '400', fontSize: '11px', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}>
+            Enquire
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Opt2Mobile() {
+  const [open, setOpen] = useState(true);
+  return (
+    <div style={{ position: 'relative', height: '100%' }}>
+      <img src="/images/hero-01.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+      <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(16,32,55,0.4)' }} />
+
+      {/* Floating compact nav */}
+      <div style={{ position: 'absolute', top: '12px', left: '16px', right: '16px', zIndex: 30 }}>
+        <div style={{
+          display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center',
+          backgroundColor: palette.surface.stone, padding: '10px 16px',
+          border: `1px solid ${palette.neutral[200]}`,
+        }}>
+          <div onClick={() => setOpen(!open)} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+            <div style={{ width: '18px', height: '10px', position: 'relative' }}>
+              <div style={{ position: 'absolute', left: 0, width: '18px', height: '2px', backgroundColor: palette.primary.default, top: open ? '4px' : 0, transform: open ? 'rotate(45deg)' : 'none', transition: 'all 0.3s ease' }} />
+              <div style={{ position: 'absolute', left: 0, width: '18px', height: '2px', backgroundColor: palette.primary.default, top: open ? '4px' : '8px', transform: open ? 'rotate(-45deg)' : 'none', transition: 'all 0.3s ease' }} />
             </div>
-          )}
-        </div>
-      )}
-      {!open && (
-        <div style={{
-          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-          textAlign: 'center', pointerEvents: 'none',
-        }}>
-          <p style={{ fontFamily: FONT_HEADING, fontSize: TS['2xl'], fontWeight: '300', color: '#FFFFFF', lineHeight: 1.3 }}>
-            Journeys by people<br />who work as experts.
-          </p>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── Pattern B — Detached popup (Mobile) ─────────────────────────────────────
-
-function PatternB_Mobile() {
-  const [open, setOpen] = useState(true);
-  return (
-    <div style={{ position: 'relative', height: '100%' }}>
-      <img src="/images/hero-01.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-      <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(16,32,55,0.4)' }} />
-
-      {/* Transparent nav bar over hero */}
-      <div style={{ position: 'relative', zIndex: 30 }}>
-        <NavTopBar isOpen={open} onToggle={() => setOpen(!open)} transparent />
-      </div>
-
-      {!open && (
-        <div style={{
-          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-          textAlign: 'center', pointerEvents: 'none',
-        }}>
-          <p style={{ fontFamily: FONT_HEADING, fontSize: TS.lg, fontWeight: '300', color: '#FFFFFF', lineHeight: 1.3 }}>
-            Journeys by<br />people who work<br />as experts.
-          </p>
-        </div>
-      )}
-
-      {/* Detached floating popup */}
-      {open && (
-        <div style={{
-          position: 'absolute', top: '56px', left: '12px', right: '12px', bottom: '12px',
-          backgroundColor: '#FFFFFF', borderRadius: '12px',
-          boxShadow: '0 16px 48px rgba(16,32,55,0.28)',
-          overflowY: 'auto', zIndex: 20, scrollbarWidth: 'none',
-        }}>
-          <DrawerContent activeSection={null} />
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── Pattern B — Detached popup (Desktop) ────────────────────────────────────
-
-function PatternB_Desktop() {
-  const [open, setOpen] = useState(true);
-  const [activeSection, setActiveSection] = useState('Destinations');
-  return (
-    <div style={{ position: 'relative', height: '100%' }}>
-      <img src="/images/hero-01.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-      <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(16,32,55,0.4)' }} />
-
-      <div style={{ position: 'relative', zIndex: 30 }}>
-        <NavTopBar isOpen={open} onToggle={() => setOpen(!open)} transparent />
-      </div>
-
-      {!open && (
-        <div style={{
-          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-          textAlign: 'center', pointerEvents: 'none',
-        }}>
-          <p style={{ fontFamily: FONT_HEADING, fontSize: TS['2xl'], fontWeight: '300', color: '#FFFFFF', lineHeight: 1.3 }}>
-            Journeys by people<br />who work as experts.
-          </p>
-        </div>
-      )}
-
-      {open && (
-        <div style={{
-          position: 'absolute', top: '56px', left: '16px', right: '16px', bottom: '16px',
-          display: 'flex', zIndex: 20,
-          boxShadow: '0 20px 60px rgba(16,32,55,0.32)',
-          borderRadius: '12px', overflow: 'hidden',
-        }}>
-          {/* Left column */}
-          <div style={{
-            width: '380px', flexShrink: 0,
-            backgroundColor: '#FFFFFF', overflowY: 'auto', scrollbarWidth: 'none',
-          }}>
-            <DrawerContent
-              headingSize="30px"
-              activeSection={activeSection}
-              onSectionClick={setActiveSection}
-            />
+            <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '400', color: palette.primary.default, letterSpacing: '1px', textTransform: 'uppercase' }}>{open ? 'Close' : 'Menu'}</span>
           </div>
-
-          {/* Right column */}
-          {activeSection === 'Destinations' && (
-            <div style={{
-              flex: 1, backgroundColor: palette.surface.stone,
-              overflowY: 'auto', scrollbarWidth: 'none', padding: '28px',
-            }}>
-              <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
-                {FEATURED_DESTINATIONS.map(dest => (
-                  <div key={dest.label} style={{ flex: 1, position: 'relative', height: '120px', borderRadius: '4px', overflow: 'hidden', cursor: 'pointer' }}>
-                    <img src={dest.img} alt={dest.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(16,32,55,0.28)' }} />
-                    <span style={{
-                      position: 'absolute', bottom: '10px', left: 0, right: 0,
-                      textAlign: 'center', fontFamily: FONT_MONO, fontSize: '10px',
-                      color: '#FFFFFF', letterSpacing: '0.1em', textTransform: 'uppercase',
-                    }}>{dest.label}</span>
-                  </div>
-                ))}
-              </div>
-              <div style={{ backgroundColor: palette.primary.default, padding: '13px 16px', cursor: 'pointer', marginBottom: '4px' }}>
-                <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.surface.stone, letterSpacing: '0.1em', textTransform: 'uppercase' }}>All Destinations</span>
-              </div>
-              {DESTINATIONS_LIST.map(dest => (
-                <div key={dest} style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  padding: '10px 8px', borderBottom: `1px solid ${palette.neutral[200]}`, cursor: 'pointer',
-                }}>
-                  <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.primary.default, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{dest}</span>
-                  <ChevronRight size={13} strokeWidth={1.5} color={palette.neutral[400]} />
-                </div>
-              ))}
-            </div>
-          )}
+          <LogoInline color={palette.primary.default} height={28} />
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.primary.default, color: '#FFFFFF', padding: '8px 14px', border: 'none', fontWeight: '400', fontSize: '11px', letterSpacing: '1px', textTransform: 'uppercase', cursor: 'pointer' }}>Enquire</button>
+          </div>
         </div>
-      )}
+        {open && <Opt2Menu mob />}
+      </div>
     </div>
   );
 }
 
-// ── Page ─────────────────────────────────────────────────────────────────────
+function Opt2Desktop() {
+  const [open, setOpen] = useState(true);
+  return (
+    <div style={{ position: 'relative', height: '100%' }}>
+      <img src="/images/hero-01.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+      <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(16,32,55,0.4)' }} />
+
+      {/* Floating compact nav — centred */}
+      <div style={{ position: 'absolute', top: '16px', left: '50%', transform: 'translateX(-50%)', width: '540px', zIndex: 30 }}>
+        <div style={{
+          display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center',
+          backgroundColor: palette.surface.stone, padding: '12px 20px',
+          border: `1px solid ${palette.neutral[200]}`,
+        }}>
+          <div onClick={() => setOpen(!open)} style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+            <div style={{ width: '20px', height: '10px', position: 'relative' }}>
+              <div style={{ position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: palette.primary.default, top: open ? '4px' : 0, transform: open ? 'rotate(45deg)' : 'none', transition: 'all 0.3s ease' }} />
+              <div style={{ position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: palette.primary.default, top: open ? '4px' : '8px', transform: open ? 'rotate(-45deg)' : 'none', transition: 'all 0.3s ease' }} />
+            </div>
+            <span style={{ fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400', color: palette.primary.default, letterSpacing: '1px', textTransform: 'uppercase' }}>{open ? 'Close' : 'Menu'}</span>
+          </div>
+          <LogoInline color={palette.primary.default} height={28} />
+          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '10px' }}>
+            <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.primary.default, color: '#FFFFFF', padding: '10px 16px', border: 'none', fontWeight: '400', fontSize: '12px', letterSpacing: '1px', textTransform: 'uppercase', cursor: 'pointer' }}>Enquire</button>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={palette.primary.default} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ cursor: 'pointer', flexShrink: 0 }}>
+              <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </div>
+        </div>
+        {open && <Opt2Menu />}
+      </div>
+    </div>
+  );
+}
+
+// ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function NavigationPage() {
   const [viewMode, setViewMode] = useState('mobile');
-  const [pattern, setPattern] = useState('A');
 
   const toggleBtn = (active) => ({
     border: `1px solid ${active ? palette.primary.default : palette.neutral[200]}`,
@@ -438,12 +430,11 @@ export default function NavigationPage() {
     borderRadius: '4px', cursor: 'pointer', transition: 'all 0.15s ease',
   });
 
-  const divider = <div style={{ width: '1px', height: '20px', backgroundColor: palette.neutral[200] }} />;
+  const sectionStyle = { marginBottom: '80px' };
 
   const sectionLabel = {
     fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300',
-    color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.08em',
-    marginBottom: '12px',
+    color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px',
   };
 
   const sectionTitle = {
@@ -465,7 +456,7 @@ export default function NavigationPage() {
         backgroundColor: palette.surface.stone,
         borderBottom: `1px solid ${palette.neutral[200]}`,
         padding: '12px 56px',
-        display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap',
+        display: 'flex', alignItems: 'center', gap: '20px',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300', color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.08em' }}>View</span>
@@ -474,19 +465,12 @@ export default function NavigationPage() {
             <button onClick={() => setViewMode('desktop')} style={toggleBtn(viewMode === 'desktop')}>Desktop</button>
           </div>
         </div>
-        {divider}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300', color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.08em' }}>Pattern</span>
-          <div style={{ display: 'flex', gap: '4px' }}>
-            <button onClick={() => setPattern('A')} style={toggleBtn(pattern === 'A')}>A</button>
-            <button onClick={() => setPattern('B')} style={toggleBtn(pattern === 'B')}>B</button>
-          </div>
-        </div>
       </div>
 
       {/* Page content */}
       <div style={{ padding: '48px 56px' }}>
-        <div style={{ marginBottom: '48px' }}>
+
+        <div style={{ marginBottom: '56px' }}>
           <Link to="/foundations" style={{
             fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400',
             color: palette.neutral[400], textDecoration: 'none', letterSpacing: '0.04em',
@@ -498,44 +482,40 @@ export default function NavigationPage() {
             Navigation Exploration
           </h1>
           <p style={{ fontFamily: FONT_BODY, fontSize: '15px', fontWeight: '300', color: palette.neutral[500], lineHeight: '1.6', maxWidth: '640px' }}>
-            Two navigation patterns shown in context over a hero section.
-            Toggle the pattern and viewport above to compare approaches.
+            Two navigation approaches shown in context over a hero. Use the view toggle to compare mobile and desktop.
           </p>
         </div>
 
-        {/* Pattern A */}
-        {pattern === 'A' && (
-          <div>
-            <p style={sectionLabel}>Pattern A</p>
-            <h2 style={sectionTitle}>Current Site — Rebrand</h2>
-            <p style={sectionDesc}>
-              Replicates the existing Cox & Kings navigation structure with new design tokens.
-              Full-width drawer slides over the hero. Desktop splits into a left nav column
-              and a right destinations panel.
-            </p>
-            {viewMode === 'mobile'
-              ? <MobileFrame label="Mobile — 375px"><PatternA_Mobile /></MobileFrame>
-              : <DesktopFrame label="Desktop"><PatternA_Desktop /></DesktopFrame>
-            }
-          </div>
-        )}
+        {/* Option 1 */}
+        <div style={sectionStyle}>
+          <p style={sectionLabel}>Option 1</p>
+          <h2 style={sectionTitle}>Current Site — Rebrand</h2>
+          <p style={sectionDesc}>
+            Replicates the existing Cox & Kings navigation structure with new design tokens.
+            Full-width drawer slides over the hero. Desktop splits into a left nav column
+            and a right destinations panel.
+          </p>
+          {viewMode === 'mobile'
+            ? <MobileFrame label="Mobile — 375px"><Opt1Mobile /></MobileFrame>
+            : <DesktopFrame label="Desktop"><Opt1Desktop /></DesktopFrame>
+          }
+        </div>
 
-        {/* Pattern B */}
-        {pattern === 'B' && (
-          <div>
-            <p style={sectionLabel}>Pattern B</p>
-            <h2 style={sectionTitle}>Detached Popup</h2>
-            <p style={sectionDesc}>
-              The nav bar sits transparently over the hero. Triggering the menu reveals a
-              detached floating panel inset from all edges — keeping the hero visible around
-              it and giving a more layered, editorial feel.
-            </p>
-            {viewMode === 'mobile'
-              ? <MobileFrame label="Mobile — 375px"><PatternB_Mobile /></MobileFrame>
-              : <DesktopFrame label="Desktop"><PatternB_Desktop /></DesktopFrame>
-            }
-          </div>
-        )}
+        {/* Option 2 */}
+        <div style={sectionStyle}>
+          <p style={sectionLabel}>Option 2</p>
+          <h2 style={sectionTitle}>Detached Floating Menu</h2>
+          <p style={sectionDesc}>
+            A centred floating nav bar sits over the hero. Opening the menu drops a
+            detached panel below it — search-led with destination and inspiration tags,
+            keeping the hero visible around it.
+          </p>
+          {viewMode === 'mobile'
+            ? <MobileFrame label="Mobile — 375px"><Opt2Mobile /></MobileFrame>
+            : <DesktopFrame label="Desktop"><Opt2Desktop /></DesktopFrame>
+          }
+        </div>
+
       </div>
     </div>
   );
