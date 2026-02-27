@@ -58,13 +58,13 @@ function MobileFrame({ children, label }) {
 
 function DesktopFrame({ children, label }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', flex: 1 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0 }}>
       <span style={{ fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '400', color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.1em' }}>
         {label}
       </span>
       <div style={{
         width: '100%', minHeight: '280px', border: `1px solid ${palette.neutral[200]}`,
-        borderRadius: '8px', overflow: 'hidden', backgroundColor: '#FFFFFF',
+        borderRadius: '8px', backgroundColor: '#FFFFFF', overflow: 'auto',
         boxShadow: '0 4px 24px rgba(16,32,55,0.06)',
       }}>
         {children}
@@ -76,8 +76,8 @@ function DesktopFrame({ children, label }) {
 function RegionPanel({ region, compact: isCompact, variant = 'V1', showBorder = true }) {
   const products = REGION_PRODUCTS[region] || [];
 
-  const cardW = isCompact ? '220px' : '320px';
-  const imgH = isCompact ? '120px' : '190px';
+  const cardW = isCompact ? '220px' : '340px';
+  const imgH = isCompact ? '120px' : '230px';
 
   return (
     <div style={{ padding: isCompact ? '32px 12px' : '40px 24px' }}>
@@ -500,6 +500,7 @@ function PatternDDesktop({ variant, showBorder }) {
 export default function TabExplorationPage() {
   const [cardVariant, setCardVariant] = useState('V1');
   const [showBorder, setShowBorder] = useState(true);
+  const [viewMode, setViewMode] = useState('mobile');
   const [winW, setWinW] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
   useEffect(() => {
     const h = () => setWinW(window.innerWidth);
@@ -528,162 +529,185 @@ export default function TabExplorationPage() {
     marginBottom: '12px',
   };
 
-  const frameRow = compact
-    ? { display: 'flex', flexDirection: 'column', gap: '32px', alignItems: 'center' }
-    : { display: 'flex', gap: '40px', alignItems: 'flex-start' };
+  const toggleBtn = (active) => ({
+    border: `1px solid ${active ? palette.primary.default : palette.neutral[200]}`,
+    backgroundColor: active ? palette.primary.default : 'transparent',
+    color: active ? '#FFFFFF' : palette.neutral[500],
+    fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '500',
+    letterSpacing: '0.04em', padding: '6px 16px',
+    borderRadius: '4px', cursor: 'pointer', transition: 'all 0.15s ease',
+  });
 
   return (
-    <div style={{
-      minHeight: '100vh', backgroundColor: palette.surface.stone, padding: compact ? '32px 16px' : '48px 56px',
-    }}>
-      {/* Header */}
-      <div style={{ marginBottom: '48px' }}>
-        <Link to="/foundations" style={{
-          fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400',
-          color: palette.neutral[400], textDecoration: 'none', letterSpacing: '0.04em',
-          display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '20px',
-        }}>
-          <ChevronLeft size={14} strokeWidth={1.5} /> Back to Foundations
-        </Link>
-        <h1 style={{
-          fontFamily: FONT_HEADING, fontSize: compact ? TS.lg : TS['2xl'], fontWeight: '300',
-          color: palette.primary.default, marginBottom: '8px',
-        }}>
-          Tab Patterns &mdash; Mobile Exploration
-        </h1>
-        <p style={{
-          fontFamily: FONT_BODY, fontSize: '15px', fontWeight: '300',
-          color: palette.neutral[500], lineHeight: '1.6', maxWidth: '640px',
-        }}>
-          These four patterns each solve the overflow problem differently.
-          Each is shown at mobile (375px) and desktop width.
-        </p>
+    <div style={{ minHeight: '100vh', backgroundColor: palette.surface.stone }}>
 
-        {/* Card variant + border toggles */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginTop: '24px', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300', color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-              Card Style
-            </span>
-            <div style={{ display: 'flex', gap: '4px' }}>
-              {['V1', 'V2', 'V3'].map((v) => (
-                <button key={v} onClick={() => setCardVariant(v)} style={{
-                  border: `1px solid ${cardVariant === v ? palette.primary.default : palette.neutral[200]}`,
-                  backgroundColor: cardVariant === v ? palette.primary.default : 'transparent',
-                  color: cardVariant === v ? '#FFFFFF' : palette.neutral[500],
-                  fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '500',
-                  letterSpacing: '0.04em', padding: '6px 16px',
-                  borderRadius: '4px', cursor: 'pointer', transition: 'all 0.15s ease',
-                }}>{v}</button>
-              ))}
-            </div>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300', color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-              Borders
-            </span>
-            <div style={{ display: 'flex', gap: '4px' }}>
-              {[['On', true], ['Off', false]].map(([label, val]) => (
-                <button key={label} onClick={() => setShowBorder(val)} style={{
-                  border: `1px solid ${showBorder === val ? palette.primary.default : palette.neutral[200]}`,
-                  backgroundColor: showBorder === val ? palette.primary.default : 'transparent',
-                  color: showBorder === val ? '#FFFFFF' : palette.neutral[500],
-                  fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '500',
-                  letterSpacing: '0.04em', padding: '6px 16px',
-                  borderRadius: '4px', cursor: 'pointer', transition: 'all 0.15s ease',
-                }}>{label}</button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Pattern A — Scrollable Strip */}
-      <div style={sectionStyle}>
-        <p style={labelStyle}>Pattern A</p>
-        <h2 style={sectionTitle}>Scrollable Strip</h2>
-        <p style={sectionDesc}>
-          Tabs sit in a single horizontal row and scroll with swipe. A fade-edge hints
-          at more options. The most common approach on travel and e-commerce sites.
-        </p>
-        <div style={frameRow}>
-          <MobileFrame label="Mobile — 375px">
-            <PatternA variant={cardVariant} showBorder={showBorder} />
-          </MobileFrame>
-          <DesktopFrame label="Desktop">
-            <PatternADesktop variant={cardVariant} showBorder={showBorder} />
-          </DesktopFrame>
-        </div>
-      </div>
-
-      {/* Pattern B — Dropdown Select */}
-      <div style={sectionStyle}>
-        <p style={labelStyle}>Pattern B</p>
-        <h2 style={sectionTitle}>Dropdown Select</h2>
-        <p style={sectionDesc}>
-          On mobile, tabs collapse into a single dropdown trigger showing the active region.
-          Tap to reveal the full list. Extremely compact — ideal when vertical space is premium.
-        </p>
-        <div style={frameRow}>
-          <MobileFrame label="Mobile — 375px">
-            <PatternB variant={cardVariant} showBorder={showBorder} />
-          </MobileFrame>
-          <DesktopFrame label="Desktop">
-            <PatternBDesktop variant={cardVariant} showBorder={showBorder} />
-          </DesktopFrame>
-        </div>
-      </div>
-
-      {/* Pattern C — Wrapping Chips */}
-      <div style={sectionStyle}>
-        <p style={labelStyle}>Pattern C</p>
-        <h2 style={sectionTitle}>Wrapping Chips</h2>
-        <p style={sectionDesc}>
-          All options remain visible, wrapping to a second line when needed. Good for discovery
-          since every region is visible without interaction. Works well with 5-7 items.
-        </p>
-        <div style={frameRow}>
-          <MobileFrame label="Mobile — 375px">
-            <PatternC variant={cardVariant} showBorder={showBorder} />
-          </MobileFrame>
-          <DesktopFrame label="Desktop">
-            <PatternCDesktop variant={cardVariant} showBorder={showBorder} />
-          </DesktopFrame>
-        </div>
-      </div>
-
-      {/* Pattern D — Accordion */}
-      <div style={sectionStyle}>
-        <p style={labelStyle}>Pattern D</p>
-        <h2 style={sectionTitle}>Accordion</h2>
-        <p style={sectionDesc}>
-          Each region becomes an expandable section. Fully vertical, no horizontal overflow.
-          Every label is always visible, and the expanded content sits naturally in-flow.
-        </p>
-        <div style={frameRow}>
-          <MobileFrame label="Mobile — 375px">
-            <PatternD variant={cardVariant} showBorder={showBorder} />
-          </MobileFrame>
-          <DesktopFrame label="Desktop">
-            <PatternDDesktop variant={cardVariant} showBorder={showBorder} />
-          </DesktopFrame>
-        </div>
-      </div>
-
-      {/* Notes */}
+      {/* Sticky toolbar */}
       <div style={{
-        borderTop: `1px solid ${palette.neutral[200]}`, paddingTop: '32px', marginTop: '16px',
+        position: 'sticky', top: 0, zIndex: 20,
+        backgroundColor: palette.surface.stone,
+        borderBottom: `1px solid ${palette.neutral[200]}`,
+        padding: compact ? '12px 16px' : '12px 56px',
+        display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap',
       }}>
-        <h3 style={{ fontFamily: FONT_HEADING, fontSize: TS.base, fontWeight: '500', color: palette.primary.default, marginBottom: '12px' }}>
-          Considerations
-        </h3>
-        <ul style={{ fontFamily: FONT_BODY, fontSize: '14px', color: palette.neutral[700], lineHeight: '1.8', paddingLeft: '20px', maxWidth: '640px' }}>
-          <li><strong>A (Scrollable Strip)</strong> — Familiar but relies on users noticing the fade edge. Add left/right arrows on touch for extra affordance.</li>
-          <li><strong>B (Dropdown)</strong> — Most space-efficient. Risk: hides options behind a tap. Best paired with a clear chevron indicator.</li>
-          <li><strong>C (Chips)</strong> — Best discoverability. Slightly taller if items wrap to two rows. Works well with brand pill styling.</li>
-          <li><strong>D (Accordion)</strong> — Best for content-heavy views. Eliminates horizontal scrolling entirely. Slightly unconventional for filter/tab use.</li>
-        </ul>
+        {/* View toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300', color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            View
+          </span>
+          <div style={{ display: 'flex', gap: '4px' }}>
+            <button onClick={() => setViewMode('mobile')} style={toggleBtn(viewMode === 'mobile')}>Mobile</button>
+            <button onClick={() => setViewMode('desktop')} style={toggleBtn(viewMode === 'desktop')}>Desktop</button>
+          </div>
+        </div>
+
+        <div style={{ width: '1px', height: '20px', backgroundColor: palette.neutral[200] }} />
+
+        {/* Card style toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300', color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            Card
+          </span>
+          <div style={{ display: 'flex', gap: '4px' }}>
+            {['V1', 'V2', 'V3'].map((v) => (
+              <button key={v} onClick={() => setCardVariant(v)} style={toggleBtn(cardVariant === v)}>{v}</button>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ width: '1px', height: '20px', backgroundColor: palette.neutral[200] }} />
+
+        {/* Borders toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300', color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            Borders
+          </span>
+          <div style={{ display: 'flex', gap: '4px' }}>
+            {[['On', true], ['Off', false]].map(([label, val]) => (
+              <button key={label} onClick={() => setShowBorder(val)} style={toggleBtn(showBorder === val)}>{label}</button>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+
+      {/* Page content */}
+      <div style={{ padding: compact ? '32px 16px' : '48px 56px' }}>
+
+        {/* Header */}
+        <div style={{ marginBottom: '48px' }}>
+          <Link to="/foundations" style={{
+            fontFamily: FONT_BODY, fontSize: '12px', fontWeight: '400',
+            color: palette.neutral[400], textDecoration: 'none', letterSpacing: '0.04em',
+            display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '20px',
+          }}>
+            <ChevronLeft size={14} strokeWidth={1.5} /> Back to Foundations
+          </Link>
+          <h1 style={{
+            fontFamily: FONT_HEADING, fontSize: compact ? TS.lg : TS['2xl'], fontWeight: '300',
+            color: palette.primary.default, marginBottom: '8px',
+          }}>
+            Tab Patterns &mdash; Mobile Exploration
+          </h1>
+          <p style={{
+            fontFamily: FONT_BODY, fontSize: '15px', fontWeight: '300',
+            color: palette.neutral[500], lineHeight: '1.6', maxWidth: '640px',
+          }}>
+            These four patterns each solve the overflow problem differently.
+            Use the toggles above to switch between mobile and desktop views.
+          </p>
+        </div>
+
+        {/* Pattern A — Scrollable Strip */}
+        <div style={sectionStyle}>
+          <p style={labelStyle}>Pattern A</p>
+          <h2 style={sectionTitle}>Scrollable Strip</h2>
+          <p style={sectionDesc}>
+            Tabs sit in a single horizontal row and scroll with swipe. A fade-edge hints
+            at more options. The most common approach on travel and e-commerce sites.
+          </p>
+          {viewMode === 'mobile' ? (
+            <MobileFrame label="Mobile — 375px">
+              <PatternA variant={cardVariant} showBorder={showBorder} />
+            </MobileFrame>
+          ) : (
+            <DesktopFrame label="Desktop">
+              <PatternADesktop variant={cardVariant} showBorder={showBorder} />
+            </DesktopFrame>
+          )}
+        </div>
+
+        {/* Pattern B — Dropdown Select */}
+        <div style={sectionStyle}>
+          <p style={labelStyle}>Pattern B</p>
+          <h2 style={sectionTitle}>Dropdown Select</h2>
+          <p style={sectionDesc}>
+            On mobile, tabs collapse into a single dropdown trigger showing the active region.
+            Tap to reveal the full list. Extremely compact — ideal when vertical space is premium.
+          </p>
+          {viewMode === 'mobile' ? (
+            <MobileFrame label="Mobile — 375px">
+              <PatternB variant={cardVariant} showBorder={showBorder} />
+            </MobileFrame>
+          ) : (
+            <DesktopFrame label="Desktop">
+              <PatternBDesktop variant={cardVariant} showBorder={showBorder} />
+            </DesktopFrame>
+          )}
+        </div>
+
+        {/* Pattern C — Wrapping Chips */}
+        <div style={sectionStyle}>
+          <p style={labelStyle}>Pattern C</p>
+          <h2 style={sectionTitle}>Wrapping Chips</h2>
+          <p style={sectionDesc}>
+            All options remain visible, wrapping to a second line when needed. Good for discovery
+            since every region is visible without interaction. Works well with 5-7 items.
+          </p>
+          {viewMode === 'mobile' ? (
+            <MobileFrame label="Mobile — 375px">
+              <PatternC variant={cardVariant} showBorder={showBorder} />
+            </MobileFrame>
+          ) : (
+            <DesktopFrame label="Desktop">
+              <PatternCDesktop variant={cardVariant} showBorder={showBorder} />
+            </DesktopFrame>
+          )}
+        </div>
+
+        {/* Pattern D — Accordion */}
+        <div style={sectionStyle}>
+          <p style={labelStyle}>Pattern D</p>
+          <h2 style={sectionTitle}>Accordion</h2>
+          <p style={sectionDesc}>
+            Each region becomes an expandable section. Fully vertical, no horizontal overflow.
+            Every label is always visible, and the expanded content sits naturally in-flow.
+          </p>
+          {viewMode === 'mobile' ? (
+            <MobileFrame label="Mobile — 375px">
+              <PatternD variant={cardVariant} showBorder={showBorder} />
+            </MobileFrame>
+          ) : (
+            <DesktopFrame label="Desktop">
+              <PatternDDesktop variant={cardVariant} showBorder={showBorder} />
+            </DesktopFrame>
+          )}
+        </div>
+
+        {/* Notes */}
+        <div style={{
+          borderTop: `1px solid ${palette.neutral[200]}`, paddingTop: '32px', marginTop: '16px',
+        }}>
+          <h3 style={{ fontFamily: FONT_HEADING, fontSize: TS.base, fontWeight: '500', color: palette.primary.default, marginBottom: '12px' }}>
+            Considerations
+          </h3>
+          <ul style={{ fontFamily: FONT_BODY, fontSize: '14px', color: palette.neutral[700], lineHeight: '1.8', paddingLeft: '20px', maxWidth: '640px' }}>
+            <li><strong>A (Scrollable Strip)</strong> — Familiar but relies on users noticing the fade edge. Add left/right arrows on touch for extra affordance.</li>
+            <li><strong>B (Dropdown)</strong> — Most space-efficient. Risk: hides options behind a tap. Best paired with a clear chevron indicator.</li>
+            <li><strong>C (Chips)</strong> — Best discoverability. Slightly taller if items wrap to two rows. Works well with brand pill styling.</li>
+            <li><strong>D (Accordion)</strong> — Best for content-heavy views. Eliminates horizontal scrolling entirely. Slightly unconventional for filter/tab use.</li>
+          </ul>
+        </div>
+
+      </div>{/* /content */}
+    </div>{/* /page */}
   );
 }
