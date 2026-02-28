@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { palette, brandDecorativeDeep } from '../tokens/index.js';
 import { FONT_HEADING, FONT_BODY, FONT_MONO, TS } from '../tokens/index.js';
-import { ChevronLeft, ChevronRight, X, Menu, Phone, Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Menu, Phone, Search, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { LogoInline, LogoCompact, LogoStacked } from '../components/Logo.jsx';
 
@@ -238,8 +238,9 @@ function DestinationsPanel({ onSelectDestination, onBack }) {
         ))}
       </div>
       {/* All Destinations dark bar */}
-      <div style={{ backgroundColor: palette.primary.default, padding: '11px 14px', cursor: 'pointer', margin: '0 14px 4px' }}>
+      <div style={{ backgroundColor: palette.primary.default, padding: '11px 14px', cursor: 'pointer', margin: '0 14px 4px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
         <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.surface.stone, letterSpacing: '0.08em', textTransform: 'uppercase' }}>All Destinations</span>
+        <ArrowUpRight size={13} strokeWidth={1.5} color={palette.surface.stone} />
       </div>
       {/* Destinations list */}
       <div style={{ padding: '0 14px' }}>
@@ -275,8 +276,9 @@ function AfricaPanel({ onBack }) {
         ))}
       </div>
       {/* All African Destinations dark bar */}
-      <div style={{ backgroundColor: palette.primary.default, padding: '11px 14px', cursor: 'pointer', margin: '0 14px 4px' }}>
+      <div style={{ backgroundColor: palette.primary.default, padding: '11px 14px', cursor: 'pointer', margin: '0 14px 4px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
         <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.surface.stone, letterSpacing: '0.08em', textTransform: 'uppercase' }}>All African Destinations</span>
+        <ArrowUpRight size={13} strokeWidth={1.5} color={palette.surface.stone} />
       </div>
       {/* Country list */}
       <div style={{ padding: '0 14px' }}>

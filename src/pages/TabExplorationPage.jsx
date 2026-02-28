@@ -95,23 +95,19 @@ function RegionPanel({ region, compact: isCompact, variant = 'V1', showBorder = 
                 <img src={p.img} alt={p.title} style={{ width: '100%', height: imgH, objectFit: 'cover', display: 'block', borderRadius: '16px' }} />
                 <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'nowrap' }}>
                   <span style={{
-                    fontFamily: FONT_BODY, fontSize: '9px', fontWeight: '500',
-                    letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap',
+                    fontFamily: FONT_BODY, fontSize: '9px', fontWeight: '400',
+                    letterSpacing: '0.06em', textTransform: 'uppercase', whiteSpace: 'nowrap',
                     backgroundColor: palette.surface.stone, color: palette.primary.default,
-                    padding: '4px 8px', borderRadius: '4px', lineHeight: '16px',
+                    border: `1px solid ${palette.neutral[200]}`,
+                    padding: '4px 10px', borderRadius: '20px',
                   }}>Small Group Tour</span>
                   {p.offer && (
-                    <span style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-                      <span style={{
-                        fontFamily: FONT_BODY, fontSize: '9px', fontWeight: '600',
-                        letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap',
-                        backgroundColor: palette.primary.default, color: '#FFFFFF',
-                        padding: '4px 10px', borderRadius: '4px 0 0 4px', lineHeight: '16px',
-                      }}>{p.offer}</span>
-                      <svg width="8" height="24" viewBox="0 0 8 24" style={{ display: 'block' }}>
-                        <polygon points="0,0 8,12 0,24" fill={palette.primary.default} />
-                      </svg>
-                    </span>
+                    <span style={{
+                      fontFamily: FONT_BODY, fontSize: '9px', fontWeight: '400',
+                      letterSpacing: '0.06em', textTransform: 'uppercase', whiteSpace: 'nowrap',
+                      backgroundColor: palette.primary.default, color: palette.surface.stone,
+                      padding: '4px 10px', borderRadius: '20px',
+                    }}>{p.offer}</span>
                   )}
                 </div>
                 <span style={{
@@ -138,8 +134,8 @@ function RegionPanel({ region, compact: isCompact, variant = 'V1', showBorder = 
             </div>
           );
 
-          // ── V2 — No rounded image/card, Chainprinter tags ──────────────
-          if (variant === 'V2') return (
+          // ── V2 — Square image/card, same font treatments as V1 ──────────
+          return (
             <div key={p.title} style={{
               minWidth: cardW, maxWidth: cardW, display: 'flex', flexDirection: 'column', flexShrink: 0,
               backgroundColor: palette.surface.stone, boxShadow: '0 2px 12px rgba(16,32,55,0.08)',
@@ -149,23 +145,19 @@ function RegionPanel({ region, compact: isCompact, variant = 'V1', showBorder = 
                 <img src={p.img} alt={p.title} style={{ width: '100%', height: imgH, objectFit: 'cover', display: 'block', borderRadius: '0' }} />
                 <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'nowrap' }}>
                   <span style={{
-                    fontFamily: FONT_MONO, fontSize: '9px', fontWeight: '400',
-                    letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap',
+                    fontFamily: FONT_BODY, fontSize: '9px', fontWeight: '400',
+                    letterSpacing: '0.06em', textTransform: 'uppercase', whiteSpace: 'nowrap',
                     backgroundColor: palette.surface.stone, color: palette.primary.default,
-                    padding: '4px 8px', borderRadius: '4px', lineHeight: '16px',
+                    border: `1px solid ${palette.neutral[200]}`,
+                    padding: '4px 10px', borderRadius: '20px',
                   }}>Small Group Tour</span>
                   {p.offer && (
-                    <span style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-                      <span style={{
-                        fontFamily: FONT_MONO, fontSize: '9px', fontWeight: '400',
-                        letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap',
-                        backgroundColor: palette.primary.default, color: '#FFFFFF',
-                        padding: '4px 10px', borderRadius: '4px 0 0 4px', lineHeight: '16px',
-                      }}>{p.offer}</span>
-                      <svg width="8" height="24" viewBox="0 0 8 24" style={{ display: 'block' }}>
-                        <polygon points="0,0 8,12 0,24" fill={palette.primary.default} />
-                      </svg>
-                    </span>
+                    <span style={{
+                      fontFamily: FONT_BODY, fontSize: '9px', fontWeight: '400',
+                      letterSpacing: '0.06em', textTransform: 'uppercase', whiteSpace: 'nowrap',
+                      backgroundColor: palette.primary.default, color: palette.surface.stone,
+                      padding: '4px 10px', borderRadius: '20px',
+                    }}>{p.offer}</span>
                   )}
                 </div>
                 <span style={{
@@ -178,63 +170,6 @@ function RegionPanel({ region, compact: isCompact, variant = 'V1', showBorder = 
                 <h4 style={{ fontFamily: FONT_HEADING, fontSize: isCompact ? '16px' : '20px', fontWeight: '500', color: palette.primary.default, marginBottom: '4px', lineHeight: 1.2 }}>{p.title}</h4>
                 <p style={{ fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '500', color: palette.primary.default, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '10px' }}>{p.days} Days</p>
                 <p style={{ fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '500', color: palette.primary.default, lineHeight: 1.5, marginBottom: '12px' }}>
-                  {p.stops.map((s, i) => <React.Fragment key={s}>{s}{i < p.stops.length - 1 && <span style={{ margin: '0 4px', color: palette.neutral[300] }}>&bull;</span>}</React.Fragment>)}
-                </p>
-                <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                  <p style={{ fontFamily: FONT_BODY, fontSize: '15px', fontWeight: '400', color: palette.primary.default }}>From {p.price}</p>
-                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px' }}>
-                    <span style={{ fontFamily: FONT_MONO, fontSize: '8px', color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.06em' }}>Activity:</span>
-                    <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end' }}>
-                      {[6, 10, 14].map((h, i) => (
-                        <div key={i} style={{ width: '3px', height: `${h}px`, borderRadius: '0', backgroundColor: i < p.level ? palette.primary.default : palette.neutral[200] }} />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-
-          // ── V3 — Editorial white, Meso throughout ──────────────────────
-          return (
-            <div key={p.title} style={{
-              minWidth: cardW, maxWidth: cardW, display: 'flex', flexDirection: 'column', flexShrink: 0,
-              backgroundColor: '#FFFFFF', boxShadow: '0 2px 12px rgba(16,32,55,0.08)',
-              border: showBorder ? `1px solid ${palette.neutral[100]}` : 'none', borderRadius: '16px', overflow: 'hidden',
-            }}>
-              <div style={{ position: 'relative' }}>
-                <img src={p.img} alt={p.title} style={{ width: '100%', height: imgH, objectFit: 'cover', display: 'block' }} />
-                <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'nowrap' }}>
-                  <span style={{
-                    fontFamily: FONT_BODY, fontSize: '9px', fontWeight: '500',
-                    letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap',
-                    backgroundColor: palette.primary.default, color: '#FFFFFF',
-                    padding: '4px 8px', borderRadius: '4px', lineHeight: '16px',
-                  }}>Small Group Tour</span>
-                  {p.offer && (
-                    <span style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-                      <span style={{
-                        fontFamily: FONT_BODY, fontSize: '9px', fontWeight: '600',
-                        letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap',
-                        backgroundColor: palette.surface.stone, color: palette.primary.default,
-                        padding: '4px 10px', borderRadius: '4px 0 0 4px', lineHeight: '16px',
-                      }}>{p.offer}</span>
-                      <svg width="8" height="24" viewBox="0 0 8 24" style={{ display: 'block' }}>
-                        <polygon points="0,0 8,12 0,24" fill={palette.surface.stone} />
-                      </svg>
-                    </span>
-                  )}
-                </div>
-                <span style={{
-                  position: 'absolute', bottom: '10px', right: '10px',
-                  fontFamily: FONT_MONO, color: 'rgb(242,242,235)',
-                  fontSize: '8px', letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
-                }}>{p.location}</span>
-              </div>
-              <div style={{ padding: isCompact ? '16px 12px' : '20px 16px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <h4 style={{ fontFamily: FONT_HEADING, fontSize: isCompact ? '16px' : '20px', fontWeight: '500', color: palette.primary.default, marginBottom: '4px', lineHeight: 1.2 }}>{p.title}</h4>
-                <p style={{ fontFamily: FONT_HEADING, fontSize: '10px', fontWeight: '400', color: palette.neutral[400], letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '10px' }}>{p.days} Days</p>
-                <p style={{ fontFamily: FONT_HEADING, fontSize: '11px', fontWeight: '300', color: palette.primary.default, lineHeight: 1.5, marginBottom: '12px' }}>
                   {p.stops.map((s, i) => <React.Fragment key={s}>{s}{i < p.stops.length - 1 && <span style={{ margin: '0 4px', color: palette.neutral[300] }}>&bull;</span>}</React.Fragment>)}
                 </p>
                 <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -568,7 +503,7 @@ export default function TabExplorationPage() {
             Card
           </span>
           <div style={{ display: 'flex', gap: '4px' }}>
-            {['V1', 'V2', 'V3'].map((v) => (
+            {['V1', 'V2'].map((v) => (
               <button key={v} onClick={() => setCardVariant(v)} style={toggleBtn(cardVariant === v)}>{v}</button>
             ))}
           </div>

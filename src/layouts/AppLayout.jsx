@@ -22,9 +22,9 @@ const navGroups = [
     label: 'Templates & Flows',
     items: [
       { to: '/homepage', label: 'Homepage', external: true },
+      { to: '/journey-finder', label: 'Journey Finder', external: true },
       { to: '/destinations', label: 'Destinations' },
       { to: '/journey-type', label: 'Journey Type' },
-      { to: '/journey-finder', label: 'Journey Finder' },
       { to: '/inspiration', label: 'Inspiration' },
       { to: '/enquiry', label: 'Enquiry' },
     ],

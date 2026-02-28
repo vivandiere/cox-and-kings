@@ -30,6 +30,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/homepage" element={<HomepagePage />} />
           <Route path="/tabs" element={<TabExplorationPage />} />
           <Route path="/navigation" element={<NavigationPage />} />
+          <Route path="/journey-finder" element={<JourneyFinderPage />} />
 
           {/* All other pages use the sidebar layout */}
           <Route element={<AppLayout />}>
@@ -44,7 +45,7 @@ createRoot(document.getElementById('root')).render(
             <Route path="destination-t3" element={<DestinationT3Page />} />
             <Route path="itinerary" element={<ItineraryPage />} />
             <Route path="journey-type" element={<JourneyTypePage />} />
-            <Route path="journey-finder" element={<JourneyFinderPage />} />
+            {/* journey-finder is now standalone above */}
             <Route path="inspiration" element={<InspirationPage />} />
             <Route path="enquiry" element={<EnquiryPage />} />
           </Route>

@@ -4,6 +4,7 @@ import { FONT_HEADING, FONT_BODY, FONT_MONO, TS } from '../tokens/index.js';
 import { LogoMark, LogoInline, LogoCompact, LogoStacked } from '../components/Logo.jsx';
 import { useAccent } from '../components/AccentContext.jsx';
 import { Link } from 'react-router-dom';
+import { Landmark, BookOpen, UtensilsCrossed, Leaf, Binoculars, Mountain, Camera, Sparkles, Compass, Crown, Building2, Gem } from 'lucide-react';
 
 export default function FoundationsPage() {
   const { activeAccent, setActiveAccent, accent, accentScale, isPrimaryAccent, isLightAccent, onPrimaryText, onPrimaryButtonBg, onPrimaryButtonText } = useAccent();
@@ -756,6 +757,54 @@ export default function FoundationsPage() {
                 ))}
               </div>
             </div>
+
+            <div>
+              <p style={{ ...sectionLabel, fontSize: '10px', marginBottom: '10px' }}>Icon + pill — interests &amp; accommodation</p>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px' }}>
+                {[
+                  { label: 'Culture & History',  Icon: BookOpen        },
+                  { label: 'Nature & Wildlife',  Icon: Leaf            },
+                  { label: 'Food & Wine',        Icon: UtensilsCrossed },
+                  { label: 'Safari',             Icon: Binoculars      },
+                  { label: 'Art & Architecture', Icon: Landmark        },
+                  { label: 'Adventure',          Icon: Mountain        },
+                  { label: 'Photography',        Icon: Camera          },
+                  { label: 'Wellness',           Icon: Sparkles        },
+                ].map(({ label, Icon }) => (
+                  <span key={label} style={{
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '400',
+                    color: palette.primary.default, backgroundColor: palette.neutral[100],
+                    border: `1px solid ${palette.neutral[200]}`,
+                    padding: '7px 14px 7px 12px', borderRadius: '20px',
+                    letterSpacing: '0.06em', textTransform: 'uppercase', whiteSpace: 'nowrap',
+                  }}>
+                    <Icon size={13} strokeWidth={1.5} />
+                    {label}
+                  </span>
+                ))}
+              </div>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                {[
+                  { label: 'Discovery', Icon: Compass   },
+                  { label: 'Luxury',    Icon: Crown     },
+                  { label: 'Standard',  Icon: Building2 },
+                  { label: 'Superior',  Icon: Gem       },
+                ].map(({ label, Icon }) => (
+                  <span key={label} style={{
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '400',
+                    color: palette.primary.default, backgroundColor: palette.neutral[100],
+                    border: `1px solid ${palette.neutral[200]}`,
+                    padding: '7px 14px 7px 12px', borderRadius: '20px',
+                    letterSpacing: '0.06em', textTransform: 'uppercase', whiteSpace: 'nowrap',
+                  }}>
+                    <Icon size={13} strokeWidth={1.5} />
+                    {label}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div style={{ height: '1px', backgroundColor: palette.neutral[300], margin: '40px 0' }} />
@@ -1004,33 +1053,28 @@ export default function FoundationsPage() {
                         <img
                           src="/images/hero-01.png"
                           alt="The Grand Tour of India"
-                          style={{ width: '100%', height: '230px', objectFit: 'cover', display: 'block', borderRadius: '24px' }}
+                          style={{ width: '100%', height: '230px', objectFit: 'cover', display: 'block', borderRadius: '16px' }}
                         />
                         <div style={{
                           position: 'absolute', top: '14px', left: '14px',
                           display: 'flex', alignItems: 'center', gap: '6px',
                         }}>
                           <span style={{
-                            fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
-                            letterSpacing: '0.08em', textTransform: 'uppercase',
+                            fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '400',
+                            letterSpacing: '0.06em', textTransform: 'uppercase',
                             backgroundColor: isPrimaryAccent ? palette.surface.stone : accent.hex,
                             color: isPrimaryAccent ? palette.primary.default : (isLightAccent ? palette.primary.default : '#FFFFFF'),
-                            padding: '6px 12px', borderRadius: '6px',
+                            border: isPrimaryAccent ? `1px solid ${palette.neutral[200]}` : 'none',
+                            padding: '6px 14px', borderRadius: '20px',
                           }}>
                             Small Group Tour
                           </span>
-                          <span style={{ display: 'flex', alignItems: 'center' }}>
-                            <span style={{
-                              fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '600',
-                              letterSpacing: '0.08em', textTransform: 'uppercase',
-                              backgroundColor: palette.primary.default, color: '#FFFFFF',
-                              padding: '6px 12px 6px 12px', borderRadius: '6px 0 0 6px',
-                              lineHeight: '16px',
-                            }}>Save £500</span>
-                            <svg width="10" height="28" viewBox="0 0 10 28" style={{ display: 'block' }}>
-                              <polygon points="0,0 10,14 0,28" fill={palette.primary.default} />
-                            </svg>
-                          </span>
+                          <span style={{
+                            fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '400',
+                            letterSpacing: '0.06em', textTransform: 'uppercase',
+                            backgroundColor: palette.primary.default, color: palette.surface.stone,
+                            padding: '6px 14px', borderRadius: '20px',
+                          }}>Save £500</span>
                         </div>
                         <span style={{
                           position: 'absolute', bottom: '14px', right: '14px',
@@ -1063,11 +1107,12 @@ export default function FoundationsPage() {
                           Itinerary
                         </p>
                         <p style={{
-                          fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '500',
+                          fontFamily: FONT_MONO, fontSize: '10px', fontWeight: '400',
                           color: palette.primary.default, lineHeight: 1.6, marginBottom: '18px',
+                          letterSpacing: '0.04em',
                         }}>
                           {stops.map((s, i) => (
-                            <React.Fragment key={s}>{s}{i < stops.length - 1 && <span style={{ margin: '0 6px', color: palette.neutral[300] }}>&bull;</span>}</React.Fragment>
+                            <React.Fragment key={s}>{s}{i < stops.length - 1 && <span style={{ margin: '0 4px', color: palette.neutral[300] }}>&bull;</span>}</React.Fragment>
                           ))}
                         </p>
                         <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -1129,26 +1174,21 @@ export default function FoundationsPage() {
                           display: 'flex', alignItems: 'center', gap: '6px',
                         }}>
                           <span style={{
-                            fontFamily: FONT_MONO, fontSize: '11px', fontWeight: '400',
-                            letterSpacing: '0.08em', textTransform: 'uppercase',
+                            fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '400',
+                            letterSpacing: '0.06em', textTransform: 'uppercase',
                             backgroundColor: isPrimaryAccent ? palette.surface.stone : accent.hex,
                             color: isPrimaryAccent ? palette.primary.default : (isLightAccent ? palette.primary.default : '#FFFFFF'),
-                            padding: '6px 12px', borderRadius: '6px',
+                            border: isPrimaryAccent ? `1px solid ${palette.neutral[200]}` : 'none',
+                            padding: '6px 14px', borderRadius: '20px',
                           }}>
                             Tailormade
                           </span>
-                          <span style={{ display: 'flex', alignItems: 'center' }}>
-                            <span style={{
-                              fontFamily: FONT_MONO, fontSize: '10px', fontWeight: '400',
-                              letterSpacing: '0.08em', textTransform: 'uppercase',
-                              backgroundColor: palette.primary.default, color: '#FFFFFF',
-                              padding: '6px 12px', borderRadius: '6px 0 0 6px',
-                              lineHeight: '16px',
-                            }}>Save £300</span>
-                            <svg width="10" height="28" viewBox="0 0 10 28" style={{ display: 'block' }}>
-                              <polygon points="0,0 10,14 0,28" fill={palette.primary.default} />
-                            </svg>
-                          </span>
+                          <span style={{
+                            fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '400',
+                            letterSpacing: '0.06em', textTransform: 'uppercase',
+                            backgroundColor: palette.primary.default, color: palette.surface.stone,
+                            padding: '6px 14px', borderRadius: '20px',
+                          }}>Save £300</span>
                         </div>
                         <span style={{
                           position: 'absolute', bottom: '14px', right: '14px',
@@ -1181,11 +1221,12 @@ export default function FoundationsPage() {
                           Itinerary
                         </p>
                         <p style={{
-                          fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '500',
+                          fontFamily: FONT_MONO, fontSize: '10px', fontWeight: '400',
                           color: palette.primary.default, lineHeight: 1.6, marginBottom: '18px',
+                          letterSpacing: '0.04em',
                         }}>
                           {stops.map((s, i) => (
-                            <React.Fragment key={s}>{s}{i < stops.length - 1 && <span style={{ margin: '0 6px', color: palette.neutral[300] }}>&bull;</span>}</React.Fragment>
+                            <React.Fragment key={s}>{s}{i < stops.length - 1 && <span style={{ margin: '0 4px', color: palette.neutral[300] }}>&bull;</span>}</React.Fragment>
                           ))}
                         </p>
                         <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -1197,7 +1238,7 @@ export default function FoundationsPage() {
                           </p>
                           <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px' }}>
                             <span style={{
-                              fontFamily: FONT_MONO, fontSize: '10px', fontWeight: '400',
+                              fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '500',
                               color: palette.neutral[400], textTransform: 'uppercase',
                               letterSpacing: '0.06em',
                             }}>
@@ -1219,107 +1260,6 @@ export default function FoundationsPage() {
                 );
               })()}
 
-              {/* Card 3 — Editorial white */}
-              <div style={{ width: '340px', display: 'flex', flexDirection: 'column' }}>
-                <p style={{
-                  fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '300',
-                  color: palette.neutral[400], textTransform: 'uppercase',
-                  letterSpacing: '0.08em', marginBottom: '8px', textAlign: 'center',
-                }}>V3 &mdash; Editorial, Meso Light + Meso stops</p>
-                <div style={{
-                  flex: 1, display: 'flex', flexDirection: 'column',
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  boxShadow: '0 2px 12px rgba(16,32,55,0.08)',
-                  border: `1px solid ${palette.neutral[100]}`,
-                }}>
-                  <div style={{ position: 'relative' }}>
-                    <img
-                      src="/images/hero-03.png"
-                      alt="Japan in Cherry Blossom"
-                      style={{ width: '100%', height: '220px', objectFit: 'cover', display: 'block' }}
-                    />
-                    <span style={{
-                      position: 'absolute', top: '14px', left: '14px',
-                      fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
-                      letterSpacing: '0.08em', textTransform: 'uppercase',
-                      backgroundColor: palette.primary.default,
-                      color: '#FFFFFF',
-                      padding: '6px 12px', borderRadius: '6px',
-                    }}>
-                      Small Group Tour
-                    </span>
-                    <span style={{
-                      position: 'absolute', bottom: '12px', right: '14px',
-                      fontFamily: FONT_MONO,
-                      color: 'rgb(242, 242, 235)', fontSize: '10px', fontWeight: '400',
-                      letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.7,
-                    }}>
-                      Kyoto, Japan
-                    </span>
-                  </div>
-                  <div style={{ padding: '20px 24px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                    <h4 style={{
-                      fontFamily: FONT_HEADING, fontSize: TS.xl, fontWeight: '500',
-                      color: palette.primary.default, marginBottom: '6px', lineHeight: 1.15,
-                    }}>
-                      Japan in Cherry Blossom
-                    </h4>
-                    <p style={{
-                      fontFamily: FONT_HEADING, fontSize: TS.sm, fontWeight: '400',
-                      color: palette.primary.default, letterSpacing: '0.04em',
-                      textTransform: 'uppercase', marginBottom: '14px',
-                    }}>
-                      14 Days &bull; Limited to 16 Guests
-                    </p>
-                    <p style={{
-                      fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '300',
-                      color: palette.neutral[400], textTransform: 'uppercase',
-                      letterSpacing: '0.06em', marginBottom: '6px',
-                    }}>
-                      Itinerary
-                    </p>
-                    <p style={{
-                      fontFamily: FONT_HEADING, fontSize: TS.sm, fontWeight: '400',
-                      color: palette.primary.default, lineHeight: 1.6, marginBottom: '18px',
-                    }}>
-                      {['Tokyo', 'Hakone', 'Kyoto', 'Osaka', 'Hiroshima'].map((s, i, arr) => (
-                        <React.Fragment key={s}>{s}{i < arr.length - 1 && <span style={{ margin: '0 6px', color: palette.neutral[300] }}>&bull;</span>}</React.Fragment>
-                      ))}
-                    </p>
-                    <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                      <p>
-                        <span style={{
-                          fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '300',
-                          color: palette.neutral[500],
-                        }}>From </span>
-                        <span style={{
-                          fontFamily: FONT_HEADING, fontSize: TS.bodyLg, fontWeight: '500',
-                          color: isPrimaryAccent ? palette.primary.default : accent.hex,
-                        }}>£5,495</span>
-                      </p>
-                      <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px' }}>
-                        <span style={{
-                          fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '500',
-                          color: palette.neutral[400], textTransform: 'uppercase',
-                          letterSpacing: '0.06em',
-                        }}>
-                          Activity Level:
-                        </span>
-                        <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end' }}>
-                          {[8, 12, 16].map((h, i) => (
-                            <div key={i} style={{
-                              width: '4px', height: `${h}px`, borderRadius: '1px',
-                              backgroundColor: i < 1 ? palette.primary.default : palette.neutral[200],
-                            }}/>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
             </div>
           </div>
@@ -1377,15 +1317,16 @@ export default function FoundationsPage() {
                     }}>
                       <div style={{ position: 'relative', zIndex: 1, marginBottom: '-16px' }}>
                         <img src={p.img} alt={p.title}
-                          style={{ width: '100%', height: '200px', objectFit: 'cover', display: 'block', borderRadius: '24px' }}
+                          style={{ width: '100%', height: '200px', objectFit: 'cover', display: 'block', borderRadius: '16px' }}
                         />
                         <span style={{
                           position: 'absolute', top: '14px', left: '14px',
-                          fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
-                          letterSpacing: '0.08em', textTransform: 'uppercase',
+                          fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '400',
+                          letterSpacing: '0.06em', textTransform: 'uppercase',
                           backgroundColor: isPrimaryAccent ? palette.surface.stone : accent.hex,
                           color: isPrimaryAccent ? palette.primary.default : (isLightAccent ? palette.primary.default : '#FFFFFF'),
-                          padding: '6px 12px', borderRadius: '6px',
+                          border: isPrimaryAccent ? `1px solid ${palette.neutral[200]}` : 'none',
+                          padding: '6px 14px', borderRadius: '20px',
                         }}>
                           {productTab === 0 ? 'Small Group Tour' : 'Tailormade'}
                         </span>
@@ -1414,11 +1355,12 @@ export default function FoundationsPage() {
                           letterSpacing: '0.06em', marginBottom: '6px',
                         }}>Itinerary</p>
                         <p style={{
-                          fontFamily: FONT_BODY, fontSize: TS.sm, fontWeight: '500',
+                          fontFamily: FONT_MONO, fontSize: '10px', fontWeight: '400',
                           color: palette.primary.default, lineHeight: 1.6, marginBottom: '18px',
+                          letterSpacing: '0.04em',
                         }}>
                           {p.stops.map((s, i) => (
-                            <React.Fragment key={s}>{s}{i < p.stops.length - 1 && <span style={{ margin: '0 6px', color: palette.neutral[300] }}>&bull;</span>}</React.Fragment>
+                            <React.Fragment key={s}>{s}{i < p.stops.length - 1 && <span style={{ margin: '0 4px', color: palette.neutral[300] }}>&bull;</span>}</React.Fragment>
                           ))}
                         </p>
                         <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -1475,11 +1417,12 @@ export default function FoundationsPage() {
                 />
                 <span style={{
                   position: 'absolute', top: '16px', left: '16px',
-                  fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
-                  letterSpacing: '0.08em', textTransform: 'uppercase',
+                  fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '400',
+                  letterSpacing: '0.06em', textTransform: 'uppercase',
                   backgroundColor: isPrimaryAccent ? palette.surface.stone : accent.hex,
                   color: isPrimaryAccent ? palette.primary.default : (isLightAccent ? palette.primary.default : '#FFFFFF'),
-                  padding: '6px 14px', borderRadius: '6px',
+                  border: isPrimaryAccent ? `1px solid ${palette.neutral[200]}` : 'none',
+                  padding: '6px 14px', borderRadius: '20px',
                 }}>
                   Small Group Tour
                 </span>
@@ -1704,11 +1647,12 @@ export default function FoundationsPage() {
                 }}>
                   <div style={{ marginBottom: '16px' }}>
                     <span style={{
-                      fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '500',
-                      letterSpacing: '0.08em', textTransform: 'uppercase',
+                      fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '400',
+                      letterSpacing: '0.06em', textTransform: 'uppercase',
                       backgroundColor: isPrimaryAccent ? palette.surface.stone : accent.hex,
                       color: isPrimaryAccent ? palette.primary.default : (isLightAccent ? palette.primary.default : '#FFFFFF'),
-                      padding: '5px 12px', borderRadius: '5px',
+                      border: isPrimaryAccent ? `1px solid ${palette.neutral[200]}` : 'none',
+                      padding: '6px 14px', borderRadius: '20px',
                     }}>
                       Small Group Tour
                     </span>
