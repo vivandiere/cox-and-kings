@@ -11,8 +11,8 @@ const WARM_ACCENT = brandDecorativeDeep.warmSandDeep.hex;
 
 const PRIMARY_NAV = [
   { label: 'Destinations', hasArrow: true },
-  { label: 'Small group tours' },
-  { label: 'Tailor-made journeys' },
+  { label: 'Small Group Tours' },
+  { label: 'Tailor-Made Journeys' },
 ];
 const POPULAR = ['India', 'Peru', 'Uzbekistan'];
 const SECONDARY_NAV = [
@@ -33,6 +33,14 @@ const DESTINATIONS_LIST = [
 const FEATURED_DESTINATIONS = [
   { label: 'Indian Subcontinent', img: '/images/dest-india-subcontinent.png' },
   { label: 'South America', img: '/images/dest-south-america.png' },
+];
+const AFRICA_COUNTRIES = [
+  'Botswana', 'Eswatini', 'Ethiopia', 'Kenya', 'Lesotho', 'Madagascar',
+  'Namibia', 'Rwanda', 'South Africa', 'Tanzania', 'Uganda', 'Zambia', 'Zimbabwe',
+];
+const AFRICA_FEATURED = [
+  { label: 'Kenya', img: '/images/hero-02.png' },
+  { label: 'South Africa', img: '/images/hero-03.png' },
 ];
 const LOCATION_TAGS = ['India', 'Peru', 'Uzbekistan', 'Japan', 'Morocco', 'Greece'];
 const INSPIRATION_TAGS = ['Specialist Tours', 'Solo Travel', 'Wildlife', 'Cultural'];
@@ -157,7 +165,7 @@ function DesktopFrame({ children, label }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '8px', width: '100%' }}>
       <span style={{ fontFamily: FONT_BODY, fontSize: '10px', fontWeight: '400', color: palette.neutral[400], textTransform: 'uppercase', letterSpacing: '0.1em' }}>{label}</span>
-      <div style={{ width: '100%', height: '640px', border: `1px solid ${palette.neutral[200]}`, borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 24px rgba(16,32,55,0.06)' }}>
+      <div style={{ width: '100%', height: '780px', border: `1px solid ${palette.neutral[200]}`, borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 24px rgba(16,32,55,0.06)' }}>
         {children}
       </div>
     </div>
@@ -207,81 +215,126 @@ function Opt1DrawerContent({ activeSection, onSectionClick }) {
   );
 }
 
-function Opt1Mobile() {
-  const [open, setOpen] = useState(true);
+// ── Tier-2 destinations panel (shared between desktop options) ─────────────────
+
+function DestinationsPanel({ onSelectDestination, onBack }) {
   return (
-    <HeroShell mob>
-      {/* Top bar + drawer — fills full hero height */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: 20, display: 'flex', flexDirection: 'column' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', backgroundColor: palette.primary.default, padding: '0 16px', height: '52px', flexShrink: 0 }}>
-          <div onClick={() => setOpen(!open)} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-            <div style={{ width: '18px', height: '10px', position: 'relative' }}>
-              <div style={{ position: 'absolute', left: 0, width: '18px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : 0, transform: open ? 'rotate(45deg)' : 'none', transition: 'all 0.3s ease' }} />
-              <div style={{ position: 'absolute', left: 0, width: '18px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : '8px', transform: open ? 'rotate(-45deg)' : 'none', transition: 'all 0.3s ease' }} />
-            </div>
-          </div>
-          <LogoInline color={palette.surface.stone} height={20} />
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Search size={18} strokeWidth={1.5} color={palette.surface.stone} style={{ cursor: 'pointer' }} />
-          </div>
+    <div style={{ height: '100%', overflowY: 'auto', scrollbarWidth: 'none', backgroundColor: palette.surface.stone }}>
+      {/* Back to main menu (mobile only) */}
+      {onBack && (
+        <div onClick={onBack} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '13px 14px', cursor: 'pointer', borderBottom: `1px solid ${palette.neutral[200]}` }}>
+          <ChevronLeft size={13} strokeWidth={1.5} color={palette.primary.default} />
+          <span style={{ fontFamily: FONT_MONO, fontSize: '10px', color: palette.primary.default, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Menu</span>
         </div>
-        {open && (
-          <div style={{ flex: 1, backgroundColor: '#FFFFFF', overflowY: 'auto', scrollbarWidth: 'none' }}>
-            <Opt1DrawerContent activeSection={null} />
+      )}
+      {/* Featured image tiles */}
+      <div style={{ display: 'flex', gap: '10px', padding: '14px 14px 10px' }}>
+        {FEATURED_DESTINATIONS.map(dest => (
+          <div key={dest.label} style={{ flex: 1, position: 'relative', height: '110px', borderRadius: '4px', overflow: 'hidden', cursor: 'pointer' }}>
+            <img src={dest.img} alt={dest.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(16,32,55,0.28)' }} />
+            <span style={{ position: 'absolute', bottom: '8px', left: 0, right: 0, textAlign: 'center', fontFamily: FONT_MONO, fontSize: '9px', color: '#FFFFFF', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{dest.label}</span>
           </div>
-        )}
+        ))}
       </div>
-    </HeroShell>
+      {/* All Destinations dark bar */}
+      <div style={{ backgroundColor: palette.primary.default, padding: '11px 14px', cursor: 'pointer', margin: '0 14px 4px' }}>
+        <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.surface.stone, letterSpacing: '0.08em', textTransform: 'uppercase' }}>All Destinations</span>
+      </div>
+      {/* Destinations list */}
+      <div style={{ padding: '0 14px' }}>
+        {DESTINATIONS_LIST.map(dest => (
+          <div key={dest} onClick={() => dest === 'Africa' && onSelectDestination('Africa')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '9px 0', borderBottom: `1px solid ${palette.neutral[200]}`, cursor: 'pointer' }}>
+            <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.primary.default, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{dest}</span>
+            <ChevronRight size={12} strokeWidth={1.5} color={dest === 'Africa' ? palette.primary.default : palette.neutral[400]} />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
-function Opt1Desktop() {
-  const [open, setOpen] = useState(true);
-  const [activeSection, setActiveSection] = useState('Destinations');
+// ── Tier-3 Africa panel ────────────────────────────────────────────────────────
+
+function AfricaPanel({ onBack }) {
   return (
-    <HeroShell>
-      {/* Top bar + drawer */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', zIndex: 20 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', backgroundColor: palette.primary.default, padding: '0 24px', height: '56px', flexShrink: 0 }}>
-          <div onClick={() => setOpen(!open)} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-            <div style={{ width: '20px', height: '10px', position: 'relative' }}>
-              <div style={{ position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : 0, transform: open ? 'rotate(45deg)' : 'none', transition: 'all 0.3s ease' }} />
-              <div style={{ position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : '8px', transform: open ? 'rotate(-45deg)' : 'none', transition: 'all 0.3s ease' }} />
+    <div style={{ height: '100%', overflowY: 'auto', scrollbarWidth: 'none', backgroundColor: palette.surface.stone }}>
+      {/* Back to tier 2 */}
+      <div onClick={onBack} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '13px 14px', cursor: 'pointer', borderBottom: `1px solid ${palette.neutral[200]}` }}>
+        <ChevronLeft size={13} strokeWidth={1.5} color={palette.primary.default} />
+        <span style={{ fontFamily: FONT_MONO, fontSize: '10px', color: palette.primary.default, letterSpacing: '0.08em', textTransform: 'uppercase' }}>All Destinations</span>
+      </div>
+      {/* Featured image tiles */}
+      <div style={{ display: 'flex', gap: '10px', padding: '14px 14px 10px' }}>
+        {AFRICA_FEATURED.map(dest => (
+          <div key={dest.label} style={{ flex: 1, position: 'relative', height: '110px', borderRadius: '4px', overflow: 'hidden', cursor: 'pointer' }}>
+            <img src={dest.img} alt={dest.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(16,32,55,0.28)' }} />
+            <span style={{ position: 'absolute', bottom: '8px', left: 0, right: 0, textAlign: 'center', fontFamily: FONT_MONO, fontSize: '9px', color: '#FFFFFF', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{dest.label}</span>
+          </div>
+        ))}
+      </div>
+      {/* All African Destinations dark bar */}
+      <div style={{ backgroundColor: palette.primary.default, padding: '11px 14px', cursor: 'pointer', margin: '0 14px 4px' }}>
+        <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.surface.stone, letterSpacing: '0.08em', textTransform: 'uppercase' }}>All African Destinations</span>
+      </div>
+      {/* Country list */}
+      <div style={{ padding: '0 14px' }}>
+        {AFRICA_COUNTRIES.map(country => (
+          <div key={country} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '9px 0', borderBottom: `1px solid ${palette.neutral[200]}`, cursor: 'pointer' }}>
+            <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.primary.default, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{country}</span>
+            <ChevronRight size={12} strokeWidth={1.5} color={palette.neutral[400]} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Opt1Mobile() {
+  const [open, setOpen] = useState(true);
+  const [tier, setTier] = useState(1);
+
+  const handleToggle = () => {
+    setOpen(o => { if (o) setTier(1); return !o; });
+  };
+
+  return (
+    <HeroShell mob>
+      {/* Top bar + sliding tier drawer */}
+      <div style={{ position: 'absolute', inset: 0, zIndex: 20, display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', backgroundColor: palette.surface.stone, borderBottom: `1px solid ${palette.neutral[200]}`, padding: '0 16px', height: '52px', flexShrink: 0 }}>
+          <div onClick={handleToggle} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+            <div style={{ width: '18px', height: '10px', position: 'relative' }}>
+              <div style={{ position: 'absolute', left: 0, width: '18px', height: '2px', backgroundColor: palette.primary.default, top: open ? '4px' : 0, transform: open ? 'rotate(45deg)' : 'none', transition: 'all 0.3s ease' }} />
+              <div style={{ position: 'absolute', left: 0, width: '18px', height: '2px', backgroundColor: palette.primary.default, top: open ? '4px' : '8px', transform: open ? 'rotate(-45deg)' : 'none', transition: 'all 0.3s ease' }} />
             </div>
           </div>
-          <LogoInline color={palette.surface.stone} height={22} />
-          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '20px' }}>
-            <button style={{ fontFamily: FONT_BODY, backgroundColor: palette.surface.stone, color: palette.primary.default, padding: '8px 20px', border: 'none', fontWeight: '400', fontSize: '11px', letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer' }}>Enquire</button>
-            <Search size={20} strokeWidth={1.5} color={palette.surface.stone} style={{ cursor: 'pointer' }} />
+          <LogoInline color={palette.primary.default} height={20} />
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Search size={18} strokeWidth={1.5} color={palette.primary.default} style={{ cursor: 'pointer' }} />
           </div>
         </div>
         {open && (
-          <div style={{ width: '60%', display: 'flex', overflow: 'hidden' }}>
-            <div style={{ width: '380px', flexShrink: 0, backgroundColor: '#FFFFFF', overflowY: 'auto', scrollbarWidth: 'none' }}>
-              <Opt1DrawerContent activeSection={activeSection} onSectionClick={setActiveSection} />
+          <div style={{ flex: 1, position: 'relative', overflow: 'hidden', backgroundColor: '#FFFFFF' }}>
+            {/* Tier 1 — main nav */}
+            <div style={{ position: 'absolute', inset: 0, transform: tier > 1 ? 'translateX(-100%)' : 'translateX(0)', transition: 'transform 0.26s cubic-bezier(0.4,0,0.2,1)', overflowY: 'auto', scrollbarWidth: 'none' }}>
+              <Opt1DrawerContent
+                activeSection={null}
+                onSectionClick={(s) => { if (s === 'Destinations') setTier(2); }}
+              />
             </div>
-            {activeSection === 'Destinations' && (
-              <div style={{ flex: 1, backgroundColor: palette.surface.stone, overflowY: 'auto', scrollbarWidth: 'none', padding: '24px' }}>
-                <div style={{ display: 'flex', gap: '10px', marginBottom: '14px' }}>
-                  {FEATURED_DESTINATIONS.map(dest => (
-                    <div key={dest.label} style={{ flex: 1, position: 'relative', height: '110px', borderRadius: '4px', overflow: 'hidden', cursor: 'pointer' }}>
-                      <img src={dest.img} alt={dest.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(16,32,55,0.28)' }} />
-                      <span style={{ position: 'absolute', bottom: '8px', left: 0, right: 0, textAlign: 'center', fontFamily: FONT_MONO, fontSize: '9px', color: '#FFFFFF', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{dest.label}</span>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ backgroundColor: palette.primary.default, padding: '11px 14px', cursor: 'pointer', marginBottom: '4px' }}>
-                  <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.surface.stone, letterSpacing: '0.1em', textTransform: 'uppercase' }}>All Destinations</span>
-                </div>
-                {DESTINATIONS_LIST.map(dest => (
-                  <div key={dest} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '9px 8px', borderBottom: `1px solid ${palette.neutral[200]}`, cursor: 'pointer' }}>
-                    <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.primary.default, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{dest}</span>
-                    <ChevronRight size={12} strokeWidth={1.5} color={palette.neutral[400]} />
-                  </div>
-                ))}
-              </div>
-            )}
+            {/* Tier 2 — destinations */}
+            <div style={{ position: 'absolute', inset: 0, transform: tier === 1 ? 'translateX(100%)' : tier === 2 ? 'translateX(0)' : 'translateX(-100%)', transition: 'transform 0.26s cubic-bezier(0.4,0,0.2,1)' }}>
+              <DestinationsPanel
+                onSelectDestination={() => setTier(3)}
+                onBack={() => setTier(1)}
+              />
+            </div>
+            {/* Tier 3 — Africa */}
+            <div style={{ position: 'absolute', inset: 0, transform: tier < 3 ? 'translateX(100%)' : 'translateX(0)', transition: 'transform 0.26s cubic-bezier(0.4,0,0.2,1)' }}>
+              <AfricaPanel onBack={() => setTier(2)} />
+            </div>
           </div>
         )}
       </div>
@@ -366,7 +419,9 @@ function Opt1bDesktop() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('Destinations');
+  const [activeDestination, setActiveDestination] = useState(null);
   const ref = useRef(null);
+  const UTIL_H = 35;
   const NAV_H = 68;
 
   // compact = dark nav bar: triggered by scroll OR by opening the menu
@@ -383,13 +438,32 @@ function Opt1bDesktop() {
     // No background colour here — hero provides the dark look; about section has its own bg
     <div ref={ref} onScroll={handleScroll} style={{ height: '100%', overflowY: 'auto', scrollbarWidth: 'none' }}>
 
-      {/* Sticky nav — always exactly NAV_H tall in the flow.
+      {/* Sticky nav — utility bar + main nav bar in the flow.
           Drawer is position:absolute so it floats over the hero without pushing it down. */}
-      <div style={{ position: 'sticky', top: 0, zIndex: 20, height: `${NAV_H}px` }}>
+      <div style={{ position: 'sticky', top: 0, zIndex: 20, height: `${UTIL_H + NAV_H}px` }}>
+
+        {/* Utility bar — always dark */}
+        <div style={{
+          backgroundColor: palette.primary.default,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '0 32px', height: `${UTIL_H}px`,
+          borderBottom: `1px solid ${palette.primary.light}`,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Phone size={13} strokeWidth={1.5} color={palette.surface.stone} />
+            <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '400', color: palette.surface.stone, letterSpacing: '0.04em' }}>020 3936 0647</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '400', color: palette.surface.stone, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer' }}>Subscribe</span>
+            <span style={{ color: palette.surface.stone, fontSize: '11px', opacity: 0.5 }}>·</span>
+            <span style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: '400', color: palette.surface.stone, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer' }}>Brochures</span>
+          </div>
+        </div>
 
         {/* Nav bar */}
         <div style={{
-          backgroundColor: compact ? palette.primary.default : 'transparent',
+          backgroundColor: compact ? palette.surface.stone : 'transparent',
+          borderBottom: compact ? `1px solid ${palette.neutral[200]}` : 'none',
           transition: 'background-color 0.35s ease',
           display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center',
           padding: '0 32px', height: `${NAV_H}px`,
@@ -397,8 +471,8 @@ function Opt1bDesktop() {
           {/* Hamburger */}
           <div onClick={() => setOpen(o => !o)} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
             <div style={{ width: '20px', height: '10px', position: 'relative' }}>
-              <div style={{ position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : 0, transform: open ? 'rotate(45deg)' : 'none', transition: 'all 0.3s ease' }} />
-              <div style={{ position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: palette.surface.stone, top: open ? '4px' : '8px', transform: open ? 'rotate(-45deg)' : 'none', transition: 'all 0.3s ease' }} />
+              <div style={{ position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: compact ? palette.primary.default : palette.surface.stone, top: open ? '4px' : 0, transform: open ? 'rotate(45deg)' : 'none', transition: 'all 0.3s ease' }} />
+              <div style={{ position: 'absolute', left: 0, width: '20px', height: '2px', backgroundColor: compact ? palette.primary.default : palette.surface.stone, top: open ? '4px' : '8px', transform: open ? 'rotate(-45deg)' : 'none', transition: 'all 0.3s ease' }} />
             </div>
           </div>
 
@@ -409,60 +483,53 @@ function Opt1bDesktop() {
               <LogoStacked color={palette.surface.stone} height={52} />
             </div>
             <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: compact ? 1 : 0, transition: 'opacity 0.35s ease', pointerEvents: compact ? 'auto' : 'none' }}>
-              <LogoInline color={palette.surface.stone} height={22} />
+              <LogoInline color={palette.primary.default} height={22} />
             </div>
           </div>
 
-          {/* Right — Enquire always shown; outlined on hero, solid on compact */}
+          {/* Right — Enquire always shown; outlined stone on hero, solid dark on compact */}
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '20px' }}>
             <button style={{
               fontFamily: FONT_BODY,
-              backgroundColor: compact ? palette.surface.stone : 'transparent',
-              color: compact ? palette.primary.default : palette.surface.stone,
+              backgroundColor: compact ? palette.primary.default : 'transparent',
+              color: palette.surface.stone,
               padding: '8px 20px',
-              border: `1px solid ${palette.surface.stone}`,
+              border: compact ? `1px solid ${palette.primary.default}` : `1px solid ${palette.surface.stone}`,
               fontWeight: '400', fontSize: '11px', letterSpacing: '0.08em',
               textTransform: 'uppercase', cursor: 'pointer',
               transition: 'all 0.35s ease',
             }}>Enquire</button>
-            <Search size={20} strokeWidth={1.5} color={palette.surface.stone} style={{ cursor: 'pointer' }} />
+            <Search size={20} strokeWidth={1.5} color={compact ? palette.primary.default : palette.surface.stone} style={{ cursor: 'pointer' }} />
           </div>
         </div>
 
         {/* Drawer — absolutely positioned so it overlays the hero without shifting page flow */}
         {open && (
-          <div style={{ position: 'absolute', top: `${NAV_H}px`, left: 0, width: '60%', display: 'flex', zIndex: 30 }}>
-            <div style={{ width: '380px', flexShrink: 0, backgroundColor: '#FFFFFF' }}>
-              <Opt1DrawerContent activeSection={activeSection} onSectionClick={setActiveSection} />
+          <div
+            style={{ position: 'absolute', top: `${UTIL_H + NAV_H}px`, left: 0, width: '60%', height: `${780 - UTIL_H - NAV_H}px`, display: 'flex', zIndex: 30, border: `1px solid ${palette.neutral[300]}` }}
+            onWheel={e => e.stopPropagation()}
+          >
+            <div style={{ width: '380px', flexShrink: 0, backgroundColor: '#FFFFFF', overflowY: 'auto', scrollbarWidth: 'none' }}>
+              <Opt1DrawerContent activeSection={activeSection} onSectionClick={(s) => { setActiveSection(s); setActiveDestination(null); }} />
             </div>
             {activeSection === 'Destinations' && (
-              <div style={{ flex: 1, backgroundColor: palette.surface.stone, padding: '24px' }}>
-                <div style={{ display: 'flex', gap: '10px', marginBottom: '14px' }}>
-                  {FEATURED_DESTINATIONS.map(dest => (
-                    <div key={dest.label} style={{ flex: 1, position: 'relative', height: '110px', borderRadius: '4px', overflow: 'hidden', cursor: 'pointer' }}>
-                      <img src={dest.img} alt={dest.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(16,32,55,0.28)' }} />
-                      <span style={{ position: 'absolute', bottom: '8px', left: 0, right: 0, textAlign: 'center', fontFamily: FONT_MONO, fontSize: '9px', color: '#FFFFFF', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{dest.label}</span>
-                    </div>
-                  ))}
+              <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+                {/* Tier 2 — slides left when Africa opens */}
+                <div style={{ position: 'absolute', inset: 0, transform: activeDestination ? 'translateX(-100%)' : 'translateX(0)', transition: 'transform 0.26s cubic-bezier(0.4,0,0.2,1)' }}>
+                  <DestinationsPanel onSelectDestination={setActiveDestination} />
                 </div>
-                <div style={{ backgroundColor: palette.primary.default, padding: '11px 14px', cursor: 'pointer', marginBottom: '4px' }}>
-                  <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.surface.stone, letterSpacing: '0.1em', textTransform: 'uppercase' }}>All Destinations</span>
+                {/* Tier 3 — Africa — slides in from right */}
+                <div style={{ position: 'absolute', inset: 0, transform: activeDestination ? 'translateX(0)' : 'translateX(100%)', transition: 'transform 0.26s cubic-bezier(0.4,0,0.2,1)' }}>
+                  <AfricaPanel onBack={() => setActiveDestination(null)} />
                 </div>
-                {DESTINATIONS_LIST.map(dest => (
-                  <div key={dest} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '9px 8px', borderBottom: `1px solid ${palette.neutral[200]}`, cursor: 'pointer' }}>
-                    <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: palette.primary.default, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{dest}</span>
-                    <ChevronRight size={12} strokeWidth={1.5} color={palette.neutral[400]} />
-                  </div>
-                ))}
               </div>
             )}
           </div>
         )}
       </div>
 
-      {/* Hero — slides under sticky nav via negative margin-top */}
-      <div style={{ position: 'relative', height: '640px', marginTop: `-${NAV_H}px`, zIndex: 1 }}>
+      {/* Hero — slides under sticky nav (utility bar + main nav) via negative margin-top */}
+      <div style={{ position: 'relative', height: '640px', marginTop: `-${UTIL_H + NAV_H}px`, zIndex: 1 }}>
         <img src="/images/hero-01.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
         <div style={{ position: 'absolute', inset: 0, backgroundColor: '#10203719' }} />
         <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 5, pointerEvents: 'none' }}>
@@ -616,12 +683,7 @@ export default function NavigationPage() {
           <p style={sectionDesc}>Replicates the existing Cox & Kings navigation structure with new design tokens. Full-width drawer slides over the hero. Desktop splits into a left nav column and a right destinations panel.</p>
           {viewMode === 'mobile'
             ? <MobileFrame label="Mobile — 375px"><Opt1Mobile /></MobileFrame>
-            : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
-                <DesktopFrame label="Option 1a — Full-width drawer"><Opt1Desktop /></DesktopFrame>
-                <DesktopFrame label="Option 1b — Transparent nav → compact on scroll (↓ scroll within frame)"><Opt1bDesktop /></DesktopFrame>
-              </div>
-            )
+            : <DesktopFrame label="Desktop — transparent nav → compact on scroll (↓ scroll within frame)"><Opt1bDesktop /></DesktopFrame>
           }
         </div>
 
